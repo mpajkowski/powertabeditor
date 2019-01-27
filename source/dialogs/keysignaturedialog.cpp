@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "keysignaturedialog.h"
 #include "ui_keysignaturedialog.h"
 
@@ -37,12 +37,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     else
         ui->minorKeyButton->setChecked(true);
 
-    connect(ui->majorKeyButton, &QAbstractButton::clicked, [=]() {
-        populateKeyTypes(KeySignature::Major);
-    });
-    connect(ui->minorKeyButton, &QAbstractButton::clicked, [=]() {
-        populateKeyTypes(KeySignature::Minor);
-    });
+    connect(ui->majorKeyButton, &QAbstractButton::clicked,
+            [=]() { populateKeyTypes(KeySignature::Major); });
+    connect(ui->minorKeyButton, &QAbstractButton::clicked,
+            [=]() { populateKeyTypes(KeySignature::Minor); });
 
     populateKeyTypes(currentKey.getKeyType());
 
@@ -58,9 +56,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
             &KeySignatureDialog::handleModification);
     connect(ui->minorKeyButton, &QAbstractButton::clicked, this,
             &KeySignatureDialog::handleModification);
-    connect(ui->keysComboBox, static_cast<void (QComboBox::*)(int)>(
-                                  &QComboBox::currentIndexChanged),
-            this, &KeySignatureDialog::handleModification);
+    connect(
+        ui->keysComboBox,
+        static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this, &KeySignatureDialog::handleModification);
 }
 
 KeySignatureDialog::~KeySignatureDialog()
@@ -113,16 +112,16 @@ void KeySignatureDialog::populateKeyTypes(KeySignature::KeyType type)
     for (uint8_t i = 0; i <= KeySignature::MAX_NUM_ACCIDENTALS; ++i)
     {
         tempKey.setNumAccidentals(i);
-        ui->keysComboBox->addItem(QString::fromStdString(
-                                      boost::lexical_cast<std::string>(tempKey)));
+        ui->keysComboBox->addItem(
+            QString::fromStdString(boost::lexical_cast<std::string>(tempKey)));
     }
 
     tempKey.setSharps(false);
     for (uint8_t i = 1; i <= KeySignature::MAX_NUM_ACCIDENTALS; ++i)
     {
         tempKey.setNumAccidentals(i);
-        ui->keysComboBox->addItem(QString::fromStdString(
-                                      boost::lexical_cast<std::string>(tempKey)));
+        ui->keysComboBox->addItem(
+            QString::fromStdString(boost::lexical_cast<std::string>(tempKey)));
     }
 
     ui->keysComboBox->setCurrentIndex(originalSelection);

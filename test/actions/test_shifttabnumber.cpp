@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2012 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2012 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <catch.hpp>
 
@@ -29,7 +29,7 @@ TEST_CASE("Actions/ShiftTabNumber", "")
 {
     boost::shared_ptr<Staff> staff(boost::make_shared<Staff>());
     Position *pos1(new Position(0, 8, 0)), *pos2(new Position(1, 8, 0)),
-             *pos3(new Position(2, 8, 0));
+        *pos3(new Position(2, 8, 0));
     staff->InsertPosition(0, pos1);
     staff->InsertPosition(0, pos2);
     staff->InsertPosition(0, pos3);

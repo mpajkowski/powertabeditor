@@ -13,15 +13,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #ifndef SCORE_VOICE_H
 #define SCORE_VOICE_H
 
-#include <boost/range/iterator_range_core.hpp>
 #include "fileversion.h"
 #include "irregulargrouping.h"
 #include "position.h"
+#include <boost/range/iterator_range_core.hpp>
 #include <vector>
 
 class Voice
@@ -33,7 +33,7 @@ public:
     typedef std::vector<Position>::const_iterator PositionConstIterator;
     typedef std::vector<IrregularGrouping>::iterator IrregularGroupingIterator;
     typedef std::vector<IrregularGrouping>::const_iterator
-    IrregularGroupingConstIterator;
+        IrregularGroupingConstIterator;
 
     bool operator==(const Voice &other) const;
 

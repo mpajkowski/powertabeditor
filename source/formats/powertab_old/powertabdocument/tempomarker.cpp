@@ -2,9 +2,9 @@
 // Name:            tempomarker.cpp
 // Purpose:         Stores and renders tempo markers
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Dec 16, 2004
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -16,21 +16,21 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default constants
-const std::string   TempoMarker::DEFAULT_DESCRIPTION        = "";
-const uint8_t       TempoMarker::DEFAULT_BEAT_TYPE          = quarter;
-const uint32_t      TempoMarker::DEFAULT_BEATS_PER_MINUTE   = 120;
+const std::string TempoMarker::DEFAULT_DESCRIPTION = "";
+const uint8_t TempoMarker::DEFAULT_BEAT_TYPE = quarter;
+const uint32_t TempoMarker::DEFAULT_BEATS_PER_MINUTE = 120;
 
 // Beats Per Minute Constants
-const uint32_t      TempoMarker::MIN_BEATS_PER_MINUTE       = 40;
-const uint32_t      TempoMarker::MAX_BEATS_PER_MINUTE       = 300;
+const uint32_t TempoMarker::MIN_BEATS_PER_MINUTE = 40;
+const uint32_t TempoMarker::MAX_BEATS_PER_MINUTE = 300;
 
 // Constructor/Destructor
 /// Default Constructor
-TempoMarker::TempoMarker() :
-    m_description(DEFAULT_DESCRIPTION)
+TempoMarker::TempoMarker() : m_description(DEFAULT_DESCRIPTION)
 {
     SetType(standardMarker);
     SetBeatType(DEFAULT_BEAT_TYPE);
@@ -47,15 +47,17 @@ TempoMarker::TempoMarker() :
 /// @param tripletFeelType Triplet feel type to set (see tripletFeelTypes for
 /// values)
 TempoMarker::TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
-                         uint32_t beatsPerMinute, const std::string& description, uint8_t tripletFeelType) :
-    m_description(DEFAULT_DESCRIPTION)
+                         uint32_t beatsPerMinute,
+                         const std::string &description,
+                         uint8_t tripletFeelType)
+    : m_description(DEFAULT_DESCRIPTION)
 {
     assert(IsValidSystem(system));
     assert(IsValidPosition(position));
     assert(IsValidBeatType(beatType));
     assert(IsValidBeatsPerMinute(beatsPerMinute));
     assert(IsValidTripletFeelType(tripletFeelType));
-    
+
     SetSystem(system);
     SetPosition(position);
     SetStandardMarker(beatType, beatsPerMinute, description, tripletFeelType);
@@ -69,8 +71,9 @@ TempoMarker::TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
 /// @param listessoBeatType Listesso beat type to set
 /// @param description Description to set
 TempoMarker::TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
-                         uint8_t listessoBeatType, const std::string& description) :
-    m_description(DEFAULT_DESCRIPTION)
+                         uint8_t listessoBeatType,
+                         const std::string &description)
+    : m_description(DEFAULT_DESCRIPTION)
 {
     assert(IsValidSystem(system));
     assert(IsValidPosition(position));
@@ -87,26 +90,26 @@ TempoMarker::TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
 /// @param position Zero-based index of the position within the system where the
 /// dynamic is anchored
 /// @param accelerando True sets an accelerando, false sets a ritardando
-TempoMarker::TempoMarker(uint32_t system, uint32_t position, bool accelerando) :
-    m_description(DEFAULT_DESCRIPTION)
+TempoMarker::TempoMarker(uint32_t system, uint32_t position, bool accelerando)
+    : m_description(DEFAULT_DESCRIPTION)
 {
     assert(IsValidSystem(system));
     assert(IsValidPosition(position));
-    
+
     SetSystem(system);
     SetPosition(position);
     SetAlterationOfPace(accelerando);
 }
 
 /// Equality Operator
-bool TempoMarker::operator==(const TempoMarker& tempoMarker) const
+bool TempoMarker::operator==(const TempoMarker &tempoMarker) const
 {
     return (SystemSymbol::operator==(tempoMarker)) &&
-            (m_description == tempoMarker.m_description);
+           (m_description == tempoMarker.m_description);
 }
 
 /// Inequality Operator
-bool TempoMarker::operator!=(const TempoMarker& tempoMarker) const
+bool TempoMarker::operator!=(const TempoMarker &tempoMarker) const
 {
     return (!operator==(tempoMarker));
 }
@@ -115,14 +118,14 @@ bool TempoMarker::operator!=(const TempoMarker& tempoMarker) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool TempoMarker::Serialize(PowerTabOutputStream& stream) const
+bool TempoMarker::Serialize(PowerTabOutputStream &stream) const
 {
     SystemSymbol::Serialize(stream);
     PTB_CHECK_THAT(stream.CheckState(), false);
-    
+
     stream.WriteMFCString(m_description);
     PTB_CHECK_THAT(stream.CheckState(), false);
-    
+
     return (stream.CheckState());
 }
 
@@ -130,19 +133,19 @@ bool TempoMarker::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool TempoMarker::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool TempoMarker::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     SystemSymbol::Deserialize(stream, version);
-    
+
     stream.ReadMFCString(m_description);
 
     // Version 1.0.2 or less
     if (version == PowerTabFileHeader::Version_1_0 ||
-            version == PowerTabFileHeader::Version_1_0_2)
+        version == PowerTabFileHeader::Version_1_0_2)
     {
         // Beat types are stored differently now
         uint8_t beatType = HIBYTE(HIWORD(m_data));
-        
+
         if (beatType == 0)
             beatType = 4;
         else if (beatType == 1)
@@ -181,10 +184,10 @@ bool TempoMarker::IsValidType(uint8_t type)
 bool TempoMarker::SetType(uint8_t type)
 {
     PTB_CHECK_THAT(IsValidType(type), false);
-    
+
     m_data &= ~typeMask;
     m_data |= (uint32_t)(type << 27);
-    
+
     return (true);
 }
 
@@ -205,19 +208,20 @@ bool TempoMarker::IsMetronomeMarkerShown() const
 /// Sets the standard marker data
 /// @return True if the data was set, false if not
 bool TempoMarker::SetStandardMarker(uint8_t beatType, uint32_t beatsPerMinute,
-                                    const std::string& description, uint8_t tripletFeelType)
+                                    const std::string &description,
+                                    uint8_t tripletFeelType)
 {
     PTB_CHECK_THAT(IsValidBeatType(beatType), false);
     PTB_CHECK_THAT(IsValidBeatsPerMinute(beatsPerMinute), false);
     PTB_CHECK_THAT(IsValidTripletFeelType(tripletFeelType), false);
-    
+
     m_data = 0;
     SetType(standardMarker);
     SetBeatType(beatType);
     SetBeatsPerMinute(beatsPerMinute);
     SetDescription(description);
     SetTripletFeelType(tripletFeelType);
-    
+
     return (true);
 }
 
@@ -234,19 +238,19 @@ bool TempoMarker::IsStandardMarker() const
 /// @param description Description to set.
 /// @return True if the data was set, false if not.
 bool TempoMarker::SetListesso(uint8_t beatType, uint8_t listessoBeatType,
-                              const std::string& description)
+                              const std::string &description)
 {
     PTB_CHECK_THAT(IsValidBeatType(beatType), false);
     PTB_CHECK_THAT(IsValidBeatType(listessoBeatType), false);
-    
+
     // Clear all current data
     m_data = 0;
-    
+
     SetType(listesso);
     SetBeatType(beatType);
     SetListessoBeatType(listessoBeatType);
     SetDescription(description);
-    
+
     return (true);
 }
 
@@ -275,13 +279,13 @@ bool TempoMarker::SetAlterationOfPace(bool accelerando)
 
     // Set the type
     SetType(alterationOfPace);
-    
+
     // Quirky stuff: accelerando uses beat type 0, ritardando used beat type 1
     if (accelerando)
         SetBeatType(0);
     else
         SetBeatType(1);
-    
+
     return (true);
 }
 
@@ -314,10 +318,10 @@ bool TempoMarker::IsValidBeatType(uint8_t beatType)
 bool TempoMarker::SetBeatType(uint8_t beatType)
 {
     PTB_CHECK_THAT(IsValidBeatType(beatType), false);
-    
+
     m_data &= ~beatTypeMask;
     m_data |= (uint32_t)(beatType << 23);
-    
+
     return (true);
 }
 
@@ -335,10 +339,10 @@ uint8_t TempoMarker::GetBeatType() const
 bool TempoMarker::SetListessoBeatType(uint8_t beatType)
 {
     PTB_CHECK_THAT(IsValidBeatType(beatType), false);
-    
+
     m_data &= ~listessoBeatTypeMask;
     m_data |= (uint32_t)(beatType << 19);
-    
+
     return (true);
 }
 
@@ -363,10 +367,10 @@ bool TempoMarker::IsValidTripletFeelType(uint8_t tripletFeelType)
 bool TempoMarker::SetTripletFeelType(uint8_t tripletFeelType)
 {
     PTB_CHECK_THAT(IsValidTripletFeelType(tripletFeelType), false);
-    
+
     m_data &= ~tripletFeelTypeMask;
     m_data |= (uint32_t)(tripletFeelType << 16);
-    
+
     return (true);
 }
 
@@ -390,7 +394,7 @@ bool TempoMarker::HasTripletFeel() const
 bool TempoMarker::IsValidBeatsPerMinute(uint32_t beatsPerMinute)
 {
     return beatsPerMinute >= MIN_BEATS_PER_MINUTE &&
-            beatsPerMinute <= MAX_BEATS_PER_MINUTE;
+           beatsPerMinute <= MAX_BEATS_PER_MINUTE;
 }
 
 /// Sets the beats per minute.
@@ -399,10 +403,10 @@ bool TempoMarker::IsValidBeatsPerMinute(uint32_t beatsPerMinute)
 bool TempoMarker::SetBeatsPerMinute(uint32_t beatsPerMinute)
 {
     PTB_CHECK_THAT(IsValidBeatsPerMinute(beatsPerMinute), false);
-    
+
     m_data &= ~beatsPerMinuteMask;
     m_data |= beatsPerMinute;
-    
+
     return (true);
 }
 
@@ -416,7 +420,7 @@ uint32_t TempoMarker::GetBeatsPerMinute() const
 /// Sets the description.
 /// @param description Description to set.
 /// @return True if the description was set, false if not.
-bool TempoMarker::SetDescription(const std::string& description)
+bool TempoMarker::SetDescription(const std::string &description)
 {
     m_description = description;
     return true;
@@ -429,4 +433,4 @@ std::string TempoMarker::GetDescription() const
     return m_description;
 }
 
-}
+} // namespace PowerTabDocument

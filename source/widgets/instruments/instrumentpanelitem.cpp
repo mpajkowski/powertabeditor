@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "instrumentpanelitem.h"
 #include "ui_instrumentpanelitem.h"
@@ -52,19 +52,18 @@ InstrumentPanelItem::InstrumentPanelItem(
             ui->instrumentNameLabel, &QWidget::hide);
     connect(ui->instrumentNameLabel, &ClickableLabel::clicked,
             ui->instrumentNameEdit, &QWidget::show);
-    connect(ui->instrumentNameLabel, &ClickableLabel::clicked, [=]()
-    { ui->instrumentNameEdit->setFocus(); });
+    connect(ui->instrumentNameLabel, &ClickableLabel::clicked,
+            [=]() { ui->instrumentNameEdit->setFocus(); });
 
     connect(ui->instrumentNameEdit, &QLineEdit::editingFinished, this,
             &InstrumentPanelItem::onInstrumentNameEdited);
 
-    connect(ui->midiInstrument, static_cast<void (QComboBox::*)(int)>(
-                                    &QComboBox::activated),
-            this, &InstrumentPanelItem::onEdited);
+    connect(ui->midiInstrument,
+            static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this,
+            &InstrumentPanelItem::onEdited);
 
-    connect(ui->removeButton, &QPushButton::clicked, [&]() {
-        myRemovePubSub.publish(myInstrumentIndex);
-    });
+    connect(ui->removeButton, &QPushButton::clicked,
+            [&]() { myRemovePubSub.publish(myInstrumentIndex); });
 }
 
 InstrumentPanelItem::~InstrumentPanelItem()

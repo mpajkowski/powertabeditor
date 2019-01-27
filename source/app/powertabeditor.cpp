@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "powertabeditor.h"
 
@@ -132,9 +132,9 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QMimeData>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QPrinter>
 #include <QScrollArea>
 #include <QTabBar>
 #include <QUrl>
@@ -232,9 +232,9 @@ void PowerTabEditor::openFile(QString filename)
 {
     if (filename.isEmpty())
     {
-        filename = QFileDialog::getOpenFileName(this, tr("Open"),
-                myPreviousDirectory,
-                QString::fromStdString(myFileFormatManager->importFileFilter()));
+        filename = QFileDialog::getOpenFileName(
+            this, tr("Open"), myPreviousDirectory,
+            QString::fromStdString(myFileFormatManager->importFileFilter()));
     }
 
     if (filename.isEmpty())
@@ -255,8 +255,8 @@ void PowerTabEditor::openFile(QString filename)
     qDebug() << "Opening file: " << filename;
 
     QFileInfo fileInfo(filename);
-    boost::optional<FileFormat> format = myFileFormatManager->findFormat(
-                fileInfo.suffix().toStdString());
+    boost::optional<FileFormat> format =
+        myFileFormatManager->findFormat(fileInfo.suffix().toStdString());
 
     if (!format)
     {
@@ -271,7 +271,9 @@ void PowerTabEditor::openFile(QString filename)
         myFileFormatManager->importFile(doc.getScore(), path, *format);
         auto end = std::chrono::high_resolution_clock::now();
         qDebug() << "File loaded in"
-                 << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) .count()
+                 << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                          start)
+                        .count()
                  << "ms";
 
         doc.setFilename(path);
@@ -464,7 +466,8 @@ void PowerTabEditor::updateModified(bool clean)
 
 void PowerTabEditor::cycleTab(int offset)
 {
-    int newIndex = (myTabWidget->currentIndex() + offset) % myTabWidget->count();
+    int newIndex =
+        (myTabWidget->currentIndex() + offset) % myTabWidget->count();
 
     if (newIndex < 0) // Make sure that negative array indices wrap around.
     {
@@ -505,9 +508,7 @@ void PowerTabEditor::printPreview()
     QPrintPreviewDialog dialog(this, Qt::Window);
 
     connect(&dialog, &QPrintPreviewDialog::paintRequested, this,
-            [=](QPrinter *printer) {
-        getScoreArea()->print(*printer);
-    });
+            [=](QPrinter *printer) { getScoreArea()->print(*printer); });
 
     dialog.exec();
 }
@@ -602,9 +603,10 @@ void PowerTabEditor::startStopPlayback(bool from_measure_start)
         connect(myPlaybackWidget, &PlaybackWidget::playbackSpeedChanged,
                 myMidiPlayer.get(), &MidiPlayer::changePlaybackSpeed);
 
-        connect(myMidiPlayer.get(), &MidiPlayer::error, this, [=](const QString &msg) {
-            QMessageBox::critical(this, tr("Midi Error"), msg);
-        });
+        connect(myMidiPlayer.get(), &MidiPlayer::error, this,
+                [=](const QString &msg) {
+                    QMessageBox::critical(this, tr("Midi Error"), msg);
+                });
 
         myMidiPlayer->start();
     }
@@ -752,14 +754,14 @@ void PowerTabEditor::removeCurrentPosition()
     auto location = getLocation();
     bool isNote = location.getNote();
 
-    if(!isNote)
+    if (!isNote)
     {
-    	removeSelectedPositions();
+        removeSelectedPositions();
     }
     else
     {
-    	myUndoManager->push(new RemoveNote(location),
-    			location.getSystemIndex());
+        myUndoManager->push(new RemoveNote(location),
+                            location.getSystemIndex());
     }
 }
 
@@ -838,8 +840,7 @@ void PowerTabEditor::editChordName()
         ChordNameDialog dialog(this);
         if (dialog.exec() == QDialog::Accepted)
         {
-            ChordText text(location.getPositionIndex(),
-                           dialog.getChordName());
+            ChordText text(location.getPositionIndex(), dialog.getChordName());
 
             myUndoManager->push(new AddChordText(location, text),
                                 location.getSystemIndex());
@@ -999,16 +1000,15 @@ void PowerTabEditor::addDot()
 
     if (pos->hasProperty(Position::Dotted))
     {
-        myUndoManager->push(new AddPositionProperty(
-                                location, Position::DoubleDotted,
-                                myDoubleDottedCommand->text()),
-                            location.getSystemIndex());
+        myUndoManager->push(
+            new AddPositionProperty(location, Position::DoubleDotted,
+                                    myDoubleDottedCommand->text()),
+            location.getSystemIndex());
     }
     else
     {
-        myUndoManager->push(new AddPositionProperty(
-                                location, Position::Dotted,
-                                myDottedCommand->text()),
+        myUndoManager->push(new AddPositionProperty(location, Position::Dotted,
+                                                    myDottedCommand->text()),
                             location.getSystemIndex());
     }
 }
@@ -1021,16 +1021,15 @@ void PowerTabEditor::removeDot()
 
     if (pos->hasProperty(Position::DoubleDotted))
     {
-        myUndoManager->push(new AddPositionProperty(
-                                location, Position::Dotted,
-                                myDottedCommand->text()),
+        myUndoManager->push(new AddPositionProperty(location, Position::Dotted,
+                                                    myDottedCommand->text()),
                             location.getSystemIndex());
     }
     else
     {
-        myUndoManager->push(new RemovePositionProperty(
-                                location, Position::Dotted,
-                                myDottedCommand->text()),
+        myUndoManager->push(new RemovePositionProperty(location,
+                                                       Position::Dotted,
+                                                       myDottedCommand->text()),
                             location.getSystemIndex());
     }
 }
@@ -1174,7 +1173,8 @@ void PowerTabEditor::editMultiBarRest()
 
             if (!ScoreUtils::findInRange(location.getVoice().getPositions(),
                                          prevBar->getPosition(),
-                                         nextBar->getPosition()).empty())
+                                         nextBar->getPosition())
+                     .empty())
             {
                 QMessageBox message(this);
                 message.setText(
@@ -1216,9 +1216,9 @@ void PowerTabEditor::editRehearsalSign()
 
         if (dialog.exec() == QDialog::Accepted)
         {
-            myUndoManager->push(new AddRehearsalSign(location,
-                                                     dialog.getDescription()),
-                                UndoManager::AFFECTS_ALL_SYSTEMS);
+            myUndoManager->push(
+                new AddRehearsalSign(location, dialog.getDescription()),
+                UndoManager::AFFECTS_ALL_SYSTEMS);
         }
         else
             myRehearsalSignCommand->setChecked(false);
@@ -1229,8 +1229,7 @@ void PowerTabEditor::editTempoMarker()
 {
     const ScoreLocation &location = getLocation();
     const TempoMarker *marker = ScoreUtils::findByPosition(
-                location.getSystem().getTempoMarkers(),
-                location.getPositionIndex());
+        location.getSystem().getTempoMarkers(), location.getPositionIndex());
 
     if (marker)
     {
@@ -1295,10 +1294,10 @@ void PowerTabEditor::editTimeSignatureFromCaret()
 void PowerTabEditor::insertStandardBarline()
 {
     ScoreLocation &location = getLocation();
-    myUndoManager->push(new AddBarline(location,
-                                       Barline(location.getPositionIndex(),
-                                               Barline::SingleBar)),
-                        location.getSystemIndex());
+    myUndoManager->push(
+        new AddBarline(
+            location, Barline(location.getPositionIndex(), Barline::SingleBar)),
+        location.getSystemIndex());
 }
 
 void PowerTabEditor::editBarlineFromCaret()
@@ -1310,8 +1309,7 @@ void PowerTabEditor::editMusicalDirection()
 {
     const ScoreLocation &location = getLocation();
     const Direction *direction = ScoreUtils::findByPosition(
-                location.getSystem().getDirections(),
-                location.getPositionIndex());
+        location.getSystem().getDirections(), location.getPositionIndex());
 
     if (direction)
     {
@@ -1337,9 +1335,9 @@ void PowerTabEditor::editMusicalDirection()
 void PowerTabEditor::editRepeatEnding()
 {
     ScoreLocation &location(getLocation());
-    AlternateEnding *ending = ScoreUtils::findByPosition(
-                location.getSystem().getAlternateEndings(),
-                location.getPositionIndex());
+    AlternateEnding *ending =
+        ScoreUtils::findByPosition(location.getSystem().getAlternateEndings(),
+                                   location.getPositionIndex());
 
     if (!ending)
     {
@@ -1365,7 +1363,7 @@ void PowerTabEditor::editDynamic()
 {
     ScoreLocation &location = getLocation();
     const Dynamic *dynamic = ScoreUtils::findByPosition(
-                location.getStaff().getDynamics(), location.getPositionIndex());
+        location.getStaff().getDynamics(), location.getPositionIndex());
 
     if (dynamic)
     {
@@ -1442,9 +1440,9 @@ void PowerTabEditor::editTappedHarmonic()
         TappedHarmonicDialog dialog(this, note->getFretNumber());
         if (dialog.exec() == QDialog::Accepted)
         {
-            myUndoManager->push(new AddTappedHarmonic(location,
-                                                      dialog.getTappedFret()),
-                                location.getSystemIndex());
+            myUndoManager->push(
+                new AddTappedHarmonic(location, dialog.getTappedFret()),
+                location.getSystemIndex());
         }
         else
             myTappedHarmonicCommand->setChecked(false);
@@ -1482,7 +1480,8 @@ void PowerTabEditor::editTrill()
     Q_ASSERT(note);
 
     if (note->hasTrill())
-        myUndoManager->push(new RemoveTrill(location), location.getSystemIndex());
+        myUndoManager->push(new RemoveTrill(location),
+                            location.getSystemIndex());
     else
     {
         TrillDialog dialog(this, note->getFretNumber());
@@ -1512,8 +1511,8 @@ void PowerTabEditor::editLeftHandFingering()
         LeftHandFingeringDialog dialog(this);
         if (dialog.exec() == QDialog::Accepted)
         {
-            myUndoManager->push(new AddLeftHandFingering(location, 
-                                dialog.getLeftHandFingering()),
+            myUndoManager->push(new AddLeftHandFingering(
+                                    location, dialog.getLeftHandFingering()),
                                 location.getSystemIndex());
         }
         else
@@ -1530,10 +1529,9 @@ void PowerTabEditor::addPlayer()
     // Create a unique name for the player.
     {
         std::vector<std::string> names;
-        boost::range::transform(score.getPlayers(), std::back_inserter(names),
-                                [](const Player &player) {
-            return player.getDescription();
-        });
+        boost::range::transform(
+            score.getPlayers(), std::back_inserter(names),
+            [](const Player &player) { return player.getDescription(); });
 
         size_t i = score.getPlayers().size() + 1;
         while (true)
@@ -1571,8 +1569,8 @@ void PowerTabEditor::addInstrument()
         boost::range::transform(score.getInstruments(),
                                 std::back_inserter(names),
                                 [](const Instrument &instrument) {
-            return instrument.getDescription();
-        });
+                                    return instrument.getDescription();
+                                });
 
         const std::string default_name =
             settings->get(Settings::DefaultInstrumentName);
@@ -1614,19 +1612,17 @@ void PowerTabEditor::editPlayerChange()
     else
     {
         // Initialize the dialog with the current staves for each player.
-        const PlayerChange *currentPlayers =
-                ScoreUtils::getCurrentPlayers(location.getScore(),
-                                              location.getSystemIndex(),
-                                              location.getPositionIndex());
+        const PlayerChange *currentPlayers = ScoreUtils::getCurrentPlayers(
+            location.getScore(), location.getSystemIndex(),
+            location.getPositionIndex());
 
         PlayerChangeDialog dialog(this, location.getScore(),
                                   location.getSystem(), currentPlayers);
         if (dialog.exec() == QDialog::Accepted)
         {
             myUndoManager->push(
-                        new AddPlayerChange(location, dialog.getPlayerChange()),
-                        UndoManager::AFFECTS_ALL_SYSTEMS);
-
+                new AddPlayerChange(location, dialog.getPlayerChange()),
+                UndoManager::AFFECTS_ALL_SYSTEMS);
         }
         else
             myPlayerChangeCommand->setChecked(false);
@@ -1717,10 +1713,10 @@ bool PowerTabEditor::eventFilter(QObject *object, QEvent *event)
                 else
                 {
                     myUndoManager->push(
-                                new AddNote(location,
-                                            Note(location.getString(), number),
-                                            myActiveDurationType),
-                                location.getSystemIndex());
+                        new AddNote(location,
+                                    Note(location.getString(), number),
+                                    myActiveDurationType),
+                        location.getSystemIndex());
                 }
 
                 return true;
@@ -1778,9 +1774,9 @@ void PowerTabEditor::dropEvent(QDropEvent *event)
 
 QString PowerTabEditor::getApplicationName() const
 {
-    QString name = QString("%1 %2 Beta").arg(
-                AppInfo::APPLICATION_NAME,
-                AppInfo::APPLICATION_VERSION);
+    QString name =
+        QString("%1 %2 Beta")
+            .arg(AppInfo::APPLICATION_NAME, AppInfo::APPLICATION_VERSION);
 
 #ifdef VERSION
     name += QString(" (v") + BOOST_STRINGIZE(VERSION) + ")";
@@ -1815,13 +1811,13 @@ void PowerTabEditor::updateWindowTitle()
 void PowerTabEditor::createCommands()
 {
     // File-related commands.
-    myNewDocumentCommand = new Command(tr("&New"), "File.New",
-                                       QKeySequence::New, this);
+    myNewDocumentCommand =
+        new Command(tr("&New"), "File.New", QKeySequence::New, this);
     connect(myNewDocumentCommand, SIGNAL(triggered()), this,
             SLOT(createNewDocument()));
 
-    myOpenFileCommand = new Command(tr("&Open..."), "File.Open",
-                                    QKeySequence::Open, this);
+    myOpenFileCommand =
+        new Command(tr("&Open..."), "File.Open", QKeySequence::Open, this);
     connect(myOpenFileCommand, SIGNAL(triggered()), this, SLOT(openFile()));
 
     myCloseTabCommand = new Command(tr("&Close Tab"), "File.CloseTab",
@@ -1829,16 +1825,16 @@ void PowerTabEditor::createCommands()
     connect(myCloseTabCommand, SIGNAL(triggered()), this,
             SLOT(closeCurrentTab()));
 
-    mySaveCommand = new Command(tr("Save"), "File.Save",
-                                QKeySequence::Save, this);
+    mySaveCommand =
+        new Command(tr("Save"), "File.Save", QKeySequence::Save, this);
     connect(mySaveCommand, SIGNAL(triggered()), this, SLOT(saveFile()));
 
     mySaveAsCommand = new Command(tr("Save As..."), "File.SaveAs",
                                   QKeySequence::SaveAs, this);
     connect(mySaveAsCommand, SIGNAL(triggered()), this, SLOT(saveFileAs()));
 
-    myPrintCommand = new Command(tr("Print..."), "File.Print",
-                                 QKeySequence::Print, this);
+    myPrintCommand =
+        new Command(tr("Print..."), "File.Print", QKeySequence::Print, this);
     connect(myPrintCommand, SIGNAL(triggered()), this, SLOT(printDocument()));
 
     myPrintPreviewCommand = new Command(
@@ -1846,20 +1842,20 @@ void PowerTabEditor::createCommands()
     connect(myPrintPreviewCommand, SIGNAL(triggered()), this,
             SLOT(printPreview()));
 
-    myEditShortcutsCommand = new Command(tr("Customize Shortcuts..."),
-                                         "File.CustomizeShortcuts",
-                                         QKeySequence(), this);
+    myEditShortcutsCommand =
+        new Command(tr("Customize Shortcuts..."), "File.CustomizeShortcuts",
+                    QKeySequence(), this);
     connect(myEditShortcutsCommand, SIGNAL(triggered()), this,
             SLOT(editKeyboardShortcuts()));
 
-    myEditPreferencesCommand = new Command(tr("&Preferences..."),
-                                           "File.Preferences",
-                                           QKeySequence::Preferences, this);
+    myEditPreferencesCommand =
+        new Command(tr("&Preferences..."), "File.Preferences",
+                    QKeySequence::Preferences, this);
     connect(myEditPreferencesCommand, SIGNAL(triggered()), this,
             SLOT(editPreferences()));
 
-    myExitCommand = new Command(tr("&Quit"), "File.Quit", QKeySequence::Quit,
-                                this);
+    myExitCommand =
+        new Command(tr("&Quit"), "File.Quit", QKeySequence::Quit, this);
     connect(myExitCommand, SIGNAL(triggered()), this, SLOT(close()));
 
     // Undo / Redo actions.
@@ -1873,13 +1869,13 @@ void PowerTabEditor::createCommands()
     myCutCommand = new Command(tr("Cut"), "Edit.Cut", QKeySequence::Cut, this);
     connect(myCutCommand, SIGNAL(triggered()), this, SLOT(cutSelectedNotes()));
 
-    myCopyCommand = new Command(tr("Copy"), "Edit.Copy", QKeySequence::Copy,
-                                this);
+    myCopyCommand =
+        new Command(tr("Copy"), "Edit.Copy", QKeySequence::Copy, this);
     connect(myCopyCommand, SIGNAL(triggered()), this,
             SLOT(copySelectedNotes()));
 
-    myPasteCommand = new Command(tr("Paste"), "Edit.Paste",
-                                 QKeySequence::Paste, this);
+    myPasteCommand =
+        new Command(tr("Paste"), "Edit.Paste", QKeySequence::Paste, this);
     connect(myPasteCommand, SIGNAL(triggered()), this, SLOT(pasteNotes()));
 
     myPolishCommand = new Command(tr("Polish Score"), "Edit.PolishScore",
@@ -1887,8 +1883,9 @@ void PowerTabEditor::createCommands()
     connect(myPolishCommand, &QAction::triggered, this,
             &PowerTabEditor::polishScore);
 
-    myPolishSystemCommand = new Command(tr("Polish System"), "Edit.PolishSystem",
-                                        QKeySequence(Qt::Key_J), this);
+    myPolishSystemCommand =
+        new Command(tr("Polish System"), "Edit.PolishSystem",
+                    QKeySequence(Qt::Key_J), this);
     connect(myPolishSystemCommand, &QAction::triggered, this,
             &PowerTabEditor::polishSystem);
 
@@ -1900,8 +1897,8 @@ void PowerTabEditor::createCommands()
             SLOT(editFileInformation()));
 
     // Playback-related actions.
-    myPlayPauseCommand = new Command(tr("Play"), "Playback.PlayPause",
-                                     Qt::Key_Space, this);
+    myPlayPauseCommand =
+        new Command(tr("Play"), "Playback.PlayPause", Qt::Key_Space, this);
     connect(myPlayPauseCommand, SIGNAL(triggered()), this,
             SLOT(startStopPlayback()));
 
@@ -1911,12 +1908,11 @@ void PowerTabEditor::createCommands()
 #else
     QKeySequence play_start_seq = Qt::CTRL + Qt::Key_Space;
 #endif
-    myPlayFromStartOfMeasureCommand = new Command(
-        tr("Play From Start Of Measure"), "Playback.PlayFromStartOfMeasure",
-        play_start_seq, this);
-    connect(myPlayFromStartOfMeasureCommand, &QAction::triggered, [this]() {
-        startStopPlayback(/* from_measure_start */ true);
-    });
+    myPlayFromStartOfMeasureCommand =
+        new Command(tr("Play From Start Of Measure"),
+                    "Playback.PlayFromStartOfMeasure", play_start_seq, this);
+    connect(myPlayFromStartOfMeasureCommand, &QAction::triggered,
+            [this]() { startStopPlayback(/* from_measure_start */ true); });
 
     myStopCommand =
         new Command(tr("Stop"), "Playback.Stop", Qt::ALT + Qt::Key_Space, this);
@@ -1959,16 +1955,15 @@ void PowerTabEditor::createCommands()
     connect(myLastSectionCommand, SIGNAL(triggered()), this,
             SLOT(moveCaretToLastSection()));
 
-    myShiftForwardCommand = new Command(tr("Shift Forward"),
-                                        "Position.ShiftForward",
-                                        QKeySequence(Qt::Key_Insert), this);
+    myShiftForwardCommand =
+        new Command(tr("Shift Forward"), "Position.ShiftForward",
+                    QKeySequence(Qt::Key_Insert), this);
     connect(myShiftForwardCommand, SIGNAL(triggered()), this,
             SLOT(shiftForward()));
 
-    myShiftBackwardCommand = new Command(tr("Shift Backward"),
-                                         "Position.ShiftBackward",
-                                         QKeySequence(Qt::SHIFT + Qt::Key_Insert),
-                                         this);
+    myShiftBackwardCommand =
+        new Command(tr("Shift Backward"), "Position.ShiftBackward",
+                    QKeySequence(Qt::SHIFT + Qt::Key_Insert), this);
     connect(myShiftBackwardCommand, SIGNAL(triggered()), this,
             SLOT(shiftBackward()));
 
@@ -2012,9 +2007,8 @@ void PowerTabEditor::createCommands()
     connect(myPrevStringCommand, SIGNAL(triggered()), this,
             SLOT(moveCaretUp()));
 
-    myLastPositionCommand =
-        new Command(tr("Move to &End"), "Position.Staff.MoveToEnd",
-                    move_end_seq, this);
+    myLastPositionCommand = new Command(
+        tr("Move to &End"), "Position.Staff.MoveToEnd", move_end_seq, this);
     connect(myLastPositionCommand, SIGNAL(triggered()), this,
             SLOT(moveCaretToEnd()));
 
@@ -2054,35 +2048,36 @@ void PowerTabEditor::createCommands()
 #endif
     myRemoveNoteCommand = new Command(tr("Remove Note"), "Position.RemoveNote",
                                       QKeySequence::Delete, this);
-    connect(myRemoveNoteCommand, SIGNAL(triggered()), this, SLOT(removeCurrentPosition()));
+    connect(myRemoveNoteCommand, SIGNAL(triggered()), this,
+            SLOT(removeCurrentPosition()));
 
-    myRemovePositionCommand = new Command(tr("Remove Position"),
-                                          "Position.RemovePosition",
-                                          QKeySequence::DeleteEndOfWord, this);
+    myRemovePositionCommand =
+        new Command(tr("Remove Position"), "Position.RemovePosition",
+                    QKeySequence::DeleteEndOfWord, this);
     connect(myRemovePositionCommand, SIGNAL(triggered()), this,
             SLOT(removeSelectedPositions()));
 
-    myGoToBarlineCommand = new Command(tr("Go To Barline..."),
-                                       "Position.GoToBarline",
-                                       Qt::CTRL + Qt::Key_G, this);
+    myGoToBarlineCommand =
+        new Command(tr("Go To Barline..."), "Position.GoToBarline",
+                    Qt::CTRL + Qt::Key_G, this);
     connect(myGoToBarlineCommand, SIGNAL(triggered()), this,
             SLOT(gotoBarline()));
 
-    myGoToRehearsalSignCommand = new Command(tr("Go To Rehearsal Sign..."),
-                                             "Position.GoToRehearsalSign",
-                                             Qt::CTRL + Qt::Key_H, this);
+    myGoToRehearsalSignCommand =
+        new Command(tr("Go To Rehearsal Sign..."), "Position.GoToRehearsalSign",
+                    Qt::CTRL + Qt::Key_H, this);
     connect(myGoToRehearsalSignCommand, SIGNAL(triggered()), this,
             SLOT(gotoRehearsalSign()));
 
     // Text-related actions.
-    myChordNameCommand = new Command(tr("Chord Name..."), "Text.ChordName",
-                                     Qt::Key_C, this);
+    myChordNameCommand =
+        new Command(tr("Chord Name..."), "Text.ChordName", Qt::Key_C, this);
     myChordNameCommand->setCheckable(true);
     connect(myChordNameCommand, SIGNAL(triggered()), this,
             SLOT(editChordName()));
 
-    myTextCommand = new Command(tr("Text..."), "Text.TextItem",
-                                QKeySequence(), this);
+    myTextCommand =
+        new Command(tr("Text..."), "Text.TextItem", QKeySequence(), this);
     myTextCommand->setCheckable(true);
     connect(myTextCommand, &QAction::triggered, this,
             &PowerTabEditor::editTextItem);
@@ -2100,30 +2095,27 @@ void PowerTabEditor::createCommands()
                     boost::bind(&PowerTabEditor::changePositionSpacing, this, -1));
 
 #endif
-    myInsertSystemAtEndCommand = new Command(tr("Insert System At End"),
-                                             "Section.InsertSystemAtEnd",
-                                             Qt::Key_N, this);
+    myInsertSystemAtEndCommand =
+        new Command(tr("Insert System At End"), "Section.InsertSystemAtEnd",
+                    Qt::Key_N, this);
     connect(myInsertSystemAtEndCommand, SIGNAL(triggered()), this,
             SLOT(insertSystemAtEnd()));
 
-    myInsertSystemBeforeCommand = new Command(tr("Insert System Before"),
-                                              "Section.InsertSystemBefore",
-                                              QKeySequence(Qt::ALT + Qt::SHIFT +
-                                                           Qt::Key_N),this);
+    myInsertSystemBeforeCommand =
+        new Command(tr("Insert System Before"), "Section.InsertSystemBefore",
+                    QKeySequence(Qt::ALT + Qt::SHIFT + Qt::Key_N), this);
     connect(myInsertSystemBeforeCommand, SIGNAL(triggered()), this,
             SLOT(insertSystemBefore()));
 
-    myInsertSystemAfterCommand = new Command(tr("Insert System After"),
-                                             "Section.InsertSystemAfter",
-                                             QKeySequence(Qt::SHIFT + Qt::Key_N),
-                                             this);
+    myInsertSystemAfterCommand =
+        new Command(tr("Insert System After"), "Section.InsertSystemAfter",
+                    QKeySequence(Qt::SHIFT + Qt::Key_N), this);
     connect(myInsertSystemAfterCommand, SIGNAL(triggered()), this,
             SLOT(insertSystemAfter()));
 
-    myRemoveCurrentSystemCommand = new Command(tr("Remove Current System"),
-                                         "Section.RemoveCurrentSystem",
-                                         QKeySequence(Qt::CTRL + Qt::SHIFT +
-                                                      Qt::Key_N), this);
+    myRemoveCurrentSystemCommand =
+        new Command(tr("Remove Current System"), "Section.RemoveCurrentSystem",
+                    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_N), this);
     connect(myRemoveCurrentSystemCommand, SIGNAL(triggered()), this,
             SLOT(removeCurrentSystem()));
 
@@ -2145,24 +2137,20 @@ void PowerTabEditor::createCommands()
     connect(myRemoveCurrentStaffCommand, &QAction::triggered, this,
             &PowerTabEditor::removeCurrentStaff);
 
-    myIncreaseLineSpacingCommand = new Command(tr("Increase"),
-                                               "Section.LineSpacing.Increase",
-                                               QKeySequence(), this);
-    connect(myIncreaseLineSpacingCommand, &QAction::triggered, [=]() {
-        adjustLineSpacing(1);
-    });
+    myIncreaseLineSpacingCommand = new Command(
+        tr("Increase"), "Section.LineSpacing.Increase", QKeySequence(), this);
+    connect(myIncreaseLineSpacingCommand, &QAction::triggered,
+            [=]() { adjustLineSpacing(1); });
 
-    myDecreaseLineSpacingCommand = new Command(tr("Decrease"),
-                                               "Section.LineSpacing.Decrease",
-                                               QKeySequence(), this);
-    connect(myDecreaseLineSpacingCommand, &QAction::triggered, [=]() {
-        adjustLineSpacing(-1);
-    });
+    myDecreaseLineSpacingCommand = new Command(
+        tr("Decrease"), "Section.LineSpacing.Decrease", QKeySequence(), this);
+    connect(myDecreaseLineSpacingCommand, &QAction::triggered,
+            [=]() { adjustLineSpacing(-1); });
 
     // Note-related actions.
     myNoteDurationGroup = new QActionGroup(this);
-    createNoteDurationCommand(myWholeNoteCommand, tr("Whole"), "Notes.WholeNote",
-                              Position::WholeNote);
+    createNoteDurationCommand(myWholeNoteCommand, tr("Whole"),
+                              "Notes.WholeNote", Position::WholeNote);
     createNoteDurationCommand(myHalfNoteCommand, tr("Half"), "Notes.HalfNote",
                               Position::HalfNote);
     createNoteDurationCommand(myQuarterNoteCommand, tr("Quarter"),
@@ -2178,19 +2166,17 @@ void PowerTabEditor::createCommands()
                               "Notes.SixtyFourthNote",
                               Position::SixtyFourthNote);
 
-    myIncreaseDurationCommand = new Command(tr("Increase Duration"),
-                                            "Notes.Duration.Increase",
-                                            Qt::SHIFT + Qt::Key_Up, this);
-    connect(myIncreaseDurationCommand, &QAction::triggered, [=]() {
-        changeNoteDuration(true);
-    });
+    myIncreaseDurationCommand =
+        new Command(tr("Increase Duration"), "Notes.Duration.Increase",
+                    Qt::SHIFT + Qt::Key_Up, this);
+    connect(myIncreaseDurationCommand, &QAction::triggered,
+            [=]() { changeNoteDuration(true); });
 
-    myDecreaseDurationCommand = new Command(tr("Decrease Duration"),
-                                            "Notes.Duration.Decrease",
-                                            Qt::SHIFT + Qt::Key_Down, this);
-    connect(myDecreaseDurationCommand, &QAction::triggered, [=]() {
-        changeNoteDuration(false);
-    });
+    myDecreaseDurationCommand =
+        new Command(tr("Decrease Duration"), "Notes.Duration.Decrease",
+                    Qt::SHIFT + Qt::Key_Down, this);
+    connect(myDecreaseDurationCommand, &QAction::triggered,
+            [=]() { changeNoteDuration(false); });
 
     createPositionPropertyCommand(myDottedCommand, tr("Dotted"), "Notes.Dotted",
                                   QKeySequence(), Position::Dotted);
@@ -2200,16 +2186,16 @@ void PowerTabEditor::createCommands()
                                   Position::DoubleDotted);
 
     myAddDotCommand = new Command(tr("Add Dot"), "Notes.Dot.Add",
-                            Qt::SHIFT + Qt::Key_Right, this);
+                                  Qt::SHIFT + Qt::Key_Right, this);
     connect(myAddDotCommand, SIGNAL(triggered()), this, SLOT(addDot()));
 
     myRemoveDotCommand = new Command(tr("Remove Dot"), "Notes.Dot.Remove",
-                               Qt::SHIFT + Qt::Key_Left, this);
+                                     Qt::SHIFT + Qt::Key_Left, this);
     connect(myRemoveDotCommand, SIGNAL(triggered()), this, SLOT(removeDot()));
 
-    myLeftHandFingeringCommand = new Command(tr("Left Hand Fingering..."), 
-                                             "Notes.LeftHandFingering",
-                                             QKeySequence(), this);
+    myLeftHandFingeringCommand =
+        new Command(tr("Left Hand Fingering..."), "Notes.LeftHandFingering",
+                    QKeySequence(), this);
     myLeftHandFingeringCommand->setCheckable(true);
     connect(myLeftHandFingeringCommand, &QAction::triggered, this,
             &PowerTabEditor::editLeftHandFingering);
@@ -2224,7 +2210,8 @@ void PowerTabEditor::createCommands()
                               "Notes.GhostNote", Qt::Key_G, Note::GhostNote);
 
     createPositionPropertyCommand(myFermataCommand, tr("Fermata"),
-                                  "Notes.Fermata", Qt::Key_F, Position::Fermata);
+                                  "Notes.Fermata", Qt::Key_F,
+                                  Position::Fermata);
 
     createPositionPropertyCommand(myLetRingCommand, tr("Let Ring"),
                                   "Notes.LetRing", QKeySequence(),
@@ -2238,8 +2225,8 @@ void PowerTabEditor::createCommands()
                                   "Notes.Staccato", Qt::Key_Z,
                                   Position::Staccato);
 
-    createPositionPropertyCommand(myMarcatoCommand, tr("Accent"), "Notes.Accent",
-                                  Qt::Key_A, Position::Marcato);
+    createPositionPropertyCommand(myMarcatoCommand, tr("Accent"),
+                                  "Notes.Accent", Qt::Key_A, Position::Marcato);
 
     createPositionPropertyCommand(mySforzandoCommand, tr("Heavy Accent"),
                                   "Notes.HeavyAccent", QKeySequence(),
@@ -2248,24 +2235,24 @@ void PowerTabEditor::createCommands()
     // Octave actions
     createNotePropertyCommand(myOctave8vaCommand, tr("8va"), "Notes.Octave.8va",
                               QKeySequence(), Note::Octave8va);
-    createNotePropertyCommand(myOctave15maCommand, tr("15ma"), "Notes.Octave.15ma",
-                              QKeySequence(), Note::Octave15ma);
+    createNotePropertyCommand(myOctave15maCommand, tr("15ma"),
+                              "Notes.Octave.15ma", QKeySequence(),
+                              Note::Octave15ma);
     createNotePropertyCommand(myOctave8vbCommand, tr("8vb"), "Notes.Octave.8vb",
                               QKeySequence(), Note::Octave8vb);
     createNotePropertyCommand(myOctave15mbCommand, tr("15mb"),
                               "Notes.Octave.15mb", QKeySequence(),
                               Note::Octave15mb);
 
-    myTripletCommand = new Command(tr("Triplet"), "Notes.Triplet", Qt::Key_E, this);
-    connect(myTripletCommand, &QAction::triggered, [=]() {
-        editIrregularGrouping(true);
-    });
+    myTripletCommand =
+        new Command(tr("Triplet"), "Notes.Triplet", Qt::Key_E, this);
+    connect(myTripletCommand, &QAction::triggered,
+            [=]() { editIrregularGrouping(true); });
 
     myIrregularGroupingCommand = new Command(
         tr("Irregular Grouping"), "Notes.IrregularGrouping", Qt::Key_I, this);
-    connect(myIrregularGroupingCommand, &QAction::triggered, [=]() {
-        editIrregularGrouping(false);
-    });
+    connect(myIrregularGroupingCommand, &QAction::triggered,
+            [=]() { editIrregularGrouping(false); });
 
     // Rest Actions.
     myRestDurationGroup = new QActionGroup(this);
@@ -2276,19 +2263,17 @@ void PowerTabEditor::createCommands()
                               Position::HalfNote);
     createRestDurationCommand(myQuarterRestCommand, tr("Quarter"),
                               "Rests.Quarter", Position::QuarterNote);
-    createRestDurationCommand(myEighthRestCommand, tr("8th"),
-                              "Rests.Eighth", Position::EighthNote);
+    createRestDurationCommand(myEighthRestCommand, tr("8th"), "Rests.Eighth",
+                              Position::EighthNote);
     createRestDurationCommand(mySixteenthRestCommand, tr("16th"),
                               "Rests.Sixteenth", Position::SixteenthNote);
     createRestDurationCommand(myThirtySecondRestCommand, tr("32nd"),
-                              "Rests.ThirtySecond",
-                              Position::ThirtySecondNote);
+                              "Rests.ThirtySecond", Position::ThirtySecondNote);
     createRestDurationCommand(mySixtyFourthRestCommand, tr("64th"),
-                              "Rests.SixtyFourth",
-                              Position::SixtyFourthNote);
+                              "Rests.SixtyFourth", Position::SixtyFourthNote);
 
-    myAddRestCommand = new Command(tr("Add Rest"), "Rests.AddRest", Qt::Key_R,
-                                   this);
+    myAddRestCommand =
+        new Command(tr("Add Rest"), "Rests.AddRest", Qt::Key_R, this);
     connect(myAddRestCommand, SIGNAL(triggered()), this, SLOT(addRest()));
 
     myMultibarRestCommand = new Command(
@@ -2318,21 +2303,21 @@ void PowerTabEditor::createCommands()
     connect(myAlterationOfPaceCommand, SIGNAL(triggered()), this,
             SLOT(editAlterationOfPace()));
 
-    myKeySignatureCommand = new Command(tr("Edit Key Signature..."),
-                                        "MusicSymbols.EditKeySignature",
-                                        Qt::Key_K, this);
+    myKeySignatureCommand =
+        new Command(tr("Edit Key Signature..."),
+                    "MusicSymbols.EditKeySignature", Qt::Key_K, this);
     connect(myKeySignatureCommand, SIGNAL(triggered()), this,
             SLOT(editKeySignatureFromCaret()));
 
-    myTimeSignatureCommand = new Command(tr("Edit Time Signature..."),
-                                   "MusicSymbols.EditTimeSignature",
-                                   Qt::Key_T, this);
+    myTimeSignatureCommand =
+        new Command(tr("Edit Time Signature..."),
+                    "MusicSymbols.EditTimeSignature", Qt::Key_T, this);
     connect(myTimeSignatureCommand, SIGNAL(triggered()), this,
             SLOT(editTimeSignatureFromCaret()));
 
-    myStandardBarlineCommand = new Command(tr("Insert Standard Barline"),
-                                     "MusicSymbols.InsertStandardBarline",
-                                     Qt::Key_B, this);
+    myStandardBarlineCommand =
+        new Command(tr("Insert Standard Barline"),
+                    "MusicSymbols.InsertStandardBarline", Qt::Key_B, this);
     connect(myStandardBarlineCommand, SIGNAL(triggered()), this,
             SLOT(insertStandardBarline()));
 
@@ -2365,7 +2350,7 @@ void PowerTabEditor::createCommands()
     volumeSwellAct->setCheckable(true);
     connect(volumeSwellAct, SIGNAL(triggered()), this, SLOT(editVolumeSwell()));
 #endif
-    
+
     // Tab Symbol Actions.
     myHammerPullCommand = new Command(tr("Hammer On/Pull Off"),
                                       "TabSymbols.HammerPull", Qt::Key_H, this);
@@ -2378,10 +2363,9 @@ void PowerTabEditor::createCommands()
                               "TabSymbols.HammerOnFromNowhere", QKeySequence(),
                               Note::HammerOnFromNowhere);
 
-    createNotePropertyCommand(myPullOffToNowhereCommand,
-                              tr("Pull Off To Nowhere"),
-                              "TabSymbols.PullOffToNowhere", QKeySequence(),
-                              Note::PullOffToNowhere);
+    createNotePropertyCommand(
+        myPullOffToNowhereCommand, tr("Pull Off To Nowhere"),
+        "TabSymbols.PullOffToNowhere", QKeySequence(), Note::PullOffToNowhere);
 
     createNotePropertyCommand(myNaturalHarmonicCommand, tr("Natural Harmonic"),
                               "TabSymbols.NaturalHarmonic", QKeySequence(),
@@ -2394,9 +2378,9 @@ void PowerTabEditor::createCommands()
     connect(myArtificialHarmonicCommand, SIGNAL(triggered()), this,
             SLOT(editArtificialHarmonic()));
 
-    myTappedHarmonicCommand = new Command(tr("Tapped Harmonic..."),
-                                          "TabSymbols.TappedHarmonic",
-                                          QKeySequence(), this);
+    myTappedHarmonicCommand =
+        new Command(tr("Tapped Harmonic..."), "TabSymbols.TappedHarmonic",
+                    QKeySequence(), this);
     myTappedHarmonicCommand->setCheckable(true);
     connect(myTappedHarmonicCommand, SIGNAL(triggered()), this,
             SLOT(editTappedHarmonic()));
@@ -2419,9 +2403,9 @@ void PowerTabEditor::createCommands()
                                   "TabSymbols.PalmMute", Qt::Key_M,
                                   Position::PalmMuting);
 
-    createPositionPropertyCommand(myTremoloPickingCommand, tr("Tremolo Picking"),
-                                  "TabSymbols.TremoloPicking", QKeySequence(),
-                                  Position::TremoloPicking);
+    createPositionPropertyCommand(
+        myTremoloPickingCommand, tr("Tremolo Picking"),
+        "TabSymbols.TremoloPicking", QKeySequence(), Position::TremoloPicking);
 
     createPositionPropertyCommand(myArpeggioUpCommand, tr("Arpeggio Up"),
                                   "TabSymbols.ArpeggioUp", QKeySequence(),
@@ -2434,8 +2418,8 @@ void PowerTabEditor::createCommands()
     createPositionPropertyCommand(myTapCommand, tr("Tap"), "TabSymbols.Tap",
                                   Qt::Key_P, Position::Tap);
 
-    myTrillCommand = new Command(tr("Trill..."), "TabSymbols.Trill",
-                                 QKeySequence(), this);
+    myTrillCommand =
+        new Command(tr("Trill..."), "TabSymbols.Trill", QKeySequence(), this);
     myTrillCommand->setCheckable(true);
     connect(myTrillCommand, SIGNAL(triggered()), this, SLOT(editTrill()));
 
@@ -2443,9 +2427,9 @@ void PowerTabEditor::createCommands()
                                   "TabSymbols.PickStrokeUp", QKeySequence(),
                                   Position::PickStrokeUp);
 
-    createPositionPropertyCommand(myPickStrokeDownCommand, tr("Pickstroke Down"),
-                                  "TabSymbols.PickStrokeDown", QKeySequence(),
-                                  Position::PickStrokeDown);
+    createPositionPropertyCommand(
+        myPickStrokeDownCommand, tr("Pickstroke Down"),
+        "TabSymbols.PickStrokeDown", QKeySequence(), Position::PickStrokeDown);
 
     createNotePropertyCommand(mySlideIntoFromAboveCommand,
                               tr("Slide Into From Above"),
@@ -2483,18 +2467,17 @@ void PowerTabEditor::createCommands()
     connect(myAddInstrumentCommand, &QAction::triggered, this,
             &PowerTabEditor::addInstrument);
 
-    myPlayerChangeCommand = new Command(tr("Player Change..."),
-                                        "Player.PlayerChange", QKeySequence(),
-                                        this);
+    myPlayerChangeCommand = new Command(
+        tr("Player Change..."), "Player.PlayerChange", QKeySequence(), this);
     myPlayerChangeCommand->setCheckable(true);
     connect(myPlayerChangeCommand, SIGNAL(triggered()), this,
             SLOT(editPlayerChange()));
 
-    myShowTuningDictionaryCommand = new Command(tr("Tuning Dictionary..."),
-                                                "Player.TuningDictionary",
-                                                QKeySequence(), this);
-    connect(myShowTuningDictionaryCommand, SIGNAL(triggered()),
-            this, SLOT(showTuningDictionary()));
+    myShowTuningDictionaryCommand =
+        new Command(tr("Tuning Dictionary..."), "Player.TuningDictionary",
+                    QKeySequence(), this);
+    connect(myShowTuningDictionaryCommand, SIGNAL(triggered()), this,
+            SLOT(showTuningDictionary()));
 
     myEditViewFiltersCommand =
         new Command(tr("Edit View Filters..."), "Player.EditViewFilters",
@@ -2503,7 +2486,7 @@ void PowerTabEditor::createCommands()
             &PowerTabEditor::editViewFilters);
 
     // Window Menu commands.
-    
+
 #ifdef Q_OS_MAC
     // NextChild is Command-{ on OS X, so use the more conventional Control-Tab
     // to match Safari, Finder, etc.
@@ -2513,18 +2496,14 @@ void PowerTabEditor::createCommands()
     QKeySequence next_tab_seq = QKeySequence::NextChild;
     QKeySequence prev_tab_seq = QKeySequence::PreviousChild;
 #endif
-    
-    myNextTabCommand = new Command(tr("Next Tab"), "Window.NextTab",
-                                   next_tab_seq, this);
-    connect(myNextTabCommand, &QAction::triggered, [=]() {
-        cycleTab(1);
-    });
+
+    myNextTabCommand =
+        new Command(tr("Next Tab"), "Window.NextTab", next_tab_seq, this);
+    connect(myNextTabCommand, &QAction::triggered, [=]() { cycleTab(1); });
 
     myPrevTabCommand = new Command(tr("Previous Tab"), "Window.PreviousTab",
                                    prev_tab_seq, this);
-    connect(myPrevTabCommand, &QAction::triggered, [=]() {
-        cycleTab(-1);
-    });
+    connect(myPrevTabCommand, &QAction::triggered, [=]() { cycleTab(-1); });
 
     // Help menu commands.
     myReportBugCommand = new Command(tr("Report Bug..."), "Help.ReportBug",
@@ -2583,13 +2562,11 @@ void PowerTabEditor::createMixer()
     myMixerDockWidget->setWidget(scroll);
     addDockWidget(Qt::BottomDockWidgetArea, myMixerDockWidget);
 
-    myPlayerEditPubSub.subscribe([=](int index, const Player & player,
-                                 bool undoable) {
-        editPlayer(index, player, undoable);
-    });
-    myPlayerRemovePubSub.subscribe([=](int index) {
-        removePlayer(index);
-    });
+    myPlayerEditPubSub.subscribe(
+        [=](int index, const Player &player, bool undoable) {
+            editPlayer(index, player, undoable);
+        });
+    myPlayerRemovePubSub.subscribe([=](int index) { removePlayer(index); });
 }
 
 void PowerTabEditor::createInstrumentPanel()
@@ -2609,12 +2586,12 @@ void PowerTabEditor::createInstrumentPanel()
     myInstrumentDockWidget->setWidget(scroll);
     addDockWidget(Qt::BottomDockWidgetArea, myInstrumentDockWidget);
 
-    myInstrumentEditPubSub.subscribe([=](int index, const Instrument &instrument) {
-        editInstrument(index, instrument);
-    });
-    myInstrumentRemovePubSub.subscribe([=](int index) {
-        removeInstrument(index);
-    });
+    myInstrumentEditPubSub.subscribe(
+        [=](int index, const Instrument &instrument) {
+            editInstrument(index, instrument);
+        });
+    myInstrumentRemovePubSub.subscribe(
+        [=](int index) { removeInstrument(index); });
 }
 
 Command *PowerTabEditor::createCommandWrapper(
@@ -2633,49 +2610,46 @@ Command *PowerTabEditor::createCommandWrapper(
 }
 
 void PowerTabEditor::createNoteDurationCommand(
-        Command *&command, const QString &menuName, const QString &commandName,
-        Position::DurationType durationType)
+    Command *&command, const QString &menuName, const QString &commandName,
+    Position::DurationType durationType)
 {
     command = new Command(menuName, commandName, QKeySequence(), this);
     command->setCheckable(true);
-    connect(command, &QAction::triggered, [=]() {
-        updateNoteDuration(durationType);
-    });
+    connect(command, &QAction::triggered,
+            [=]() { updateNoteDuration(durationType); });
     myNoteDurationGroup->addAction(command);
 }
 
 void PowerTabEditor::createRestDurationCommand(
-        Command *&command, const QString &menuName, const QString &commandName,
-        Position::DurationType durationType)
+    Command *&command, const QString &menuName, const QString &commandName,
+    Position::DurationType durationType)
 {
     command = new Command(menuName, commandName, QKeySequence(), this);
     command->setCheckable(true);
-    connect(command, &QAction::triggered, [=]() {
-        editRest(durationType);
-    });
+    connect(command, &QAction::triggered, [=]() { editRest(durationType); });
     myRestDurationGroup->addAction(command);
 }
 
-void PowerTabEditor::createNotePropertyCommand(
-        Command *&command, const QString &menuName, const QString &commandName,
-        const QKeySequence &shortcut, Note::SimpleProperty property)
+void PowerTabEditor::createNotePropertyCommand(Command *&command,
+                                               const QString &menuName,
+                                               const QString &commandName,
+                                               const QKeySequence &shortcut,
+                                               Note::SimpleProperty property)
 {
     command = new Command(menuName, commandName, shortcut, this);
     command->setCheckable(true);
-    connect(command, &QAction::triggered, [=]() {
-        editSimpleNoteProperty(command, property);
-    });
+    connect(command, &QAction::triggered,
+            [=]() { editSimpleNoteProperty(command, property); });
 }
 
 void PowerTabEditor::createPositionPropertyCommand(
-        Command *&command, const QString &menuName, const QString &commandName,
-        const QKeySequence &shortcut, Position::SimpleProperty property)
+    Command *&command, const QString &menuName, const QString &commandName,
+    const QKeySequence &shortcut, Position::SimpleProperty property)
 {
     command = new Command(menuName, commandName, shortcut, this);
     command->setCheckable(true);
-    connect(command, &QAction::triggered, [=]() {
-        editSimplePositionProperty(command, property);
-    });
+    connect(command, &QAction::triggered,
+            [=]() { editSimplePositionProperty(command, property); });
 }
 
 void PowerTabEditor::createMenus()
@@ -2849,7 +2823,7 @@ void PowerTabEditor::createMenus()
     myMusicSymbolsMenu->addAction(volumeSwellAct);
 
 #endif
-        
+
     // Tab Symbols Menu
     myTabSymbolsMenu = menuBar()->addMenu(tr("&Tab Symbols"));
     myHammerOnMenu = myTabSymbolsMenu->addMenu(tr("&Hammer Ons/Pull Offs"));
@@ -2862,8 +2836,8 @@ void PowerTabEditor::createMenus()
     myTabSymbolsMenu->addAction(myTappedHarmonicCommand);
     myTabSymbolsMenu->addSeparator();
 
-	myTabSymbolsMenu->addAction(myBendCommand);
-	myTabSymbolsMenu->addSeparator();
+    myTabSymbolsMenu->addAction(myBendCommand);
+    myTabSymbolsMenu->addSeparator();
 
     mySlideIntoMenu = myTabSymbolsMenu->addMenu(tr("Slide Into"));
     mySlideIntoMenu->addAction(mySlideIntoFromBelowCommand);
@@ -3025,7 +2999,7 @@ void PowerTabEditor::setupNewTab()
 
     // Create title for the tab bar.
     QString title = fileInfo.fileName();
-    QFontMetrics fm (myTabWidget->font());
+    QFontMetrics fm(myTabWidget->font());
 
     // Each tab is 200px wide, so we want to shorten the name if it's wider
     // than 140px.
@@ -3056,8 +3030,10 @@ void PowerTabEditor::setupNewTab()
 
     auto end = std::chrono::high_resolution_clock::now();
     qDebug() << "Tab opened in"
-             << std::chrono::duration_cast<std::chrono::milliseconds>(
-                    end - start).count() << "ms";
+             << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                      start)
+                    .count()
+             << "ms";
 }
 
 namespace
@@ -3075,7 +3051,7 @@ inline void updateNoteProperty(Command *command, const Note *note,
     command->setEnabled(note != nullptr);
     command->setChecked(note && note->hasProperty(property));
 }
-}
+} // namespace
 
 void PowerTabEditor::updateCommands()
 {
@@ -3163,7 +3139,8 @@ void PowerTabEditor::updateCommands()
                                     pos->hasProperty(Position::DoubleDotted)));
 
     myLeftHandFingeringCommand->setEnabled(note != nullptr);
-    myLeftHandFingeringCommand->setChecked(note && note->hasLeftHandFingering());
+    myLeftHandFingeringCommand->setChecked(note &&
+                                           note->hasLeftHandFingering());
 
     if (note)
     {
@@ -3334,7 +3311,8 @@ void PowerTabEditor::editRest(Position::DurationType duration)
     {
         if (pos->getDurationType() == duration)
         {
-            // TODO - delete rest using the regular command for deleting positions.
+            // TODO - delete rest using the regular command for deleting
+            // positions.
         }
         else
         {
@@ -3346,7 +3324,6 @@ void PowerTabEditor::editRest(Position::DurationType duration)
     {
         myUndoManager->push(new AddRest(location, duration),
                             location.getSystemIndex());
-
     }
 }
 
@@ -3432,15 +3409,15 @@ void PowerTabEditor::editTimeSignature(const ScoreLocation &timeLocation)
     TimeSignatureDialog dialog(this, barline->getTimeSignature());
     if (dialog.exec() == QDialog::Accepted)
     {
-        myUndoManager->push(new EditTimeSignature(location,
-                                                  dialog.getTimeSignature()),
-                            UndoManager::AFFECTS_ALL_SYSTEMS);
+        myUndoManager->push(
+            new EditTimeSignature(location, dialog.getTimeSignature()),
+            UndoManager::AFFECTS_ALL_SYSTEMS);
     }
 }
 
 void PowerTabEditor::editBarline(const ScoreLocation &barLocation)
 {
-	ScoreLocation location(getLocation());
+    ScoreLocation location(getLocation());
     location.setSystemIndex(barLocation.getSystemIndex());
     location.setPositionIndex(barLocation.getPositionIndex());
     System &system = location.getSystem();
@@ -3464,8 +3441,8 @@ void PowerTabEditor::editBarline(const ScoreLocation &barLocation)
     }
     else
     {
-        BarlineDialog dialog(this, Barline::SingleBar, Barline::MIN_REPEAT_COUNT,
-                             false, false);
+        BarlineDialog dialog(this, Barline::SingleBar,
+                             Barline::MIN_REPEAT_COUNT, false, false);
         if (dialog.exec() == QDialog::Accepted)
         {
             Barline bar(location.getPositionIndex(), dialog.getBarType(),
@@ -3492,8 +3469,8 @@ void PowerTabEditor::editClef(int system, int staff)
         location.getSystemIndex());
 }
 
-void PowerTabEditor::editSimplePositionProperty(Command *command,
-                                                Position::SimpleProperty property)
+void PowerTabEditor::editSimplePositionProperty(
+    Command *command, Position::SimpleProperty property)
 {
     ScoreLocation &location = getLocation();
     std::vector<Position *> selectedPositions = location.getSelectedPositions();
@@ -3511,15 +3488,15 @@ void PowerTabEditor::editSimplePositionProperty(Command *command,
 
     if (enableProperty)
     {
-        myUndoManager->push(new AddPositionProperty(location, property,
-                                                    command->text()),
-                            location.getSystemIndex());
+        myUndoManager->push(
+            new AddPositionProperty(location, property, command->text()),
+            location.getSystemIndex());
     }
     else
     {
-        myUndoManager->push(new RemovePositionProperty(location, property,
-                                                       command->text()),
-                            location.getSystemIndex());
+        myUndoManager->push(
+            new RemovePositionProperty(location, property, command->text()),
+            location.getSystemIndex());
     }
 }
 
@@ -3542,15 +3519,15 @@ void PowerTabEditor::editSimpleNoteProperty(Command *command,
 
     if (enableProperty)
     {
-        myUndoManager->push(new AddNoteProperty(location, property,
-                                                command->text()),
-                            location.getSystemIndex());
+        myUndoManager->push(
+            new AddNoteProperty(location, property, command->text()),
+            location.getSystemIndex());
     }
     else
     {
-        myUndoManager->push(new RemoveNoteProperty(location, property,
-                                                   command->text()),
-                            location.getSystemIndex());
+        myUndoManager->push(
+            new RemoveNoteProperty(location, property, command->text()),
+            location.getSystemIndex());
     }
 }
 

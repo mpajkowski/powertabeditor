@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2014 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2014 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "benddialog.h"
 #include "ui_benddialog.h"
@@ -27,11 +27,10 @@ BendDialog::BendDialog(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->bendTypeComboBox->addItems({
-        tr("Bend"), tr("Bend and Release"), tr("Bend and Hold"),
-        tr("Pre-Bend"), tr("Pre-Bend and Release"), tr("Pre-Bend and Hold"),
-        tr("Gradual Release"), tr("Immediate Release")
-    });
+    ui->bendTypeComboBox->addItems(
+        { tr("Bend"), tr("Bend and Release"), tr("Bend and Hold"),
+          tr("Pre-Bend"), tr("Pre-Bend and Release"), tr("Pre-Bend and Hold"),
+          tr("Gradual Release"), tr("Immediate Release") });
 
     initBendPitches();
 
@@ -43,21 +42,30 @@ BendDialog::BendDialog(QWidget *parent)
     initDrawPoints(ui->vertStartingPointComboBox);
     initDrawPoints(ui->vertEndingPointComboBox);
 
-    connect(ui->bendTypeComboBox, static_cast<void (QComboBox::*)(int)>(
-                                         &QComboBox::currentIndexChanged),
-            this, &BendDialog::handleBendTypeChanged);
+    connect(
+        ui->bendTypeComboBox,
+        static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        this, &BendDialog::handleBendTypeChanged);
     handleBendTypeChanged();
 }
 
-BendDialog::~BendDialog() { delete ui; }
+BendDialog::~BendDialog()
+{
+    delete ui;
+}
 
 Bend BendDialog::getBend() const
 {
     return Bend(
         static_cast<Bend::BendType>(ui->bendTypeComboBox->currentIndex()),
-        ui->bentPitchComboBox->itemData(ui->bentPitchComboBox->currentIndex()).toInt(),
-        ui->releasePitchComboBox->itemData(ui->releasePitchComboBox->currentIndex()).toInt(),
-        ui->defaultDurationButton->isChecked() ? 0 : ui->bendDurationSpinBox->value() + 1,
+        ui->bentPitchComboBox->itemData(ui->bentPitchComboBox->currentIndex())
+            .toInt(),
+        ui->releasePitchComboBox
+            ->itemData(ui->releasePitchComboBox->currentIndex())
+            .toInt(),
+        ui->defaultDurationButton->isChecked()
+            ? 0
+            : ui->bendDurationSpinBox->value() + 1,
         static_cast<Bend::DrawPoint>(
             ui->vertStartingPointComboBox->currentIndex()),
         static_cast<Bend::DrawPoint>(

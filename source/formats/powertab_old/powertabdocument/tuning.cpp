@@ -15,22 +15,22 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 using std::pair;
 using std::string;
 
-const char*     Tuning::DEFAULT_NAME                    = "";
-const uint8_t   Tuning::DEFAULT_DATA                    = 0;
-const int8_t    Tuning::MIN_MUSIC_NOTATION_OFFSET       = -12;
-const int8_t    Tuning::MAX_MUSIC_NOTATION_OFFSET       = 12;
-const uint32_t  Tuning::MIN_STRING_COUNT                = 3;
-const uint32_t  Tuning::MAX_STRING_COUNT                = 8;
+const char *Tuning::DEFAULT_NAME = "";
+const uint8_t Tuning::DEFAULT_DATA = 0;
+const int8_t Tuning::MIN_MUSIC_NOTATION_OFFSET = -12;
+const int8_t Tuning::MAX_MUSIC_NOTATION_OFFSET = 12;
+const uint32_t Tuning::MIN_STRING_COUNT = 3;
+const uint32_t Tuning::MAX_STRING_COUNT = 8;
 
 // Constructors/Destructors
 /// Default Constructor
-Tuning::Tuning() :
-    m_name(DEFAULT_NAME), m_data(DEFAULT_DATA)
+Tuning::Tuning() : m_name(DEFAULT_NAME), m_data(DEFAULT_DATA)
 {
 }
 
@@ -38,7 +38,7 @@ Tuning::Tuning() :
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Tuning::Serialize(PowerTabOutputStream& stream) const
+bool Tuning::Serialize(PowerTabOutputStream &stream) const
 {
     stream.WriteMFCString(m_name);
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -55,7 +55,7 @@ bool Tuning::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Tuning::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool Tuning::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream.ReadMFCString(m_name);
     stream >> m_data;
@@ -81,4 +81,4 @@ std::vector<uint8_t> Tuning::GetTuningNotes() const
     return m_noteArray;
 }
 
-}
+} // namespace PowerTabDocument

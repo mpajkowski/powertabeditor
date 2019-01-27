@@ -134,12 +134,10 @@ std::ostream &operator<<(std::ostream &os, const ChordName &chord)
                                          "6",  "m6", "7",      "maj7", "m7",
                                          "+7", "°7", "m/maj7", "m7b5" };
     static std::array<ChordName::FormulaModification, 13> theModifications = {
-        { ChordName::Suspended2nd, ChordName::Suspended4th,
-          ChordName::Added2nd,     ChordName::Added4th,
-          ChordName::Added6th,     ChordName::Added9th,
-          ChordName::Added11th,    ChordName::Flatted13th,
-          ChordName::Raised11th,   ChordName::Flatted9th,
-          ChordName::Raised9th,    ChordName::Flatted5th,
+        { ChordName::Suspended2nd, ChordName::Suspended4th, ChordName::Added2nd,
+          ChordName::Added4th, ChordName::Added6th, ChordName::Added9th,
+          ChordName::Added11th, ChordName::Flatted13th, ChordName::Raised11th,
+          ChordName::Flatted9th, ChordName::Raised9th, ChordName::Flatted5th,
           ChordName::Raised5th }
     };
     static std::string theModificationText[] = {

@@ -2,30 +2,32 @@
 // Name:            powertaboutputstream.cpp
 // Purpose:         Handles serialization of MFC based Power Tab data
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Dec 20, 2004
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #include "powertaboutputstream.h"
+#include "colour.h"
 #include "powertabobject.h"
 #include "rect.h"
-#include "colour.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 using std::string;
 
 // Constructor/Destructor
 /// Primary Constructor
-PowerTabOutputStream::PowerTabOutputStream(std::ostream& stream) :
-    m_mapsInitialized(false), m_mapCount(0),
-    m_lastPowerTabError(POWERTABSTREAM_NO_ERROR),
-    m_stream(stream)
+PowerTabOutputStream::PowerTabOutputStream(std::ostream &stream)
+    : m_mapsInitialized(false),
+      m_mapCount(0),
+      m_lastPowerTabError(POWERTABSTREAM_NO_ERROR),
+      m_stream(stream)
 {
-    //m_stream.open(filename.c_str(), ofstream::out | ofstream::binary);
+    // m_stream.open(filename.c_str(), ofstream::out | ofstream::binary);
 }
 
 // Write Functions
@@ -51,7 +53,7 @@ bool PowerTabOutputStream::WriteCount(uint32_t count)
 /// Writes a string object to the stream
 /// @param string String to write
 /// @return True if the string was written, false if not
-bool PowerTabOutputStream::WriteMFCString(const string& str)
+bool PowerTabOutputStream::WriteMFCString(const string &str)
 {
     const uint32_t length = static_cast<uint32_t>(str.length());
     // Write the string length
@@ -109,7 +111,7 @@ bool PowerTabOutputStream::WriteMFCStringLength(uint32_t length, bool unicode)
 /// Writes a Color object to the stream
 /// @param colour Colour to write
 /// @return True if the color was written, false if not
-bool PowerTabOutputStream::WriteWin32ColorRef(const Colour& colour)
+bool PowerTabOutputStream::WriteWin32ColorRef(const Colour &colour)
 {
     *this << colour.Red() << colour.Green() << colour.Blue() << colour.Alpha();
     return CheckState();
@@ -118,16 +120,17 @@ bool PowerTabOutputStream::WriteWin32ColorRef(const Colour& colour)
 /// Writes a Rect object to the stream
 /// @param rect Rect object whose values are to be written
 /// @return True if the rect was written, false if not
-bool PowerTabOutputStream::WriteMFCRect(const Rect& rect)
+bool PowerTabOutputStream::WriteMFCRect(const Rect &rect)
 {
-    *this << rect.GetLeft() << rect.GetTop() << rect.GetRight() << rect.GetBottom();
+    *this << rect.GetLeft() << rect.GetTop() << rect.GetRight()
+          << rect.GetBottom();
     return CheckState();
 }
 
 /// Writes a Power Tab object to the stream, in the format of MFC's CArchive
 /// @param object Power Tab object to write
 /// @return True if the object was written, false if not
-bool PowerTabOutputStream::WriteObject(const PowerTabObject* object)
+bool PowerTabOutputStream::WriteObject(const PowerTabObject *object)
 {
     // object can be NULL
 
@@ -142,7 +145,7 @@ bool PowerTabOutputStream::WriteObject(const PowerTabObject* object)
     {
         // Lookup the object in the map
         if (m_objectHashMap.find(object) != m_objectHashMap.end())
-            // Assumes initialized to 0 map
+        // Assumes initialized to 0 map
         {
             uint32_t nObjectIndex = m_objectHashMap[object];
 
@@ -177,7 +180,7 @@ bool PowerTabOutputStream::WriteObject(const PowerTabObject* object)
 /// Writes a Power Tab object's class information to the stream
 /// @param object Power Tab object whose class information is to be written
 /// @return True if the class information was written, false if not
-bool PowerTabOutputStream::WriteClassInformation(const PowerTabObject* object)
+bool PowerTabOutputStream::WriteClassInformation(const PowerTabObject *object)
 {
     if (object == nullptr)
     {
@@ -288,7 +291,7 @@ bool PowerTabOutputStream::CheckCount()
 /// Maps a Power Tab object to its object index
 /// @param object Power Tab object to map
 /// @return True if the object was mapped, false if not
-bool PowerTabOutputStream::MapObject(const PowerTabObject* object)
+bool PowerTabOutputStream::MapObject(const PowerTabObject *object)
 {
     // Initialize the internal maps
     if (!m_mapsInitialized)
@@ -310,4 +313,4 @@ bool PowerTabOutputStream::MapObject(const PowerTabObject* object)
     return (true);
 }
 
-}
+} // namespace PowerTabDocument

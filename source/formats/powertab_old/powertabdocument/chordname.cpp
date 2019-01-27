@@ -11,33 +11,36 @@
 
 #include "chordname.h"
 
+#include "powertabfileheader.h" // Needed for FILEVERSION constants
 #include <sstream>
-#include "powertabfileheader.h"         // Needed for FILEVERSION constants
 
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
-const uint16_t ChordName::DEFAULT_KEY                         = (uint16_t)((variationDefault << 12) | (C << 8) | (variationDefault << 4) | C); // C/C
-const uint8_t ChordName::DEFAULT_FORMULA                     = (uint8_t)(major << 4);     // Major
-const uint16_t ChordName::DEFAULT_FORMULA_MODIFICATIONS       = 0;
-const uint8_t ChordName::DEFAULT_EXTRA                       = 0;
+const uint16_t ChordName::DEFAULT_KEY = (uint16_t)(
+    (variationDefault << 12) | (C << 8) | (variationDefault << 4) | C); // C/C
+const uint8_t ChordName::DEFAULT_FORMULA = (uint8_t)(major << 4); // Major
+const uint16_t ChordName::DEFAULT_FORMULA_MODIFICATIONS = 0;
+const uint8_t ChordName::DEFAULT_EXTRA = 0;
 
 // Type Constants
-const uint8_t ChordName::MIN_TYPE                            = 2;
-const uint8_t ChordName::MAX_TYPE                            = 8;
+const uint8_t ChordName::MIN_TYPE = 2;
+const uint8_t ChordName::MAX_TYPE = 8;
 
 // Fret Position Constants
-const uint8_t ChordName::MIN_FRET_POSITION                   = 0;
-const uint8_t ChordName::MAX_FRET_POSITION                   = 24;
+const uint8_t ChordName::MIN_FRET_POSITION = 0;
+const uint8_t ChordName::MAX_FRET_POSITION = 24;
 
 /// Default Constructor
-ChordName::ChordName() :
-    m_key(DEFAULT_KEY), m_formula(DEFAULT_FORMULA),
-    m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
-    m_extra(DEFAULT_EXTRA)
+ChordName::ChordName()
+    : m_key(DEFAULT_KEY),
+      m_formula(DEFAULT_FORMULA),
+      m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
+      m_extra(DEFAULT_EXTRA)
 {
     //------Last Checked------//
     // - Jan 4, 2005
@@ -52,11 +55,13 @@ ChordName::ChordName() :
 /// formulaModifications enum for values)
 /// @param fretPosition Fret position to set (0 through 30 + not used)
 /// @param type Type to set
-ChordName::ChordName(uint8_t tonicKey, uint8_t tonicKeyVariation, uint8_t formula,
-    uint16_t formulaModifications, uint8_t fretPosition, uint8_t type) :
-    m_key(DEFAULT_KEY), m_formula(DEFAULT_FORMULA),
-    m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
-    m_extra(DEFAULT_EXTRA)
+ChordName::ChordName(uint8_t tonicKey, uint8_t tonicKeyVariation,
+                     uint8_t formula, uint16_t formulaModifications,
+                     uint8_t fretPosition, uint8_t type)
+    : m_key(DEFAULT_KEY),
+      m_formula(DEFAULT_FORMULA),
+      m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
+      m_extra(DEFAULT_EXTRA)
 {
     //------Last Checked------//
     // - Jan 4, 2005
@@ -68,11 +73,12 @@ ChordName::ChordName(uint8_t tonicKey, uint8_t tonicKeyVariation, uint8_t formul
 }
 
 /// Copy Constructor
-ChordName::ChordName(const ChordName& chordName) :
-    PowerTabObject(),
-    m_key(DEFAULT_KEY), m_formula(DEFAULT_FORMULA),
-    m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
-    m_extra(DEFAULT_EXTRA)
+ChordName::ChordName(const ChordName &chordName)
+    : PowerTabObject(),
+      m_key(DEFAULT_KEY),
+      m_formula(DEFAULT_FORMULA),
+      m_formulaModifications(DEFAULT_FORMULA_MODIFICATIONS),
+      m_extra(DEFAULT_EXTRA)
 {
     //------Last Checked------//
     // - Dec 16, 2004
@@ -87,7 +93,7 @@ ChordName::~ChordName()
 }
 
 /// Assignment Operator
-const ChordName& ChordName::operator=(const ChordName& chordName)
+const ChordName &ChordName::operator=(const ChordName &chordName)
 {
     //------Last Checked------//
     // - Jan 4, 2005
@@ -104,20 +110,17 @@ const ChordName& ChordName::operator=(const ChordName& chordName)
 }
 
 /// Equality Operator
-bool ChordName::operator==(const ChordName& chordName) const
+bool ChordName::operator==(const ChordName &chordName) const
 {
     //------Last Checked------//
     // - Jan 4, 2005
-    return (
-        (m_key == chordName.m_key) &&
-        (m_formula == chordName.m_formula) &&
-        (m_formulaModifications == chordName.m_formulaModifications) &&
-        (m_extra == chordName.m_extra)
-    );
+    return ((m_key == chordName.m_key) && (m_formula == chordName.m_formula) &&
+            (m_formulaModifications == chordName.m_formulaModifications) &&
+            (m_extra == chordName.m_extra));
 }
 
 /// Inequality Operator
-bool ChordName::operator!=(const ChordName& chordName) const
+bool ChordName::operator!=(const ChordName &chordName) const
 {
     //------Last Checked------//
     // - Dec 16, 2004
@@ -128,7 +131,7 @@ bool ChordName::operator!=(const ChordName& chordName) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool ChordName::Serialize(PowerTabOutputStream& stream) const
+bool ChordName::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_key << m_formula << m_formulaModifications << m_extra;
     return stream.CheckState();
@@ -138,7 +141,7 @@ bool ChordName::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool ChordName::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool ChordName::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     //------Last Checked------//
     // - Dec 14, 2004
@@ -206,7 +209,7 @@ bool ChordName::SetTonic(uint8_t key, uint8_t keyVariation)
 /// Gets the tonic key
 /// @param key Holds the key return value
 /// @param keyVariation Holds the key variation return value
-void ChordName::GetTonic(uint8_t& key, uint8_t& keyVariation) const
+void ChordName::GetTonic(uint8_t &key, uint8_t &keyVariation) const
 {
     //------Last Checked------//
     // - Jan 17, 2005
@@ -250,7 +253,7 @@ bool ChordName::SetBassNote(uint8_t key, uint8_t keyVariation)
 /// Gets the bass note key
 /// @param key Holds the key return value
 /// @param keyVariation Holds the key variation return value
-void ChordName::GetBassNote(uint8_t& key, uint8_t& keyVariation) const
+void ChordName::GetBassNote(uint8_t &key, uint8_t &keyVariation) const
 {
     //------Last Checked------//
     // - Jan 17, 2005
@@ -276,7 +279,7 @@ bool ChordName::IsSameBassNote(uint8_t key, uint8_t keyVariation) const
 /// @return True if the bass note matches the tonic key, false otherwise
 bool ChordName::TonicMatchesBassNote() const
 {
-    uint8_t tonicKey= 0, bassNote = 0, variation = 0;
+    uint8_t tonicKey = 0, bassNote = 0, variation = 0;
 
     GetBassNote(bassNote, variation);
     GetTonic(tonicKey, variation);
@@ -318,21 +321,13 @@ std::string ChordName::GetFormulaText() const
     // Add any extension to the chord name
     int nFormula = GetFormula();
     bool bExtension = false;
-    uint16_t wExtension[3] = {extended9th, extended11th, extended13th};
-    std::string strExtension[3] = {"9", "11", "13"};
+    uint16_t wExtension[3] = { extended9th, extended11th, extended13th };
+    std::string strExtension[3] = { "9", "11", "13" };
 
-    std::string chordAbbreviations[10] =
-    {
-        "maj",
-        "m",
-        "+",
-        std::string(1, 176u), // degree symbol
-        "5",
-        "add",
-        "sus2",
-        "sus4",
-        "#",
-        "b"
+    std::string chordAbbreviations[10] = {
+        "maj", "m",   "+",    std::string(1, 176u), // degree symbol
+        "5",   "add", "sus2", "sus4",
+        "#",   "b"
     };
 
     for (int j = 0; j < 3; j++)
@@ -341,15 +336,20 @@ std::string ChordName::GetFormulaText() const
         {
             if (nFormula >= 8)
             {
-                returnValue += (
-                    (nFormula == 8) ? chordAbbreviations[0] :
-                    (nFormula == 9) ? chordAbbreviations[1] :
-                    (nFormula == 10) ? chordAbbreviations[2] :
-                    (nFormula == 11) ? chordAbbreviations[3] :
-                    (nFormula == 12) ? (chordAbbreviations[1] + "/" +
-                        chordAbbreviations[0]) :
-                    (chordAbbreviations[1] + strExtension[j] + "b5")
-                );
+                returnValue +=
+                    ((nFormula == 8)
+                         ? chordAbbreviations[0]
+                         : (nFormula == 9)
+                               ? chordAbbreviations[1]
+                               : (nFormula == 10)
+                                     ? chordAbbreviations[2]
+                                     : (nFormula == 11)
+                                           ? chordAbbreviations[3]
+                                           : (nFormula == 12)
+                                                 ? (chordAbbreviations[1] +
+                                                    "/" + chordAbbreviations[0])
+                                                 : (chordAbbreviations[1] +
+                                                    strExtension[j] + "b5"));
 
                 if (nFormula < 13)
                     returnValue += strExtension[j];
@@ -361,43 +361,39 @@ std::string ChordName::GetFormulaText() const
     }
 
     // Chord suffixes
-    std::string strSuffixList[14] =
-    {
-        "",
-        chordAbbreviations[1],
-        chordAbbreviations[2],
-        chordAbbreviations[3],
-        chordAbbreviations[4],
-        "6",
-        chordAbbreviations[1] + "6",
-        "7",
-        chordAbbreviations[0] + "7",
-        chordAbbreviations[1] + "7",
-        chordAbbreviations[2] + "7",
-        chordAbbreviations[3] + "7",
-        chordAbbreviations[1] + "/" + chordAbbreviations[0] + "7",
-        "m7" + chordAbbreviations[9] + "5"
-    };
+    std::string strSuffixList[14] = { "",
+                                      chordAbbreviations[1],
+                                      chordAbbreviations[2],
+                                      chordAbbreviations[3],
+                                      chordAbbreviations[4],
+                                      "6",
+                                      chordAbbreviations[1] + "6",
+                                      "7",
+                                      chordAbbreviations[0] + "7",
+                                      chordAbbreviations[1] + "7",
+                                      chordAbbreviations[2] + "7",
+                                      chordAbbreviations[3] + "7",
+                                      chordAbbreviations[1] + "/" +
+                                          chordAbbreviations[0] + "7",
+                                      "m7" + chordAbbreviations[9] + "5" };
 
     // If not an extension, add the suffix
     if (!bExtension && nFormula != 0)
         returnValue += strSuffixList[nFormula];
 
-    uint16_t wFormulaBit[13] =
-    {
-        suspended2nd, suspended4th, added2nd, added4th, added6th, added9th,
-        added11th, flatted13th, raised11th, flatted9th, raised9th, flatted5th,
-        raised5th
-    };
+    uint16_t wFormulaBit[13] = { suspended2nd, suspended4th, added2nd,
+                                 added4th,     added6th,     added9th,
+                                 added11th,    flatted13th,  raised11th,
+                                 flatted9th,   raised9th,    flatted5th,
+                                 raised5th };
 
-    std::string strAddition[13] =
-    {
-        chordAbbreviations[6], chordAbbreviations[7],
-        chordAbbreviations[5] + "2", chordAbbreviations[5] + "4",
-        chordAbbreviations[5] + "6", chordAbbreviations[5] + "9",
+    std::string strAddition[13] = {
+        chordAbbreviations[6],        chordAbbreviations[7],
+        chordAbbreviations[5] + "2",  chordAbbreviations[5] + "4",
+        chordAbbreviations[5] + "6",  chordAbbreviations[5] + "9",
         chordAbbreviations[5] + "11", chordAbbreviations[9] + "13",
         chordAbbreviations[2] + "11", chordAbbreviations[9] + "9",
-        chordAbbreviations[2] + "9", chordAbbreviations[9] + "5",
+        chordAbbreviations[2] + "9",  chordAbbreviations[9] + "5",
         chordAbbreviations[2] + "5"
     };
 
@@ -463,8 +459,8 @@ uint8_t ChordName::GetFretPosition() const
     //------Last Checked------//
     // - Jan 4, 2005
     uint8_t returnValue = (uint8_t)(m_extra & fretPositionMask);
-    return (uint8_t)((returnValue == 0) ? fretPositionNotUsed :
-        (returnValue - 1));
+    return (uint8_t)((returnValue == 0) ? fretPositionNotUsed
+                                        : (returnValue - 1));
 }
 
 // Type Functions
@@ -500,13 +496,19 @@ uint8_t ChordName::GetType() const
 }
 
 // Returns a string representation of the key (i.e. 'F#' or 'Db')
-// Use the getBassNote parameter to choose between returning the tonic key text or
-// the bass note text
+// Use the getBassNote parameter to choose between returning the tonic key text
+// or the bass note text
 std::string ChordName::GetKeyText(bool getBassNote) const
 {
-    static std::string variationDefaultText[12] = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
-    static std::string variationDownText[12] = {"B#", "Bx", "Cx", "D#", "Dx", "E#", "Ex", "Fx", "G#", "Gx", "A#", "Ax"};
-    static std::string variationUpText[12] = {"Dbb", "Db", "Ebb", "Fbb", "Fb", "Gbb", "Gb", "Abb", "", "Bbb", "Cbb", "Cb"};
+    static std::string variationDefaultText[12] = { "C",  "C#", "D",  "Eb",
+                                                    "E",  "F",  "F#", "G",
+                                                    "Ab", "A",  "Bb", "B" };
+    static std::string variationDownText[12] = { "B#", "Bx", "Cx", "D#",
+                                                 "Dx", "E#", "Ex", "Fx",
+                                                 "G#", "Gx", "A#", "Ax" };
+    static std::string variationUpText[12] = { "Dbb", "Db",  "Ebb", "Fbb",
+                                               "Fb",  "Gbb", "Gb",  "Abb",
+                                               "",    "Bbb", "Cbb", "Cb" };
 
     uint8_t key = 0, variation = 0;
 
@@ -577,201 +579,202 @@ std::string ChordName::GetText() const
 }
 
 void ChordName::ComputeKeyAndVariation(uint8_t &key, uint8_t &variation,
-        uint8_t currentKey, bool sharp, bool doubleSharp, bool flat,
-        bool doubleFlat)
+                                       uint8_t currentKey, bool sharp,
+                                       bool doubleSharp, bool flat,
+                                       bool doubleFlat)
 {
-    switch(currentKey)
+    switch (currentKey)
     {
-    case ChordName::C:
-        if (sharp) // C#
-        {
-            key = ChordName::CSharp;
-            variation = ChordName::variationDefault;
-        }
-        else if (doubleSharp) // C##
-        {
-            key = ChordName::D;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Cb
-        {
-            key = ChordName::B;
-            variation = ChordName::variationUp;
-        }
-        else if (doubleFlat) // Cbb
-        {
-            key = ChordName::BFlat;
-            variation = ChordName::variationUp;
-        }
-        else // C
-        {
-            key = ChordName::C;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::D:
-        if (sharp) // D#
-        {
-            key = ChordName::EFlat;
-            variation = ChordName::variationDown;
-        }
-        else if (doubleSharp) // D##
-        {
-            key = ChordName::E;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Db
-        {
-            key = ChordName::CSharp;
-            variation = ChordName::variationUp;
-        }
-        else if (doubleFlat) // Dbb
-        {
-            key = ChordName::C;
-            variation = ChordName::variationUp;
-        }
-        else // D
-        {
-            key = ChordName::D;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::E:
-        if (sharp) // E#
-        {
-            key = ChordName::F;
-            variation = ChordName::variationDown;
-        }
-        else if (doubleSharp) // E##
-        {
-            key = ChordName::FSharp;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Eb
-        {
-            key = ChordName::EFlat;
-            variation = ChordName::variationDefault;
-        }
-        else if (doubleFlat) // Ebb
-        {
-            key = ChordName::D;
-            variation = ChordName::variationUp;
-        }
-        else // E
-        {
-            key = ChordName::E;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::F:
-        if (sharp) // F#
-        {
-            key = ChordName::FSharp;
-            variation = ChordName::variationDefault;
-        }
-        else if (doubleSharp) // F##
-        {
-            key = ChordName::G;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Fb
-        {
-            key = ChordName::E;
-            variation = ChordName::variationUp;
-        }
-        else if (doubleFlat) // Fbb
-        {
-            key = ChordName::EFlat;
-            variation = ChordName::variationUp;
-        }
-        else // F
-        {
-            key = ChordName::F;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::G:
-        if (sharp) // G#
-        {
-            key = ChordName::AFlat;
-            variation = ChordName::variationDown;
-        }
-        else if (doubleSharp) // G##
-        {
-            key = ChordName::A;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Gb
-        {
-            key = ChordName::FSharp;
-            variation = ChordName::variationUp;
-        }
-        else if (doubleFlat) // Gbb
-        {
-            key = ChordName::F;
-            variation = ChordName::variationUp;
-        }
-        else // G
-        {
-            key = ChordName::G;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::A:
-        if (sharp) // A#
-        {
-            key = ChordName::BFlat;
-            variation = ChordName::variationDown;
-        }
-        else if (doubleSharp) // A##
-        {
-            key = ChordName::B;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Ab
-        {
-            key = ChordName::AFlat;
-            variation = ChordName::variationDefault;
-        }
-        else if (doubleFlat) // Abb
-        {
-            key = ChordName::G;
-            variation = ChordName::variationUp;
-        }
-        else // A
-        {
-            key = ChordName::A;
-            variation = ChordName::variationDefault;
-        }
-        break;
-    case ChordName::B:
-        if (sharp) // B#
-        {
-            key = ChordName::C;
-            variation = ChordName::variationDown;
-        }
-        else if (doubleSharp) // B##
-        {
-            key = ChordName::CSharp;
-            variation = ChordName::variationDown;
-        }
-        else if (flat) // Bb
-        {
-            key = ChordName::BFlat;
-            variation = ChordName::variationDefault;
-        }
-        else if (doubleFlat) // Bbb
-        {
-            key = ChordName::A;
-            variation = ChordName::variationUp;
-        }
-        else // B
-        {
-            key = ChordName::B;
-            variation = ChordName::variationDefault;
-        }
-        break;
+        case ChordName::C:
+            if (sharp) // C#
+            {
+                key = ChordName::CSharp;
+                variation = ChordName::variationDefault;
+            }
+            else if (doubleSharp) // C##
+            {
+                key = ChordName::D;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Cb
+            {
+                key = ChordName::B;
+                variation = ChordName::variationUp;
+            }
+            else if (doubleFlat) // Cbb
+            {
+                key = ChordName::BFlat;
+                variation = ChordName::variationUp;
+            }
+            else // C
+            {
+                key = ChordName::C;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::D:
+            if (sharp) // D#
+            {
+                key = ChordName::EFlat;
+                variation = ChordName::variationDown;
+            }
+            else if (doubleSharp) // D##
+            {
+                key = ChordName::E;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Db
+            {
+                key = ChordName::CSharp;
+                variation = ChordName::variationUp;
+            }
+            else if (doubleFlat) // Dbb
+            {
+                key = ChordName::C;
+                variation = ChordName::variationUp;
+            }
+            else // D
+            {
+                key = ChordName::D;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::E:
+            if (sharp) // E#
+            {
+                key = ChordName::F;
+                variation = ChordName::variationDown;
+            }
+            else if (doubleSharp) // E##
+            {
+                key = ChordName::FSharp;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Eb
+            {
+                key = ChordName::EFlat;
+                variation = ChordName::variationDefault;
+            }
+            else if (doubleFlat) // Ebb
+            {
+                key = ChordName::D;
+                variation = ChordName::variationUp;
+            }
+            else // E
+            {
+                key = ChordName::E;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::F:
+            if (sharp) // F#
+            {
+                key = ChordName::FSharp;
+                variation = ChordName::variationDefault;
+            }
+            else if (doubleSharp) // F##
+            {
+                key = ChordName::G;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Fb
+            {
+                key = ChordName::E;
+                variation = ChordName::variationUp;
+            }
+            else if (doubleFlat) // Fbb
+            {
+                key = ChordName::EFlat;
+                variation = ChordName::variationUp;
+            }
+            else // F
+            {
+                key = ChordName::F;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::G:
+            if (sharp) // G#
+            {
+                key = ChordName::AFlat;
+                variation = ChordName::variationDown;
+            }
+            else if (doubleSharp) // G##
+            {
+                key = ChordName::A;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Gb
+            {
+                key = ChordName::FSharp;
+                variation = ChordName::variationUp;
+            }
+            else if (doubleFlat) // Gbb
+            {
+                key = ChordName::F;
+                variation = ChordName::variationUp;
+            }
+            else // G
+            {
+                key = ChordName::G;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::A:
+            if (sharp) // A#
+            {
+                key = ChordName::BFlat;
+                variation = ChordName::variationDown;
+            }
+            else if (doubleSharp) // A##
+            {
+                key = ChordName::B;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Ab
+            {
+                key = ChordName::AFlat;
+                variation = ChordName::variationDefault;
+            }
+            else if (doubleFlat) // Abb
+            {
+                key = ChordName::G;
+                variation = ChordName::variationUp;
+            }
+            else // A
+            {
+                key = ChordName::A;
+                variation = ChordName::variationDefault;
+            }
+            break;
+        case ChordName::B:
+            if (sharp) // B#
+            {
+                key = ChordName::C;
+                variation = ChordName::variationDown;
+            }
+            else if (doubleSharp) // B##
+            {
+                key = ChordName::CSharp;
+                variation = ChordName::variationDown;
+            }
+            else if (flat) // Bb
+            {
+                key = ChordName::BFlat;
+                variation = ChordName::variationDefault;
+            }
+            else if (doubleFlat) // Bbb
+            {
+                key = ChordName::A;
+                variation = ChordName::variationUp;
+            }
+            else // B
+            {
+                key = ChordName::B;
+                variation = ChordName::variationDefault;
+            }
+            break;
     }
 }
 
-}
+} // namespace PowerTabDocument

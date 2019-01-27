@@ -1,25 +1,25 @@
 /*
-  * Copyright (C) 2014 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2014 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef ACTIONS_ADDSPECIALNOTEPROPERTY_H
 #define ACTIONS_ADDSPECIALNOTEPROPERTY_H
 
-#include <functional>
 #include <QUndoCommand>
+#include <functional>
 #include <score/note.h>
 #include <score/scorelocation.h>
 
@@ -43,9 +43,15 @@ public:
     {
     }
 
-    virtual void redo() override { mySetter(myLocation.getNote(), myValue); }
+    virtual void redo() override
+    {
+        mySetter(myLocation.getNote(), myValue);
+    }
 
-    virtual void undo() override { myClearer(myLocation.getNote()); }
+    virtual void undo() override
+    {
+        myClearer(myLocation.getNote());
+    }
 
 private:
     ScoreLocation myLocation;
@@ -104,11 +110,12 @@ public:
 class AddLeftHandFingering : public AddSpecialNoteProperty<LeftHandFingering>
 {
 public:
-    AddLeftHandFingering(const ScoreLocation &location, const LeftHandFingering &fingering)
-        : AddSpecialNoteProperty<LeftHandFingering>(location,
-            QObject::tr("Add Left Hand Fingering"), fingering,
-            std::mem_fn(&Note::setLeftHandFingering),
-            std::mem_fn(&Note::clearLeftHandFingering))
+    AddLeftHandFingering(const ScoreLocation &location,
+                         const LeftHandFingering &fingering)
+        : AddSpecialNoteProperty<LeftHandFingering>(
+              location, QObject::tr("Add Left Hand Fingering"), fingering,
+              std::mem_fn(&Note::setLeftHandFingering),
+              std::mem_fn(&Note::clearLeftHandFingering))
     {
     }
 };

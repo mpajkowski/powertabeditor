@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "notestem.h"
 
@@ -42,8 +42,9 @@ NoteStem::NoteStem(const Voice &voice, const Position &pos, double x,
     if (it != noteLocations.end())
         myBottom = *it;
 
-    myStemType = LayoutInfo::STD_NOTATION_LINE_SPACING * 2 < myBottom ?
-                StemUp : StemDown;
+    myStemType = LayoutInfo::STD_NOTATION_LINE_SPACING * 2 < myBottom
+                     ? StemUp
+                     : StemDown;
 }
 
 double NoteStem::getX() const
@@ -125,7 +126,7 @@ bool NoteStem::isStaccato() const
 bool NoteStem::isBeamable(const NoteStem &stem)
 {
     return !stem.myPosition->isRest() && !stem.myPosition->hasMultiBarRest() &&
-            stem.myPosition->getDurationType() >= Position::EighthNote;
+           stem.myPosition->getDurationType() >= Position::EighthNote;
 }
 
 bool NoteStem::needsStem(const NoteStem &stem)
@@ -138,7 +139,7 @@ bool NoteStem::needsStem(const NoteStem &stem)
 bool NoteStem::canHaveFlag(const NoteStem &stem)
 {
     return stem.myPosition->getDurationType() > Position::QuarterNote ||
-            stem.isGraceNote();
+           stem.isGraceNote();
 }
 
 NoteStem::StemType NoteStem::getStemType() const
@@ -215,13 +216,15 @@ NoteStem::StemType NoteStem::computeStemDirection(
     std::vector<NoteStem> &stems, const std::vector<size_t> &group)
 {
     // Find how many stem directions of each type we have.
-    const size_t stemsUp = std::count_if(group.begin(), group.end(), [&](size_t i) {
-        return stems[i].getStemType() == NoteStem::StemUp;
-    });
+    const size_t stemsUp =
+        std::count_if(group.begin(), group.end(), [&](size_t i) {
+            return stems[i].getStemType() == NoteStem::StemUp;
+        });
 
-    const size_t stemsDown = std::count_if(group.begin(), group.end(), [&](size_t i) {
-        return stems[i].getStemType() == NoteStem::StemDown;
-    });
+    const size_t stemsDown =
+        std::count_if(group.begin(), group.end(), [&](size_t i) {
+            return stems[i].getStemType() == NoteStem::StemDown;
+        });
 
     NoteStem::StemType stemType =
         (stemsDown >= stemsUp) ? NoteStem::StemDown : NoteStem::StemUp;
@@ -237,16 +240,16 @@ const NoteStem &NoteStem::findHighestStem(const std::vector<NoteStem> &stems,
                                           const std::vector<size_t> &group)
 {
     return stems[*std::min_element(
-                     group.begin(), group.end(), [&](size_t i, size_t j) {
-                         return stems[i].getTop() < stems[j].getTop();
-                     })];
+        group.begin(), group.end(), [&](size_t i, size_t j) {
+            return stems[i].getTop() < stems[j].getTop();
+        })];
 }
 
 const NoteStem &NoteStem::findLowestStem(const std::vector<NoteStem> &stems,
                                          const std::vector<size_t> &group)
 {
     return stems[*std::max_element(
-                     group.begin(), group.end(), [&](size_t i, size_t j) {
-                         return stems[i].getBottom() < stems[j].getBottom();
-                     })];
+        group.begin(), group.end(), [&](size_t i, size_t j) {
+            return stems[i].getBottom() < stems[j].getBottom();
+        })];
 }

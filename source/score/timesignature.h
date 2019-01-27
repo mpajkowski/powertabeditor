@@ -1,25 +1,25 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_TIMESIGNATURE_H
 #define SCORE_TIMESIGNATURE_H
 
-#include <array>
 #include "fileversion.h"
+#include <array>
 
 class TimeSignature
 {
@@ -35,8 +35,8 @@ public:
 
     bool operator==(const TimeSignature &other) const;
 
-	template <class Archive>
-	void serialize(Archive &ar, const FileVersion version);
+    template <class Archive>
+    void serialize(Archive &ar, const FileVersion version);
 
     /// Returns the type of meter (normal, cut time, or common time).
     MeterType getMeterType() const;
@@ -94,12 +94,12 @@ private:
 template <class Archive>
 void TimeSignature::serialize(Archive &ar, const FileVersion /*version*/)
 {
-	ar("meter_type", myMeterType);
-	ar("num_beats", myBeatsPerMeasure);
-	ar("beat_value", myBeatValue);
-	ar("pattern", myBeamingPattern);
-	ar("num_pulses", myNumPulses);
-	ar("visible", myIsVisible);
+    ar("meter_type", myMeterType);
+    ar("num_beats", myBeatsPerMeasure);
+    ar("beat_value", myBeatValue);
+    ar("pattern", myBeamingPattern);
+    ar("num_pulses", myNumPulses);
+    ar("visible", myIsVisible);
 }
 
 #endif

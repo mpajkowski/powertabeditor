@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_NOTE_H
 #define SCORE_NOTE_H
 
-#include <bitset>
-#include <boost/optional.hpp>
 #include "chordname.h"
 #include "fileversion.h"
+#include <bitset>
+#include <boost/optional.hpp>
 #include <iosfwd>
 #include <vector>
 
@@ -128,7 +128,7 @@ public:
         Ring = 3,
         Little = 4
     };
-    
+
     /// Position relative to note head at which to display number.
     enum DisplayPosition
     {
@@ -141,26 +141,26 @@ public:
         Below,
         BelowLeft
     };
-    
+
     LeftHandFingering();
     LeftHandFingering(Finger finger, DisplayPosition pos = AboveLeft);
-    
+
     bool operator==(const LeftHandFingering &other) const;
-    
+
     /// Sets the finger this hint is showing.
     void setFinger(Finger finger);
     /// Returns the finger number this hint is showing.
     unsigned int getFingerNumber() const;
     /// Returns the display position relative to the note head.
     DisplayPosition getDisplayPosition() const;
-    
+
     template <class Archive>
     void serialize(Archive &ar, const FileVersion /*version*/)
     {
         ar("finger", myFinger);
         ar("display_position", myDisplayPosition);
     }
-    
+
 private:
     Finger myFinger;
     DisplayPosition myDisplayPosition;
@@ -288,7 +288,8 @@ void Note::serialize(Archive &ar, const FileVersion version)
 }
 
 /// Useful utility functions for working with natural and tapped harmonics.
-namespace Harmonics {
+namespace Harmonics
+{
 
 /// Returns a list of all fret offsets that produce harmonics (e.g. 7, 12, etc.)
 std::vector<int> getValidFretOffsets();
@@ -297,7 +298,7 @@ std::vector<int> getValidFretOffsets();
 /// For example, a fret offset of 12 has a pitch offset of 12 (one octave), and
 /// a fret offset of 7 has pitch offset 19 (octave and a fifth).
 int getPitchOffset(int fretOffset);
-}
+} // namespace Harmonics
 
 /// Creates a text representation of the note, including brackets for ghost
 /// notes, harmonics, etc.

@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "stdnotationnote.h"
 
+#include <QFontMetricsF>
 #include <boost/algorithm/string/predicate.hpp>
 #include <numeric>
 #include <painters/layoutinfo.h>
 #include <painters/musicfont.h>
-#include <QFontMetricsF>
 #include <score/generalmidi.h>
 #include <score/score.h>
 #include <score/tuning.h>
@@ -33,8 +33,8 @@
 /// using units of 0.5 * STD_NOTATION_LINE_SPACING.
 /// This is for treble clef, but can easily be adjusted for bass clef.
 static const std::unordered_map<char, int> theNotePositions = {
-	{ 'F', 0 }, { 'E', 1 }, { 'D', 2 }, { 'C', 3 }, { 'B', -3 },
-	{ 'A', -2 }, { 'G', -1 }
+    { 'F', 0 },  { 'E', 1 },  { 'D', 2 }, { 'C', 3 },
+    { 'B', -3 }, { 'A', -2 }, { 'G', -1 }
 };
 
 StdNotationNote::StdNotationNote(const Voice &voice, const Position &pos,
@@ -53,15 +53,15 @@ StdNotationNote::StdNotationNote(const Voice &voice, const Position &pos,
     // Choose the note head symbol.
     switch (pos.getDurationType())
     {
-    case Position::WholeNote:
-        myNoteHeadSymbol = MusicFont::WholeNote;
-        break;
-    case Position::HalfNote:
-        myNoteHeadSymbol = MusicFont::HalfNote;
-        break;
-    default:
-        myNoteHeadSymbol = MusicFont::QuarterNoteOrLess;
-        break;
+        case Position::WholeNote:
+            myNoteHeadSymbol = MusicFont::WholeNote;
+            break;
+        case Position::HalfNote:
+            myNoteHeadSymbol = MusicFont::HalfNote;
+            break;
+        default:
+            myNoteHeadSymbol = MusicFont::QuarterNoteOrLess;
+            break;
     }
 
     if (note.hasProperty(Note::NaturalHarmonic) || note.hasTappedHarmonic() ||
@@ -138,15 +138,15 @@ void StdNotationNote::getNotesInStaff(
                 // Find an active player so that we know what tuning to use.
                 std::vector<ActivePlayer> activePlayers;
                 const PlayerChange *players = ScoreUtils::getCurrentPlayers(
-                            score, systemIndex, pos.getPosition());
+                    score, systemIndex, pos.getPosition());
                 if (players)
                     activePlayers = players->getActivePlayers(staffIndex);
 
                 const Player *player = nullptr;
                 if (!activePlayers.empty())
                 {
-                    player = &score.getPlayers()[
-                            activePlayers.front().getPlayerNumber()];
+                    player = &score.getPlayers()[activePlayers.front()
+                                                     .getPlayerNumber()];
                 }
 
                 double noteHeadWidth = 0;
@@ -156,10 +156,10 @@ void StdNotationNote::getNotesInStaff(
 
                 for (const Note &note : pos.getNotes())
                 {
-                    const Tuning tuning = player ? player->getTuning() :
-                                                   fallbackTuning;
+                    const Tuning tuning =
+                        player ? player->getTuning() : fallbackTuning;
                     const double y = getNoteLocation(
-                                staff, note, bar.getKeySignature(), tuning);
+                        staff, note, bar.getKeySignature(), tuning);
 
                     noteLocations.push_back(y);
 
@@ -175,7 +175,8 @@ void StdNotationNote::getNotesInStaff(
                     // Don't show accidentals if there are consecutive
                     // identical notes on that line/space in the staff.
                     if (accidentals.find(y) != accidentals.end() &&
-                        accidentals.find(y)->second == stdNote.getAccidentalType())
+                        accidentals.find(y)->second ==
+                            stdNote.getAccidentalType())
                     {
                         stdNote.clearAccidental();
                     }
@@ -199,8 +200,9 @@ void StdNotationNote::getNotesInStaff(
                     noteHeadWidth = fm->width(stdNote.getNoteHeadSymbol());
                 }
 
-                const double x = layout.getPositionX(pos.getPosition()) +
-                        0.5 * (layout.getPositionSpacing() - noteHeadWidth);
+                const double x =
+                    layout.getPositionX(pos.getPosition()) +
+                    0.5 * (layout.getPositionSpacing() - noteHeadWidth);
                 stems.push_back(
                     NoteStem(voice, pos, x, noteHeadWidth, noteLocations));
             }
@@ -221,12 +223,13 @@ double StdNotationNote::getNoteLocation(const Staff &staff, const Note &note,
                                         const KeySignature &key,
                                         const Tuning &tuning)
 {
-    const int pitch = tuning.getNote(note.getString(), true) + note.getFretNumber();
+    const int pitch =
+        tuning.getNote(note.getString(), true) + note.getFretNumber();
 
-    const std::string text = Midi::getMidiNoteText(
-                pitch, key.getKeyType() == KeySignature::Minor,
-                key.usesSharps() || key.getNumAccidentals() == 0,
-                key.getNumAccidentals());
+    const std::string text =
+        Midi::getMidiNoteText(pitch, key.getKeyType() == KeySignature::Minor,
+                              key.usesSharps() || key.getNumAccidentals() == 0,
+                              key.getNumAccidentals());
 
     // Find the offset of the note - accidentals don't matter, so C# and C
     // have the same offset, for example.
@@ -236,13 +239,14 @@ double StdNotationNote::getNoteLocation(const Staff &staff, const Note &note,
     if (staff.getClefType() == Staff::BassClef)
         y += 2;
 
-    const int topNote = (staff.getClefType() == Staff::TrebleClef) ?
-                Midi::MIDI_NOTE_F4 : Midi::MIDI_NOTE_A2;
+    const int topNote = (staff.getClefType() == Staff::TrebleClef)
+                            ? Midi::MIDI_NOTE_F4
+                            : Midi::MIDI_NOTE_A2;
 
     // Shift the note by the number of octaves.
     y += 7 * (Midi::getMidiNoteOctave(topNote) -
               Midi::getMidiNoteOctave(pitch, text[0])) +
-            7 * getOctaveOffset(note);
+         7 * getOctaveOffset(note);
 
     return y * 0.5 * LayoutInfo::STD_NOTATION_LINE_SPACING;
 }
@@ -265,13 +269,14 @@ void StdNotationNote::computeAccidentalType(bool explicitSymbol)
 {
     using boost::algorithm::ends_with;
 
-    const int pitch = myTuning->getNote(myNote->getString(), true) +
-            myNote->getFretNumber();
-    const bool usesSharps = myKey->usesSharps() || myKey->getNumAccidentals() == 0;
+    const int pitch =
+        myTuning->getNote(myNote->getString(), true) + myNote->getFretNumber();
+    const bool usesSharps =
+        myKey->usesSharps() || myKey->getNumAccidentals() == 0;
 
     const std::string noteText = Midi::getMidiNoteText(
-                pitch, myKey->getKeyType() == KeySignature::Minor, usesSharps,
-                myKey->getNumAccidentals(), explicitSymbol);
+        pitch, myKey->getKeyType() == KeySignature::Minor, usesSharps,
+        myKey->getNumAccidentals(), explicitSymbol);
 
     if (ends_with(noteText, "##"))
         myAccidentalType = DoubleSharp;
@@ -288,7 +293,7 @@ void StdNotationNote::computeAccidentalType(bool explicitSymbol)
 }
 
 std::vector<uint8_t> StdNotationNote::getBeamingPatterns(
-        const TimeSignature &timeSig)
+    const TimeSignature &timeSig)
 {
     TimeSignature::BeamingPattern pattern(timeSig.getBeamingPattern());
     std::vector<uint8_t> beaming(pattern.begin(), pattern.end());
@@ -306,7 +311,8 @@ void StdNotationNote::computeBeaming(const TimeSignature &timeSig,
 
     // Create a list of the durations for each stem.
     std::vector<double> durations(stems.size() - firstStemIndex);
-    std::transform(stems.begin() + firstStemIndex, stems.end(), durations.begin(),
+    std::transform(stems.begin() + firstStemIndex, stems.end(),
+                   durations.begin(),
                    std::mem_fun_ref(&NoteStem::getDurationTime));
     // Convert the duration list to a list of timestamps relative to the
     // beginning of the bar.
@@ -319,13 +325,15 @@ void StdNotationNote::computeBeaming(const TimeSignature &timeSig,
 
     while (groupEnd != durations.end())
     {
-        // Find the timestamp where the end of the current pattern group will be.
+        // Find the timestamp where the end of the current pattern group will
+        // be.
         const double groupEndTime =
             *groupSize * std::min(0.5, 4.0 / timeSig.getBeatValue()) +
             groupBeginTime;
 
         // Get the stems in the pattern group.
-        groupStart = std::lower_bound(groupEnd, durations.end(), groupBeginTime);
+        groupStart =
+            std::lower_bound(groupEnd, durations.end(), groupBeginTime);
         groupEnd = std::upper_bound(groupStart, durations.end(), groupEndTime);
 
         // Only create subgroups if the beat length is an 8th note or greater.
@@ -445,24 +453,24 @@ QString StdNotationNote::getAccidentalText() const
 
     switch (myAccidentalType)
     {
-    case StdNotationNote::NoAccidental:
-        // Do nothing.
-        break;
-    case StdNotationNote::Natural:
-        text = QChar(MusicFont::Natural);
-        break;
-    case StdNotationNote::Sharp:
-        text = QChar(MusicFont::AccidentalSharp);
-        break;
-    case StdNotationNote::DoubleSharp:
-        text = QChar(MusicFont::AccidentalDoubleSharp);
-        break;
-    case StdNotationNote::Flat:
-        text = QChar(MusicFont::AccidentalFlat);
-        break;
-    case StdNotationNote::DoubleFlat:
-        text = QChar(MusicFont::AccidentalDoubleFlat);
-        break;
+        case StdNotationNote::NoAccidental:
+            // Do nothing.
+            break;
+        case StdNotationNote::Natural:
+            text = QChar(MusicFont::Natural);
+            break;
+        case StdNotationNote::Sharp:
+            text = QChar(MusicFont::AccidentalSharp);
+            break;
+        case StdNotationNote::DoubleSharp:
+            text = QChar(MusicFont::AccidentalDoubleSharp);
+            break;
+        case StdNotationNote::Flat:
+            text = QChar(MusicFont::AccidentalFlat);
+            break;
+        case StdNotationNote::DoubleFlat:
+            text = QChar(MusicFont::AccidentalDoubleFlat);
+            break;
     }
 
     return text;

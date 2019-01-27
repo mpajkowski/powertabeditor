@@ -1,26 +1,25 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_SYSTEM_H
 #define SCORE_SYSTEM_H
 
 #include "alternateending.h"
 #include "barline.h"
-#include <boost/range/iterator_range_core.hpp>
 #include "chordtext.h"
 #include "direction.h"
 #include "fileversion.h"
@@ -28,6 +27,7 @@
 #include "staff.h"
 #include "tempomarker.h"
 #include "textitem.h"
+#include <boost/range/iterator_range_core.hpp>
 #include <vector>
 
 class System
@@ -40,7 +40,8 @@ public:
     typedef std::vector<TempoMarker>::iterator TempoMarkerIterator;
     typedef std::vector<TempoMarker>::const_iterator TempoMarkerConstIterator;
     typedef std::vector<AlternateEnding>::iterator AlternateEndingIterator;
-    typedef std::vector<AlternateEnding>::const_iterator AlternateEndingConstIterator;
+    typedef std::vector<AlternateEnding>::const_iterator
+        AlternateEndingConstIterator;
     typedef std::vector<Direction>::iterator DirectionIterator;
     typedef std::vector<Direction>::const_iterator DirectionConstIterator;
     typedef std::vector<PlayerChange>::iterator PlayerChangeIterator;
@@ -97,7 +98,8 @@ public:
     /// Returns the set of alternate endings in the system.
     boost::iterator_range<AlternateEndingIterator> getAlternateEndings();
     /// Returns the set of alternate endings in system.
-    boost::iterator_range<AlternateEndingConstIterator> getAlternateEndings() const;
+    boost::iterator_range<AlternateEndingConstIterator> getAlternateEndings()
+        const;
 
     /// Adds a new alternate ending to the system.
     void insertAlternateEnding(const AlternateEnding &ending);
@@ -171,7 +173,8 @@ void System::serialize(Archive &ar, const FileVersion version)
         ar("text_items", myTextItems);
 }
 
-namespace SystemUtils {
+namespace SystemUtils
+{
 
 /// Shifts everything forward starting from the given position.
 void shiftForward(System &system, int position);
@@ -180,6 +183,6 @@ void shiftBackward(System &system, int position);
 /// Shifts everything by the given offset.
 void shift(System &system, int position, int offset);
 
-}
+} // namespace SystemUtils
 
 #endif

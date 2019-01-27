@@ -9,38 +9,38 @@
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include <cmath>           // Needed for pow()
+#include <cmath> // Needed for pow()
 
 #include "timesignature.h"
 
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
-const uint32_t   TimeSignature::DEFAULT_DATA            = 0x1a018000;
-const uint8_t     TimeSignature::DEFAULT_PULSES          = 4;
+const uint32_t TimeSignature::DEFAULT_DATA = 0x1a018000;
+const uint8_t TimeSignature::DEFAULT_PULSES = 4;
 
-const uint8_t     TimeSignature::MIN_BEATSPERMEASURE     = 1;
-const uint8_t     TimeSignature::MAX_BEATSPERMEASURE     = 32;
+const uint8_t TimeSignature::MIN_BEATSPERMEASURE = 1;
+const uint8_t TimeSignature::MAX_BEATSPERMEASURE = 32;
 
-const uint8_t     TimeSignature::MIN_BEATAMOUNT          = 1;
-const uint8_t     TimeSignature::MAX_BEATAMOUNT          = 32;
+const uint8_t TimeSignature::MIN_BEATAMOUNT = 1;
+const uint8_t TimeSignature::MAX_BEATAMOUNT = 32;
 
-const uint8_t     TimeSignature::MIN_PULSES              = 0;
-const uint8_t     TimeSignature::MAX_PULSES              = 32;
+const uint8_t TimeSignature::MIN_PULSES = 0;
+const uint8_t TimeSignature::MAX_PULSES = 32;
 
 // Constructor/Destructor
 /// Default Constructor
-TimeSignature::TimeSignature() :
-    m_data(DEFAULT_DATA), m_pulses(DEFAULT_PULSES)
+TimeSignature::TimeSignature() : m_data(DEFAULT_DATA), m_pulses(DEFAULT_PULSES)
 {
 }
 
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool TimeSignature::Serialize(PowerTabOutputStream& stream) const
+bool TimeSignature::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_data << m_pulses;
     return stream.CheckState();
@@ -50,7 +50,7 @@ bool TimeSignature::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool TimeSignature::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool TimeSignature::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_data >> m_pulses;
     return true;
@@ -101,8 +101,8 @@ uint8_t TimeSignature::GetBeatAmount() const
 /// @param beat2 - Beaming pattern for the second beat in the time signature
 /// @param beat3 - Beaming pattern for the third beat in the time signature
 /// @param beat4 - Beaming pattern for the fourth beat in the time signature
-void TimeSignature::GetBeamingPattern(uint8_t & beat1, uint8_t & beat2,
-    uint8_t & beat3, uint8_t & beat4) const
+void TimeSignature::GetBeamingPattern(uint8_t &beat1, uint8_t &beat2,
+                                      uint8_t &beat3, uint8_t &beat4) const
 {
     //------Last Checked------//
     // - Dec 13, 2004
@@ -140,4 +140,4 @@ int TimeSignature::GetWidth() const
     return IsShown() ? 18 : 0;
 }
 
-}
+} // namespace PowerTabDocument

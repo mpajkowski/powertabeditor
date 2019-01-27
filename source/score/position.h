@@ -1,28 +1,28 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_POSITION_H
 #define SCORE_POSITION_H
 
-#include <algorithm>
-#include <boost/range/iterator_range_core.hpp>
-#include <bitset>
 #include "fileversion.h"
 #include "note.h"
+#include <algorithm>
+#include <bitset>
+#include <boost/range/iterator_range_core.hpp>
 #include <vector>
 
 class Position
@@ -143,13 +143,14 @@ void Position::removeNotes(Predicate p)
                   myNotes.end());
 }
 
-namespace Utils {
-    const Note *findByString(const Position &pos, int string);
-    bool hasNoteWithTappedHarmonic(const Position &pos);
-    bool hasNoteWithArtificialHarmonic(const Position &pos);
-    bool hasNoteWithTrill(const Position &pos);
-    bool hasNoteWithBend(const Position &pos);
-    bool hasNoteWithProperty(const Position &pos, Note::SimpleProperty property);
-}
+namespace Utils
+{
+const Note *findByString(const Position &pos, int string);
+bool hasNoteWithTappedHarmonic(const Position &pos);
+bool hasNoteWithArtificialHarmonic(const Position &pos);
+bool hasNoteWithTrill(const Position &pos);
+bool hasNoteWithBend(const Position &pos);
+bool hasNoteWithProperty(const Position &pos, Note::SimpleProperty property);
+} // namespace Utils
 
 #endif

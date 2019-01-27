@@ -2,9 +2,9 @@
 // Name:            systemsymbol.cpp
 // Purpose:         Base class for symbols residing on a system scope
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Jan 13, 2005
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -14,25 +14,28 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default constants
-const uint16_t        SystemSymbol::DEFAULT_SYSTEM            = 0;
-const uint8_t        SystemSymbol::DEFAULT_POSITION          = 0;
-const uint32_t      SystemSymbol::DEFAULT_DATA              = 0;
+const uint16_t SystemSymbol::DEFAULT_SYSTEM = 0;
+const uint8_t SystemSymbol::DEFAULT_POSITION = 0;
+const uint32_t SystemSymbol::DEFAULT_DATA = 0;
 
 // System Constants
-const uint32_t      SystemSymbol::MIN_SYSTEM                = 0;
-const uint32_t      SystemSymbol::MAX_SYSTEM                = 65535;
+const uint32_t SystemSymbol::MIN_SYSTEM = 0;
+const uint32_t SystemSymbol::MAX_SYSTEM = 65535;
 
 // Position Constants
-const uint32_t      SystemSymbol::MIN_POSITION              = 0;
-const uint32_t      SystemSymbol::MAX_POSITION              = 255;
+const uint32_t SystemSymbol::MIN_POSITION = 0;
+const uint32_t SystemSymbol::MAX_POSITION = 255;
 
 // Constructor/Destructor
 /// Default Constructor
-SystemSymbol::SystemSymbol() : 
-    m_system(DEFAULT_SYSTEM), m_position(DEFAULT_POSITION), m_data(DEFAULT_DATA)
+SystemSymbol::SystemSymbol()
+    : m_system(DEFAULT_SYSTEM),
+      m_position(DEFAULT_POSITION),
+      m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Jan 13, 2005
@@ -45,21 +48,23 @@ SystemSymbol::SystemSymbol() :
 /// system symbol is anchored
 /// @param data Data used by the symbol (the data format is dependant upon the
 /// derived class)
-SystemSymbol::SystemSymbol(uint32_t system, uint32_t position, uint32_t data) :
-    m_system(DEFAULT_SYSTEM), m_position(DEFAULT_POSITION), m_data(data)
+SystemSymbol::SystemSymbol(uint32_t system, uint32_t position, uint32_t data)
+    : m_system(DEFAULT_SYSTEM), m_position(DEFAULT_POSITION), m_data(data)
 {
     //------Last Checked------//
     // - Jan 13, 2005
     assert(IsValidSystem(system));
     assert(IsValidPosition(position));
     SetSystem(system);
-    SetPosition(position);    
+    SetPosition(position);
 }
 
 /// Copy Constructor
-SystemSymbol::SystemSymbol(const SystemSymbol& systemSymbol) :
-    PowerTabObject(), m_system(DEFAULT_SYSTEM), m_position(DEFAULT_POSITION), 
-    m_data(DEFAULT_DATA)
+SystemSymbol::SystemSymbol(const SystemSymbol &systemSymbol)
+    : PowerTabObject(),
+      m_system(DEFAULT_SYSTEM),
+      m_position(DEFAULT_POSITION),
+      m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Jan 13, 2005
@@ -74,7 +79,7 @@ SystemSymbol::~SystemSymbol()
 }
 
 /// Assignment Operator
-const SystemSymbol& SystemSymbol::operator=(const SystemSymbol& systemSymbol)
+const SystemSymbol &SystemSymbol::operator=(const SystemSymbol &systemSymbol)
 {
     //------Last Checked------//
     // - Jan 13, 2005
@@ -90,19 +95,17 @@ const SystemSymbol& SystemSymbol::operator=(const SystemSymbol& systemSymbol)
 }
 
 /// Equality Operator
-bool SystemSymbol::operator==(const SystemSymbol& systemSymbol) const
+bool SystemSymbol::operator==(const SystemSymbol &systemSymbol) const
 {
     //------Last Checked------//
     // - Jan 12, 2005
-    return (
-        (m_system == systemSymbol.m_system) &&
-        (m_position == systemSymbol.m_position) &&
-        (m_data == systemSymbol.m_data)
-    );
+    return ((m_system == systemSymbol.m_system) &&
+            (m_position == systemSymbol.m_position) &&
+            (m_data == systemSymbol.m_data));
 }
 
 /// Inequality Operator
-bool SystemSymbol::operator!=(const SystemSymbol& systemSymbol) const
+bool SystemSymbol::operator!=(const SystemSymbol &systemSymbol) const
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -110,7 +113,7 @@ bool SystemSymbol::operator!=(const SystemSymbol& systemSymbol) const
 }
 
 /// Order symbols by their system, then position index
-bool SystemSymbol::operator<(const SystemSymbol& systemSymbol) const
+bool SystemSymbol::operator<(const SystemSymbol &systemSymbol) const
 {
     if (m_system == systemSymbol.m_system)
     {
@@ -126,7 +129,7 @@ bool SystemSymbol::operator<(const SystemSymbol& systemSymbol) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool SystemSymbol::Serialize(PowerTabOutputStream& stream) const
+bool SystemSymbol::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 13, 2005
@@ -139,10 +142,10 @@ bool SystemSymbol::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool SystemSymbol::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool SystemSymbol::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_system >> m_position >> m_data;
     return true;
 }
 
-}
+} // namespace PowerTabDocument

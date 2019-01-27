@@ -1,30 +1,30 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_SERIALIZATION_H
 #define SCORE_SERIALIZATION_H
 
+#include "fileversion.h"
 #include <array>
+#include <bitset>
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
 #include <boost/variant.hpp>
-#include <bitset>
-#include "fileversion.h"
 #include <map>
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
@@ -57,7 +57,7 @@ public:
     }
 
 private:
-    typedef rapidjson::GenericValue<rapidjson::UTF8<> > JSONValue;
+    typedef rapidjson::GenericValue<rapidjson::UTF8<>> JSONValue;
 
     struct ValueVisitor : public boost::static_visitor<const JSONValue &>
     {
@@ -156,9 +156,10 @@ private:
     rapidjson::Document myDocument;
     FileVersion myVersion;
 
-	// Iterate over both objects and arrays in a uniform manner.
+    // Iterate over both objects and arrays in a uniform manner.
     typedef boost::variant<JSONValue::ConstMemberIterator,
-                           JSONValue::ConstValueIterator> Iterator;
+                           JSONValue::ConstValueIterator>
+        Iterator;
     std::stack<Iterator> myIterators;
 };
 
@@ -420,6 +421,6 @@ void OutputArchive::write(const boost::gregorian::date &date)
 {
     write(boost::gregorian::to_iso_string(date));
 }
-}
+} // namespace ScoreUtils
 
 #endif

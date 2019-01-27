@@ -15,29 +15,29 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
-const uint8_t Note::DEFAULT_STRING_DATA      = 0;
-const uint16_t Note::DEFAULT_SIMPLE_DATA      = 0;
+const uint8_t Note::DEFAULT_STRING_DATA = 0;
+const uint16_t Note::DEFAULT_SIMPLE_DATA = 0;
 
 // String Constants
-const uint8_t Note::MIN_STRING               = 0;
-const uint8_t Note::MAX_STRING               = 6;
+const uint8_t Note::MIN_STRING = 0;
+const uint8_t Note::MAX_STRING = 6;
 
 // Fret Number Constants
-const uint8_t Note::MIN_FRET_NUMBER          = 0;
-const uint8_t Note::MAX_FRET_NUMBER          = 29;
+const uint8_t Note::MIN_FRET_NUMBER = 0;
+const uint8_t Note::MAX_FRET_NUMBER = 29;
 
 // Bend Constants
-const uint8_t Note::MAX_BEND_PITCH           = 12;
-const uint8_t Note::MAX_BEND_DURATION        = 9;
+const uint8_t Note::MAX_BEND_PITCH = 12;
+const uint8_t Note::MAX_BEND_DURATION = 9;
 
 // Constructor/Destructor
 /// Default Constructor
-Note::Note() :
-    m_stringData(DEFAULT_STRING_DATA),
-    m_simpleData(DEFAULT_SIMPLE_DATA)
+Note::Note()
+    : m_stringData(DEFAULT_STRING_DATA), m_simpleData(DEFAULT_SIMPLE_DATA)
 {
     ComplexSymbols::clearComplexSymbols(m_complexSymbolArray);
 }
@@ -46,7 +46,7 @@ Note::Note() :
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Note::Serialize(PowerTabOutputStream& stream) const
+bool Note::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_stringData << m_simpleData;
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -59,7 +59,7 @@ bool Note::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Note::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool Note::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_stringData >> m_simpleData;
 
@@ -117,12 +117,13 @@ bool Note::HasSlideIntoFromBelow() const
 /// Gets the slide into data (if any)
 /// @param type Holds the slide into type return value
 /// @return True if the data was returned, false if not
-bool Note::GetSlideInto(uint8_t& type) const
+bool Note::GetSlideInto(uint8_t &type) const
 {
     type = slideIntoNone;
 
     // Get the index of the slide
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, slide);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, slide);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -151,13 +152,14 @@ bool Note::HasSlideOutType(uint8_t slideType) const
 /// @param type Holds the slide out of type return value
 /// @param steps Holds the steps return value
 /// @return True if the data was returned, false if not
-bool Note::GetSlideOutOf(uint8_t& type, int8_t& steps) const
+bool Note::GetSlideOutOf(uint8_t &type, int8_t &steps) const
 {
     type = slideIntoNone;
     steps = 0;
 
     // Get the index of the slide
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, slide);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, slide);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -193,8 +195,9 @@ bool Note::HasSlideOutOfUpwards() const
 /// @param drawStartPoint Holds the draw start point return value
 /// @param drawEndPoint Holds the draw end point return value
 /// @return True if the data was returned, false if not
-bool Note::GetBend(uint8_t& type, uint8_t& bentPitch, uint8_t& releasePitch,
-                   uint8_t& duration, uint8_t& drawStartPoint, uint8_t& drawEndPoint) const
+bool Note::GetBend(uint8_t &type, uint8_t &bentPitch, uint8_t &releasePitch,
+                   uint8_t &duration, uint8_t &drawStartPoint,
+                   uint8_t &drawEndPoint) const
 {
     type = 0;
     duration = 0;
@@ -204,7 +207,8 @@ bool Note::GetBend(uint8_t& type, uint8_t& bentPitch, uint8_t& releasePitch,
     drawEndPoint = 0;
 
     // Get the index of the bend
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, bend);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, bend);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -225,18 +229,20 @@ bool Note::GetBend(uint8_t& type, uint8_t& bentPitch, uint8_t& releasePitch,
 /// @return True if the note has a bend, false if not
 bool Note::HasBend() const
 {
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, bend) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, bend) !=
+            (uint32_t)-1);
 }
 
 /// Gets the tapped harmonic data (if any)
 /// @param tappedFretNumber Holds the tapped fret number return value
 /// @return True if the data was returned, false if not
-bool Note::GetTappedHarmonic(uint8_t& tappedFretNumber) const
+bool Note::GetTappedHarmonic(uint8_t &tappedFretNumber) const
 {
     tappedFretNumber = 0;
 
     // Get the index of the tapped harmonic
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tappedHarmonic);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tappedHarmonic);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -251,18 +257,20 @@ bool Note::GetTappedHarmonic(uint8_t& tappedFretNumber) const
 /// @return True if the note has a tapped harmonic, false if not
 bool Note::HasTappedHarmonic() const
 {
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tappedHarmonic) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray,
+                                              tappedHarmonic) != (uint32_t)-1);
 }
 
 /// Gets the trill data (if any)
 /// @param trilledFretNumber Holds the trilled fret number return value
 /// @return True if the data was returned, false if not
-bool Note::GetTrill(uint8_t& trilledFretNumber) const
+bool Note::GetTrill(uint8_t &trilledFretNumber) const
 {
     trilledFretNumber = 0;
 
     // Get the index of the trill
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, trill);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, trill);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -277,7 +285,8 @@ bool Note::GetTrill(uint8_t& trilledFretNumber) const
 /// @return True if the note has a trill, false if not
 bool Note::HasTrill() const
 {
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, trill) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, trill) !=
+            (uint32_t)-1);
 }
 
 /// Gets the artificial harmonic data (if any)
@@ -285,15 +294,16 @@ bool Note::HasTrill() const
 /// @param keyVariation Holds the key variation return value
 /// @param octave Holds the octave return value
 /// @return True if the data was returned, false if not
-bool Note::GetArtificialHarmonic(uint8_t& key, uint8_t& keyVariation,
-                                 uint8_t& octave) const
+bool Note::GetArtificialHarmonic(uint8_t &key, uint8_t &keyVariation,
+                                 uint8_t &octave) const
 {
     key = 0;
     keyVariation = 0;
     octave = 0;
 
     // Get the index of the artificial harmonic
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, artificialHarmonic);
+    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray,
+                                                       artificialHarmonic);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -310,7 +320,8 @@ bool Note::GetArtificialHarmonic(uint8_t& key, uint8_t& keyVariation,
 /// @return True if the note has a artificial harmonic, false if not
 bool Note::HasArtificialHarmonic() const
 {
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, artificialHarmonic) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(
+                m_complexSymbolArray, artificialHarmonic) != (uint32_t)-1);
 }
 
 /// Determines if the note is an 8va
@@ -366,7 +377,8 @@ bool Note::HasTieWrap() const
 /// @return True if the note has a hammer on, false if not
 bool Note::HasHammerOn() const
 {
-    return IsSimpleFlagSet(hammerOn) && !IsSimpleFlagSet(hammerPullFromToNowhere);
+    return IsSimpleFlagSet(hammerOn) &&
+           !IsSimpleFlagSet(hammerPullFromToNowhere);
 }
 
 /// Determines if the note has a hammer on from nowhere
@@ -380,7 +392,8 @@ bool Note::HasHammerOnFromNowhere() const
 /// @return True if the note has a pull off, false if not
 bool Note::HasPullOff() const
 {
-    return IsSimpleFlagSet(pullOff) && !IsSimpleFlagSet(hammerPullFromToNowhere);
+    return IsSimpleFlagSet(pullOff) &&
+           !IsSimpleFlagSet(hammerPullFromToNowhere);
 }
 
 /// Determines if the note has a pull off to nowhere
@@ -404,4 +417,4 @@ bool Note::IsGhostNote() const
     return IsSimpleFlagSet(ghostNote);
 }
 
-}
+} // namespace PowerTabDocument

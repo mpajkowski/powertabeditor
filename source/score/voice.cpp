@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "voice.h"
 
@@ -49,14 +49,14 @@ void Voice::removePosition(const Position &position)
     ScoreUtils::removeObject(myPositions, position);
 }
 
-boost::iterator_range<Voice::IrregularGroupingIterator>
-Voice:: getIrregularGroupings()
+boost::iterator_range<Voice::IrregularGroupingIterator> Voice::
+    getIrregularGroupings()
 {
     return boost::make_iterator_range(myIrregularGroupings);
 }
 
-boost::iterator_range<Voice::IrregularGroupingConstIterator>
-Voice:: getIrregularGroupings() const
+boost::iterator_range<Voice::IrregularGroupingConstIterator> Voice::
+    getIrregularGroupings() const
 {
     return boost::make_iterator_range(myIrregularGroupings);
 }

@@ -2,9 +2,9 @@
 // Name:            dynamic.cpp
 // Purpose:         Stores and renders a dynamic
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Jan 13, 2005
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -14,35 +14,39 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-#include "powertabfileheader.h"         // Needed for file version constants
+#include "powertabfileheader.h" // Needed for file version constants
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default constants
-const uint16_t        Dynamic::DEFAULT_SYSTEM                     = 0;
-const uint8_t        Dynamic::DEFAULT_STAFF                      = 0;
-const uint8_t        Dynamic::DEFAULT_POSITION                   = 0;
-const uint16_t        Dynamic::DEFAULT_DATA                       = MAKEWORD(DEFAULT_RHYTHM_SLASH_VOLUME, DEFAULT_STAFF_VOLUME);
-const uint8_t        Dynamic::DEFAULT_STAFF_VOLUME               = Dynamic::fff;
-const uint8_t        Dynamic::DEFAULT_RHYTHM_SLASH_VOLUME        = 0;
-    
+const uint16_t Dynamic::DEFAULT_SYSTEM = 0;
+const uint8_t Dynamic::DEFAULT_STAFF = 0;
+const uint8_t Dynamic::DEFAULT_POSITION = 0;
+const uint16_t Dynamic::DEFAULT_DATA =
+    MAKEWORD(DEFAULT_RHYTHM_SLASH_VOLUME, DEFAULT_STAFF_VOLUME);
+const uint8_t Dynamic::DEFAULT_STAFF_VOLUME = Dynamic::fff;
+const uint8_t Dynamic::DEFAULT_RHYTHM_SLASH_VOLUME = 0;
+
 // System Constants
-const uint32_t      Dynamic::MIN_SYSTEM                 = 0;
-const uint32_t      Dynamic::MAX_SYSTEM                 = 65535;
+const uint32_t Dynamic::MIN_SYSTEM = 0;
+const uint32_t Dynamic::MAX_SYSTEM = 65535;
 
 // Staff Constants
-const uint32_t      Dynamic::MIN_STAFF                  = 0;
-const uint32_t      Dynamic::MAX_STAFF                  = 2;
+const uint32_t Dynamic::MIN_STAFF = 0;
+const uint32_t Dynamic::MAX_STAFF = 2;
 
 // Position Constants
-const uint32_t      Dynamic::MIN_POSITION               = 0;
-const uint32_t      Dynamic::MAX_POSITION               = 255;
+const uint32_t Dynamic::MIN_POSITION = 0;
+const uint32_t Dynamic::MAX_POSITION = 255;
 
 // Constructor/Destructor
 /// Default Constructor
-Dynamic::Dynamic() :
-    m_system(DEFAULT_SYSTEM), m_staff(DEFAULT_STAFF),
-    m_position(DEFAULT_POSITION), m_data(DEFAULT_DATA)
+Dynamic::Dynamic()
+    : m_system(DEFAULT_SYSTEM),
+      m_staff(DEFAULT_STAFF),
+      m_position(DEFAULT_POSITION),
+      m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -56,8 +60,11 @@ Dynamic::Dynamic() :
 /// @param staffVolume Staff volume to set (see volumeLevels enum)
 /// @param rhythmSlashVolume Rhythm slash volume to set (see volumeLevels enum)
 Dynamic::Dynamic(uint32_t system, uint32_t staff, uint32_t position,
-    uint8_t staffVolume, uint8_t rhythmSlashVolume) : m_system(DEFAULT_SYSTEM),
-    m_staff(DEFAULT_STAFF), m_position(DEFAULT_POSITION), m_data(DEFAULT_DATA)
+                 uint8_t staffVolume, uint8_t rhythmSlashVolume)
+    : m_system(DEFAULT_SYSTEM),
+      m_staff(DEFAULT_STAFF),
+      m_position(DEFAULT_POSITION),
+      m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -72,10 +79,12 @@ Dynamic::Dynamic(uint32_t system, uint32_t staff, uint32_t position,
 }
 
 /// Copy Constructor
-Dynamic::Dynamic(const Dynamic& dynamic) :
-    PowerTabObject(),
-    m_system(DEFAULT_SYSTEM), m_staff(DEFAULT_STAFF),
-    m_position(DEFAULT_POSITION), m_data(DEFAULT_DATA)
+Dynamic::Dynamic(const Dynamic &dynamic)
+    : PowerTabObject(),
+      m_system(DEFAULT_SYSTEM),
+      m_staff(DEFAULT_STAFF),
+      m_position(DEFAULT_POSITION),
+      m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -90,7 +99,7 @@ Dynamic::~Dynamic()
 }
 
 /// Assignment Operator
-const Dynamic& Dynamic::operator=(const Dynamic& dynamic)
+const Dynamic &Dynamic::operator=(const Dynamic &dynamic)
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -107,20 +116,16 @@ const Dynamic& Dynamic::operator=(const Dynamic& dynamic)
 }
 
 /// Equality Operator
-bool Dynamic::operator==(const Dynamic& dynamic) const
+bool Dynamic::operator==(const Dynamic &dynamic) const
 {
     //------Last Checked------//
     // - Jan 12, 2005
-    return (
-        (m_system == dynamic.m_system) &&
-        (m_staff == dynamic.m_staff) &&
-        (m_position == dynamic.m_position) &&
-        (m_data == dynamic.m_data)
-    );
+    return ((m_system == dynamic.m_system) && (m_staff == dynamic.m_staff) &&
+            (m_position == dynamic.m_position) && (m_data == dynamic.m_data));
 }
 
 /// Inequality Operator
-bool Dynamic::operator!=(const Dynamic& dynamic) const
+bool Dynamic::operator!=(const Dynamic &dynamic) const
 {
     //------Last Checked------//
     // - Jan 12, 2005
@@ -130,13 +135,13 @@ bool Dynamic::operator!=(const Dynamic& dynamic) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Dynamic::Serialize(PowerTabOutputStream& stream) const
+bool Dynamic::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 12, 2005
     stream << m_system << m_staff << m_position << m_data;
     PTB_CHECK_THAT(stream.CheckState(), false);
-   
+
     return (stream.CheckState());
 }
 
@@ -144,18 +149,18 @@ bool Dynamic::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Dynamic::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool Dynamic::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     //------Last Checked------//
     // - Jan 12, 2005
-    
+
     // Version 1.0 and 1.0.2 (only staff volume was stored)
     if (version == PowerTabFileHeader::Version_1_0 ||
         version == PowerTabFileHeader::Version_1_0_2)
     {
         uint8_t staffVolume;
         stream >> m_system >> m_staff >> m_position >> staffVolume;
-        
+
         m_data = MAKEWORD(notSet, staffVolume);
     }
     // Latest version
@@ -163,7 +168,7 @@ bool Dynamic::Deserialize(PowerTabInputStream& stream, uint16_t version)
     {
         stream >> m_system >> m_staff >> m_position >> m_data;
     }
-            
+
     return true;
 }
 
@@ -178,12 +183,12 @@ bool Dynamic::SetVolume(bool rhythmSlashes, uint8_t volume)
     //------Last Checked------//
     // - Jan 12, 2005
     PTB_CHECK_THAT(IsValidVolume(volume), false);
-    
+
     if (rhythmSlashes)
         m_data = MAKEWORD(volume, GetStaffVolume());
     else
         m_data = MAKEWORD(GetRhythmSlashVolume(), volume);
-        
+
     return (true);
 }
 
@@ -208,8 +213,8 @@ bool Dynamic::IsVolumeSet(bool rhythmSlashes) const
 {
     //------Last Checked------//
     // - Jan 13, 2005
-    uint8_t volume = ((rhythmSlashes) ? GetRhythmSlashVolume() :
-        GetStaffVolume());
+    uint8_t volume =
+        ((rhythmSlashes) ? GetRhythmSlashVolume() : GetStaffVolume());
     return (volume != notSet);
 }
 
@@ -240,8 +245,8 @@ std::string Dynamic::GetText(bool rhythmSlashes) const
         return "f";
     else if (volume <= Dynamic::ff)
         return "ff";
-    
+
     return "fff";
 }
 
-}
+} // namespace PowerTabDocument

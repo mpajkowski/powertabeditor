@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "caret.h"
 
@@ -124,8 +124,8 @@ void Caret::moveToStaff(int staff)
 
 bool Caret::moveToNextBar()
 {
-    const Barline *nextBar = myLocation.getSystem().getNextBarline(
-                myLocation.getPositionIndex());
+    const Barline *nextBar =
+        myLocation.getSystem().getNextBarline(myLocation.getPositionIndex());
     if (!nextBar)
         return false;
 
@@ -142,8 +142,8 @@ bool Caret::moveToNextBar()
 void Caret::moveToPrevBar()
 {
     const System &system = myLocation.getSystem();
-    const Barline *prevBar = system.getPreviousBarline(
-                myLocation.getPositionIndex());
+    const Barline *prevBar =
+        system.getPreviousBarline(myLocation.getPositionIndex());
     if (prevBar)
         prevBar = system.getPreviousBarline(prevBar->getPosition());
 
@@ -163,7 +163,7 @@ void Caret::moveToPrevBar()
 }
 
 boost::signals2::connection Caret::subscribeToChanges(
-        const LocationChangedSlot::slot_type &subscriber) const
+    const LocationChangedSlot::slot_type &subscriber) const
 {
     return onLocationChanged.connect(subscriber);
 }
@@ -181,8 +181,8 @@ int Caret::getLastSystemIndex() const
 
 void Caret::moveToPosition(int position)
 {
-    myLocation.setPositionIndex(boost::algorithm::clamp(position, 0,
-                                                        getLastPosition()));
+    myLocation.setPositionIndex(
+        boost::algorithm::clamp(position, 0, getLastPosition()));
     myLocation.setSelectionStart(myLocation.getPositionIndex());
 
     onLocationChanged();
@@ -191,8 +191,8 @@ void Caret::moveToPosition(int position)
 bool Caret::moveToSystem(int system, bool keepStaff)
 {
     const int prevSystem = myLocation.getSystemIndex();
-    myLocation.setSystemIndex(boost::algorithm::clamp(system, 0,
-                                                      getLastSystemIndex()));
+    myLocation.setSystemIndex(
+        boost::algorithm::clamp(system, 0, getLastSystemIndex()));
 
     if (myLocation.getSystemIndex() != prevSystem)
     {
@@ -202,7 +202,8 @@ bool Caret::moveToSystem(int system, bool keepStaff)
         {
             myLocation.setStaffIndex(boost::algorithm::clamp(
                 myLocation.getStaffIndex(), 0,
-                static_cast<int>(myLocation.getSystem().getStaves().size() - 1)));
+                static_cast<int>(myLocation.getSystem().getStaves().size() -
+                                 1)));
         }
 
         myLocation.setPositionIndex(0);

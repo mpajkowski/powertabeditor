@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef APP_POWERTABEDITOR_H
 #define APP_POWERTABEDITOR_H
 
@@ -235,8 +235,8 @@ private slots:
     void editArtificialHarmonic();
     /// Adds or removes a tapped harmonic for the current note.
     void editTappedHarmonic();
-	/// Adds or removes a bend for the current note.
-	void editBend();
+    /// Adds or removes a bend for the current note.
+    void editBend();
     /// Adds or removes a trill for the current note.
     void editTrill();
     /// Adds or removes left hand fingering for the current note.
@@ -266,7 +266,7 @@ protected:
     virtual bool eventFilter(QObject *object, QEvent *event) override;
 
     /// Performs some final actions before exiting.
-    virtual void closeEvent(QCloseEvent*) override;
+    virtual void closeEvent(QCloseEvent *) override;
 
     /// Accept drag events.
     virtual void dragEnterEvent(QDragEnterEvent *event) override;
@@ -370,7 +370,8 @@ private:
     void editSimplePositionProperty(Command *command,
                                     Position::SimpleProperty property);
     /// Toggles a simple note property.
-    void editSimpleNoteProperty(Command *command, Note::SimpleProperty property);
+    void editSimpleNoteProperty(Command *command,
+                                Note::SimpleProperty property);
 
     /// Helper function to insert a system at the given index.
     void insertSystem(int index);
@@ -455,7 +456,7 @@ private:
     Command *myPrevPositionCommand;
     Command *myNextStringCommand;
     Command *myPrevStringCommand;
-    Command *myLastPositionCommand;    
+    Command *myLastPositionCommand;
     Command *myNextStaffCommand;
     Command *myPrevStaffCommand;
     Command *myNextBarCommand;
@@ -550,7 +551,7 @@ private:
     Command *myNaturalHarmonicCommand;
     Command *myArtificialHarmonicCommand;
     Command *myTappedHarmonicCommand;
-	Command *myBendCommand;
+    Command *myBendCommand;
     Command *myLeftHandFingeringCommand;
 
     QMenu *mySlideIntoMenu;

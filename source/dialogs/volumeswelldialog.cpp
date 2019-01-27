@@ -1,34 +1,33 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "volumeswelldialog.h"
 #include "ui_volumeswelldialog.h"
 
-#include <powertabdocument/position.h>
 #include <powertabdocument/dynamic.h>
+#include <powertabdocument/position.h>
 
-VolumeSwellDialog::VolumeSwellDialog(QWidget *parent, const Position *position) :
-    QDialog(parent),
-    ui(new Ui::VolumeSwellDialog)
+VolumeSwellDialog::VolumeSwellDialog(QWidget *parent, const Position *position)
+    : QDialog(parent), ui(new Ui::VolumeSwellDialog)
 {
     ui->setupUi(this);
 
-    connect(ui->overCurNoteOpt, SIGNAL(toggled(bool)),
-            ui->numNotesSpinBox, SLOT(setDisabled(bool)));
+    connect(ui->overCurNoteOpt, SIGNAL(toggled(bool)), ui->numNotesSpinBox,
+            SLOT(setDisabled(bool)));
 
     ui->numNotesSpinBox->setMinimum(1);
     ui->numNotesSpinBox->setMaximum(Position::MAX_VOLUME_SWELL_DURATION);
@@ -103,7 +102,8 @@ uint8_t VolumeSwellDialog::getNewDuration() const
 
 void VolumeSwellDialog::accept()
 {
-    newDuration = ui->overCurNoteOpt->isChecked() ? 0 : ui->numNotesSpinBox->value();
+    newDuration =
+        ui->overCurNoteOpt->isChecked() ? 0 : ui->numNotesSpinBox->value();
     newStartVolume = startVolumeLevels->checkedId();
     newEndVolume = endVolumeLevels->checkedId();
 

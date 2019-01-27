@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef PAINTERS_STDNOTATIONNOTE_H
 #define PAINTERS_STDNOTATIONNOTE_H
 
+#include <QChar>
 #include <array>
 #include <painters/beamgroup.h>
 #include <painters/notestem.h>
-#include <QChar>
 #include <score/staff.h>
 #include <vector>
 
@@ -64,13 +64,14 @@ public:
     QString getAccidentalText() const;
     bool isDotted() const;
     bool isDoubleDotted() const;
-    
+
     /// Return the score note attached to this note.
     const Note *getNote() const;
 
     /// Remove the note's accidental.
     void clearAccidental();
-    /// Force the accidental to be shown, even if it's part of the key signature.
+    /// Force the accidental to be shown, even if it's part of the key
+    /// signature.
     void showAccidental();
 
     const boost::optional<int> &getTie() const;
@@ -79,9 +80,11 @@ public:
 private:
     /// Return the offset of the note from the top of the staff.
     static double getNoteLocation(const Staff &staff, const Note &note,
-                                  const KeySignature &key, const Tuning &tuning);
+                                  const KeySignature &key,
+                                  const Tuning &tuning);
 
-    /// Returns the number of octaves (from -2 to 2) that the note is shifted by.
+    /// Returns the number of octaves (from -2 to 2) that the note is shifted
+    /// by.
     static int getOctaveOffset(const Note &note);
 
     /// Computes the accidental for the note.
@@ -90,7 +93,8 @@ private:
     void computeAccidentalType(bool explicitSymbol);
 
     /// Returns the non-zero beaming patterns of the time signature.
-    static std::vector<uint8_t> getBeamingPatterns(const TimeSignature &timeSig);
+    static std::vector<uint8_t> getBeamingPatterns(
+        const TimeSignature &timeSig);
 
     /// Calculates the beaming for a set of note stems.
     static void computeBeaming(const TimeSignature &timeSig,

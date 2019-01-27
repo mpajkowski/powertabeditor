@@ -18,8 +18,8 @@
 #ifndef SCORE_CHORDNAME_H
 #define SCORE_CHORDNAME_H
 
-#include <bitset>
 #include "fileversion.h"
+#include <bitset>
 #include <iosfwd>
 
 class ChordName

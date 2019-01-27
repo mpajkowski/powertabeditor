@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "timesignaturedialog.h"
 #include "ui_timesignaturedialog.h"
 
 #include <QMessageBox>
 
 TimeSignatureDialog::TimeSignatureDialog(
-        QWidget *parent, const TimeSignature &currentTimeSignature)
+    QWidget *parent, const TimeSignature &currentTimeSignature)
     : QDialog(parent),
       ui(new Ui::TimeSignatureDialog),
       myTimeSignature(currentTimeSignature)
@@ -54,34 +54,33 @@ TimeSignatureDialog::TimeSignatureDialog(
                             TimeSignature::CutTime);
 
     ui->beatsPerMeasure->setValue(myTimeSignature.getBeatsPerMeasure());
-    ui->beatValue->setCurrentIndex(ui->beatValue->findData(
-                                       myTimeSignature.getBeatValue()));
+    ui->beatValue->setCurrentIndex(
+        ui->beatValue->findData(myTimeSignature.getBeatValue()));
 
     updatePossiblePulseValues();
     ui->metronomePulses->setCurrentIndex(
-                ui->metronomePulses->findData(myTimeSignature.getNumPulses()));
+        ui->metronomePulses->findData(myTimeSignature.getNumPulses()));
 
     TimeSignature::BeamingPattern pattern = myTimeSignature.getBeamingPattern();
     for (size_t i = 0; i < myBeamingPatterns.size(); i++)
         myBeamingPatterns[i]->setText(QString::number(pattern[i]));
 
-    connect(ui->showTimeSignature, SIGNAL(toggled(bool)),
-            this, SLOT(editTimeSignatureVisible(bool)));
+    connect(ui->showTimeSignature, SIGNAL(toggled(bool)), this,
+            SLOT(editTimeSignatureVisible(bool)));
 
-    connect(ui->metronomePulses, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(editMetronomePulses(int)));
+    connect(ui->metronomePulses, SIGNAL(currentIndexChanged(int)), this,
+            SLOT(editMetronomePulses(int)));
 
-    connect(ui->cutTime, SIGNAL(toggled(bool)),
-            this, SLOT(editCutTime(bool)));
+    connect(ui->cutTime, SIGNAL(toggled(bool)), this, SLOT(editCutTime(bool)));
 
-    connect(ui->commonTime, SIGNAL(toggled(bool)),
-            this, SLOT(editCommonTime(bool)));
+    connect(ui->commonTime, SIGNAL(toggled(bool)), this,
+            SLOT(editCommonTime(bool)));
 
-    connect(ui->beatValue, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(editBeatValue(int)));
+    connect(ui->beatValue, SIGNAL(currentIndexChanged(int)), this,
+            SLOT(editBeatValue(int)));
 
-    connect(ui->beatsPerMeasure, SIGNAL(valueChanged(int)),
-            this, SLOT(editBeatsPerMeasure(int)));
+    connect(ui->beatsPerMeasure, SIGNAL(valueChanged(int)), this,
+            SLOT(editBeatsPerMeasure(int)));
 }
 
 TimeSignatureDialog::~TimeSignatureDialog()
@@ -93,8 +92,7 @@ void TimeSignatureDialog::updatePossiblePulseValues()
 {
     ui->metronomePulses->clear();
 
-    for (int i = TimeSignature::MIN_PULSES;
-         i < TimeSignature::MAX_PULSES; ++i)
+    for (int i = TimeSignature::MIN_PULSES; i < TimeSignature::MAX_PULSES; ++i)
     {
         if (myTimeSignature.isValidNumPulses(i))
         {
@@ -111,7 +109,7 @@ TimeSignature TimeSignatureDialog::getTimeSignature() const
 void TimeSignatureDialog::accept()
 {
     // Save the new beaming pattern values.
-    TimeSignature::BeamingPattern pattern = {{0, 0, 0, 0}};
+    TimeSignature::BeamingPattern pattern = { { 0, 0, 0, 0 } };
     for (size_t i = 0; i < myBeamingPatterns.size(); ++i)
     {
         QLineEdit *value = myBeamingPatterns[i];
@@ -141,7 +139,7 @@ void TimeSignatureDialog::editTimeSignatureVisible(bool isVisible)
 void TimeSignatureDialog::editMetronomePulses(int selectedIndex)
 {
     myTimeSignature.setNumPulses(
-                ui->metronomePulses->itemData(selectedIndex).toUInt());
+        ui->metronomePulses->itemData(selectedIndex).toUInt());
 }
 
 void TimeSignatureDialog::editCutTime(bool enabled)
@@ -154,7 +152,7 @@ void TimeSignatureDialog::editCutTime(bool enabled)
         myTimeSignature.setMeterType(TimeSignature::Normal);
         myTimeSignature.setBeatsPerMeasure(ui->beatsPerMeasure->value());
         myTimeSignature.setBeatValue(
-                    ui->beatValue->itemData(ui->beatValue->currentIndex()).toUInt());
+            ui->beatValue->itemData(ui->beatValue->currentIndex()).toUInt());
     }
 
     ui->beatsPerMeasure->setEnabled(!enabled);
@@ -164,7 +162,7 @@ void TimeSignatureDialog::editCutTime(bool enabled)
 void TimeSignatureDialog::editBeatValue(int selectedIndex)
 {
     myTimeSignature.setBeatValue(
-                ui->beatValue->itemData(selectedIndex).toUInt());
+        ui->beatValue->itemData(selectedIndex).toUInt());
 }
 
 void TimeSignatureDialog::editBeatsPerMeasure(int beats)
@@ -186,7 +184,7 @@ void TimeSignatureDialog::editCommonTime(bool enabled)
         myTimeSignature.setMeterType(TimeSignature::Normal);
         myTimeSignature.setBeatsPerMeasure(ui->beatsPerMeasure->value());
         myTimeSignature.setBeatValue(
-                    ui->beatValue->itemData(ui->beatValue->currentIndex()).toUInt());
+            ui->beatValue->itemData(ui->beatValue->currentIndex()).toUInt());
     }
 
     ui->beatsPerMeasure->setEnabled(!enabled);

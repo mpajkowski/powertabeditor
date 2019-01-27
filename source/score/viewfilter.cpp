@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2015 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2015 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "viewfilter.h"
 
@@ -84,29 +84,29 @@ bool FilterRule::accept(const Score &score, const ActivePlayer &p) const
 
     switch (mySubject)
     {
-    case PLAYER_NAME:
-        return boost::regex_match(player.getDescription(), myRegex);
-    case NUM_STRINGS:
-    {
-        const int value = player.getTuning().getStringCount();
-
-        switch (myOperation)
+        case PLAYER_NAME:
+            return boost::regex_match(player.getDescription(), myRegex);
+        case NUM_STRINGS:
         {
-        case LESS_THAN:
-            return value < myIntValue;
-        case LESS_THAN_EQUAL:
-            return value <= myIntValue;
-        case EQUAL:
-            return value == myIntValue;
-        case GREATER_THAN:
-            return value > myIntValue;
-        case GREATER_THAN_EQUAL:
-            return value >= myIntValue;
+            const int value = player.getTuning().getStringCount();
+
+            switch (myOperation)
+            {
+                case LESS_THAN:
+                    return value < myIntValue;
+                case LESS_THAN_EQUAL:
+                    return value <= myIntValue;
+                case EQUAL:
+                    return value == myIntValue;
+                case GREATER_THAN:
+                    return value > myIntValue;
+                case GREATER_THAN_EQUAL:
+                    return value >= myIntValue;
+            }
         }
-    }
-    default:
-        assert(!"Unexpected subject for filter.");
-        return false;
+        default:
+            assert(!"Unexpected subject for filter.");
+            return false;
     }
 }
 
@@ -144,8 +144,8 @@ boost::iterator_range<ViewFilter::RuleIterator> ViewFilter::getRules()
     return boost::make_iterator_range(myRules);
 }
 
-boost::iterator_range<ViewFilter::RuleConstIterator>
-ViewFilter::getRules() const
+boost::iterator_range<ViewFilter::RuleConstIterator> ViewFilter::getRules()
+    const
 {
     return boost::make_iterator_range(myRules);
 }

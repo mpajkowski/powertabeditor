@@ -16,37 +16,38 @@
 
 #include <sstream>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default constants
-const int8_t      RehearsalSign::DEFAULT_LETTER           = RehearsalSign::notSet;
-const std::string RehearsalSign::DEFAULT_DESCRIPTION      = "";
+const int8_t RehearsalSign::DEFAULT_LETTER = RehearsalSign::notSet;
+const std::string RehearsalSign::DEFAULT_DESCRIPTION = "";
 
 /// Default Constructor
-RehearsalSign::RehearsalSign() :
-    m_letter(DEFAULT_LETTER), m_description(DEFAULT_DESCRIPTION)
+RehearsalSign::RehearsalSign()
+    : m_letter(DEFAULT_LETTER), m_description(DEFAULT_DESCRIPTION)
 {
 }
 
 /// Primary Constructor
 /// @param letter Unique letter identifying the rehearsal sign
 /// @param description Description for the rehearsal sign (i.e. Intro)
-RehearsalSign::RehearsalSign(int8_t letter, const std::string& description) :
-    m_letter(letter), m_description(description)
+RehearsalSign::RehearsalSign(int8_t letter, const std::string &description)
+    : m_letter(letter), m_description(description)
 {
     assert(IsValidLetter(letter));
     assert(!description.empty());
 }
 
 /// Equality Operator
-bool RehearsalSign::operator==(const RehearsalSign& rehearsalSign) const
+bool RehearsalSign::operator==(const RehearsalSign &rehearsalSign) const
 {
     return ((m_letter == rehearsalSign.m_letter) &&
             (m_description == rehearsalSign.m_description));
 }
 
 /// Inequality Operator
-bool RehearsalSign::operator!=(const RehearsalSign& rehearsalSign) const
+bool RehearsalSign::operator!=(const RehearsalSign &rehearsalSign) const
 {
     return (!operator==(rehearsalSign));
 }
@@ -55,7 +56,7 @@ bool RehearsalSign::operator!=(const RehearsalSign& rehearsalSign) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool RehearsalSign::Serialize(PowerTabOutputStream& stream) const
+bool RehearsalSign::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_letter;
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -70,7 +71,7 @@ bool RehearsalSign::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool RehearsalSign::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool RehearsalSign::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_letter;
     stream.ReadMFCString(m_description);
@@ -120,7 +121,7 @@ int8_t RehearsalSign::GetLetter() const
 
 /// Sets the rehearsal sign description
 /// @return True if the description was set, false if not
-bool RehearsalSign::SetDescription(const std::string& description)
+bool RehearsalSign::SetDescription(const std::string &description)
 {
     PTB_CHECK_THAT(!description.empty(), false);
     m_description = description;
@@ -147,4 +148,4 @@ void RehearsalSign::Clear()
     m_description.clear();
 }
 
-}
+} // namespace PowerTabDocument

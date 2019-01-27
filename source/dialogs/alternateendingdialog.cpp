@@ -1,30 +1,29 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "alternateendingdialog.h"
 
-#include <functional>
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <functional>
 
-AlternateEndingDialog::AlternateEndingDialog(QWidget *parent)
-    : QDialog(parent)
+AlternateEndingDialog::AlternateEndingDialog(QWidget *parent) : QDialog(parent)
 {
     const int LAYOUT_SPACING = 15;
 
@@ -34,7 +33,8 @@ AlternateEndingDialog::AlternateEndingDialog(QWidget *parent)
     auto mainLayout = new QVBoxLayout(this);
 
     std::vector<QHBoxLayout *> rowLayouts;
-    for (int i = AlternateEnding::MIN_NUMBER; i <= AlternateEnding::MAX_NUMBER; ++i)
+    for (int i = AlternateEnding::MIN_NUMBER; i <= AlternateEnding::MAX_NUMBER;
+         ++i)
     {
         // Group checkboxes into rows of 4.
         if ((i - 1) % 4 == 0)
@@ -92,9 +92,10 @@ void AlternateEndingDialog::accept()
 {
     // Check that at least one repeat number was selected.
     if (std::find_if(myCheckBoxes.begin(), myCheckBoxes.end(),
-                     std::mem_fun(&QCheckBox::isChecked)) == myCheckBoxes.end()
-        && !myDaCapoCheckbox->isChecked() && !myDalSegnoCheckbox->isChecked()
-        && !myDalSegnoSegnoCheckbox->isChecked())
+                     std::mem_fun(&QCheckBox::isChecked)) ==
+            myCheckBoxes.end() &&
+        !myDaCapoCheckbox->isChecked() && !myDalSegnoCheckbox->isChecked() &&
+        !myDalSegnoSegnoCheckbox->isChecked())
     {
         QMessageBox msgBox(this);
         msgBox.setIcon(QMessageBox::Warning);

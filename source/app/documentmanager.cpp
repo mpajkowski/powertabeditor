@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "documentmanager.h"
 
 #include <app/settings.h>
@@ -115,7 +115,7 @@ int DocumentManager::getCurrentDocumentIndex() const
     return *myCurrentIndex;
 }
 
-size_t DocumentManager::getDocumentListSize() const 
+size_t DocumentManager::getDocumentListSize() const
 {
     return myDocumentList.size();
 }
@@ -124,20 +124,18 @@ int DocumentManager::findDocument(const Document::PathType &filepath)
 {
     for (unsigned int i = 0; i < getDocumentListSize(); ++i)
     {
-        Document& doc = getDocument(i);
-        
+        Document &doc = getDocument(i);
+
         if (!doc.hasFilename())
             continue;
 
         if (filepath == doc.getFilename())
             return i;
-        
     }
     return -1;
 }
 
-Document::Document()
-    : myCaret(myScore, myViewOptions)
+Document::Document() : myCaret(myScore, myViewOptions)
 {
 }
 

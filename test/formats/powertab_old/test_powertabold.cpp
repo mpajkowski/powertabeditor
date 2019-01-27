@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <catch.hpp>
 
 #include <app/appinfo.h>
 #include <formats/powertab/powertabimporter.h>
-#include <formats/powertab_old/powertaboldimporter.h>
 #include <formats/powertab_old/powertabdocument/powertabdocument.h>
+#include <formats/powertab_old/powertaboldimporter.h>
 #include <score/score.h>
 
 static void loadTest(FileFormatImporter &importer, const char *filename,
@@ -58,7 +58,8 @@ TEST_CASE("Formats/PowerTabOldImport/Guitars", "")
     PowerTabOldImporter importer;
     loadTest(importer, "data/guitars.ptb", score);
 
-    // Should contain two players from the guitar score and one from the bass score.
+    // Should contain two players from the guitar score and one from the bass
+    // score.
     REQUIRE(score.getPlayers().size() == 3);
     REQUIRE(score.getInstruments().size() == 3);
 
@@ -70,7 +71,8 @@ TEST_CASE("Formats/PowerTabOldImport/Guitars", "")
     REQUIRE(player2.getTuning().getStringCount() == 7);
     REQUIRE(player3.getTuning().getStringCount() == 4);
 
-    REQUIRE(score.getInstruments()[0].getDescription() == "Electric Guitar (clean)");
+    REQUIRE(score.getInstruments()[0].getDescription() ==
+            "Electric Guitar (clean)");
 }
 
 TEST_CASE("Formats/PowerTabOldImport/Barlines", "")

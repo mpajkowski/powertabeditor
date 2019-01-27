@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tuningdialog.h"
 #include "ui_tuningdialog.h"
 
@@ -27,13 +27,12 @@ Q_DECLARE_METATYPE(const Tuning *)
 
 TuningDialog::TuningDialog(QWidget *parent, const Tuning &currentTuning,
                            const TuningDictionary &dictionary)
-    : QDialog(parent),
-      ui(new Ui::TuningDialog),
-      myDictionary(dictionary)
+    : QDialog(parent), ui(new Ui::TuningDialog), myDictionary(dictionary)
 {
     ui->setupUi(this);
 
-    ui->tuningNameEdit->setText(QString::fromStdString(currentTuning.getName()));
+    ui->tuningNameEdit->setText(
+        QString::fromStdString(currentTuning.getName()));
 
     ui->sharpsCheckBox->setChecked(currentTuning.usesSharps());
     connect(ui->sharpsCheckBox, SIGNAL(toggled(bool)), this,
@@ -81,8 +80,8 @@ TuningDialog::TuningDialog(QWidget *parent, const Tuning &currentTuning,
     initStringSelectors(currentTuning);
     updateEnabledStrings(currentTuning.getStringCount());
 
-    connect(ui->presetComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(loadPreset()));
+    connect(ui->presetComboBox, SIGNAL(currentIndexChanged(int)), this,
+            SLOT(loadPreset()));
 
     updateCurrentPreset();
 }
@@ -92,14 +91,14 @@ TuningDialog::~TuningDialog()
     delete ui;
 }
 
-void TuningDialog::initStringSelectors(const Tuning& currentTuning)
+void TuningDialog::initStringSelectors(const Tuning &currentTuning)
 {
     for (int i = 0; i < static_cast<int>(myStringSelectors.size()); i++)
     {
         QComboBox *selector = myStringSelectors[i];
 
         selector->addItems(myNoteNames);
-        
+
         if (i < currentTuning.getStringCount())
             selector->setCurrentIndex(currentTuning.getNote(i, false));
     }
@@ -108,19 +107,19 @@ void TuningDialog::initStringSelectors(const Tuning& currentTuning)
 void TuningDialog::generateNoteNames(bool usesSharps)
 {
     myNoteNames.clear();
-    
+
     for (uint8_t note = Midi::MIN_MIDI_NOTE; note < Midi::MAX_MIDI_NOTE; ++note)
     {
         myNoteNames << QString::fromStdString(
-                         Midi::getMidiNoteTextSimple(note,usesSharps)) +
-                     QString::number(Midi::getMidiNoteOctave(note));
+                           Midi::getMidiNoteTextSimple(note, usesSharps)) +
+                           QString::number(Midi::getMidiNoteOctave(note));
     }
 }
 
 void TuningDialog::toggleSharps(bool usesSharps)
 {
     generateNoteNames(usesSharps);
-    
+
     for (uint8_t i = 0; i < Tuning::MAX_STRING_COUNT; i++)
     {
         QComboBox *selector = myStringSelectors.at(i);
@@ -136,12 +135,12 @@ void TuningDialog::updateEnabledStrings(int numStrings)
     Q_ASSERT(numStrings <= (int)Tuning::MAX_STRING_COUNT && numStrings >= 0);
 
     std::for_each(myStringSelectors.begin(),
-                  myStringSelectors.begin() + numStrings, [](QComboBox * c)
-    { c->setEnabled(true); });
+                  myStringSelectors.begin() + numStrings,
+                  [](QComboBox *c) { c->setEnabled(true); });
 
     std::for_each(myStringSelectors.begin() + numStrings,
-                  myStringSelectors.end(), [](QComboBox * c)
-    { c->setEnabled(false); });
+                  myStringSelectors.end(),
+                  [](QComboBox *c) { c->setEnabled(false); });
 }
 
 void TuningDialog::updateTuningDictionary(int numStrings)
@@ -153,10 +152,12 @@ void TuningDialog::updateTuningDictionary(int numStrings)
 
     for (const Tuning *tuning : tunings)
     {
-        ui->presetComboBox->addItem(QString("%1 - %2").arg(
-            QString::fromStdString(tuning->getName()),
-            QString::fromStdString(boost::lexical_cast<std::string>(*tuning))),
-                                    QVariant::fromValue(tuning));
+        ui->presetComboBox->addItem(
+            QString("%1 - %2").arg(
+                QString::fromStdString(tuning->getName()),
+                QString::fromStdString(
+                    boost::lexical_cast<std::string>(*tuning))),
+            QVariant::fromValue(tuning));
     }
 }
 
@@ -165,8 +166,9 @@ void TuningDialog::loadPreset()
     if (ui->presetComboBox->currentIndex() < 0)
         return;
 
-    const Tuning *tuning = ui->presetComboBox->itemData(
-                ui->presetComboBox->currentIndex()).value<const Tuning *>();
+    const Tuning *tuning =
+        ui->presetComboBox->itemData(ui->presetComboBox->currentIndex())
+            .value<const Tuning *>();
 
     ui->sharpsCheckBox->setChecked(tuning->usesSharps());
 

@@ -17,50 +17,57 @@
 #include "powertaboutputstream.h"
 #include "tuning.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
-const uint8_t Staff::DEFAULT_DATA                                        = (uint8_t)((DEFAULT_CLEF << 4) | DEFAULT_TABLATURE_STAFF_TYPE);
-const uint8_t Staff::DEFAULT_CLEF                                        = TREBLE_CLEF;
-const uint8_t Staff::DEFAULT_TABLATURE_STAFF_TYPE                        = 6;
-const uint8_t Staff::DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING       = 9;
-const uint8_t Staff::DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING       = 9;
-const uint8_t Staff::DEFAULT_SYMBOL_SPACING                              = 0;
-const uint8_t Staff::DEFAULT_TABLATURE_STAFF_BELOW_SPACING               = 0;
+const uint8_t Staff::DEFAULT_DATA =
+    (uint8_t)((DEFAULT_CLEF << 4) | DEFAULT_TABLATURE_STAFF_TYPE);
+const uint8_t Staff::DEFAULT_CLEF = TREBLE_CLEF;
+const uint8_t Staff::DEFAULT_TABLATURE_STAFF_TYPE = 6;
+const uint8_t Staff::DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING = 9;
+const uint8_t Staff::DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING = 9;
+const uint8_t Staff::DEFAULT_SYMBOL_SPACING = 0;
+const uint8_t Staff::DEFAULT_TABLATURE_STAFF_BELOW_SPACING = 0;
 const uint8_t Staff::STD_NOTATION_LINE_SPACING = 7;
 const uint8_t Staff::STD_NOTATION_STAFF_TYPE = 5;
 const uint8_t Staff::STAFF_BORDER_SPACING = 10;
 const uint8_t Staff::TAB_SYMBOL_HEIGHT = 10;
 
 // Clef Constants
-const uint8_t Staff::TREBLE_CLEF                         = 0;
-const uint8_t Staff::BASS_CLEF                           = 1;
+const uint8_t Staff::TREBLE_CLEF = 0;
+const uint8_t Staff::BASS_CLEF = 1;
 
 // Tablature Staff Type Constants
 const uint8_t Staff::MIN_TABULATURE_STAFF_TYPE = Tuning::MIN_STRING_COUNT;
 const uint8_t Staff::MAX_TABULATURE_STAFF_TYPE = Tuning::MAX_STRING_COUNT;
 
 /// Default Constructor
-Staff::Staff() :
-    m_data(DEFAULT_DATA),
-    m_standardNotationStaffAboveSpacing(DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING),
-    m_standardNotationStaffBelowSpacing(DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING),
-    m_symbolSpacing(DEFAULT_SYMBOL_SPACING),
-    m_tablatureStaffBelowSpacing(DEFAULT_TABLATURE_STAFF_BELOW_SPACING),
-    m_isShown(true)
+Staff::Staff()
+    : m_data(DEFAULT_DATA),
+      m_standardNotationStaffAboveSpacing(
+          DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING),
+      m_standardNotationStaffBelowSpacing(
+          DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING),
+      m_symbolSpacing(DEFAULT_SYMBOL_SPACING),
+      m_tablatureStaffBelowSpacing(DEFAULT_TABLATURE_STAFF_BELOW_SPACING),
+      m_isShown(true)
 {
 }
 
 /// Primary Constructor
-/// @param tablatureStaffType The type of tablature staff to set (number of strings)
+/// @param tablatureStaffType The type of tablature staff to set (number of
+/// strings)
 /// @param clef Type of clef to set (see CLEF constants)
-Staff::Staff(uint8_t tablatureStaffType, uint8_t clef) :
-    m_data(DEFAULT_DATA),
-    m_standardNotationStaffAboveSpacing(DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING),
-    m_standardNotationStaffBelowSpacing(DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING),
-    m_symbolSpacing(DEFAULT_SYMBOL_SPACING),
-    m_tablatureStaffBelowSpacing(DEFAULT_TABLATURE_STAFF_BELOW_SPACING),
-    m_isShown(true)
+Staff::Staff(uint8_t tablatureStaffType, uint8_t clef)
+    : m_data(DEFAULT_DATA),
+      m_standardNotationStaffAboveSpacing(
+          DEFAULT_STANDARD_NOTATION_STAFF_ABOVE_SPACING),
+      m_standardNotationStaffBelowSpacing(
+          DEFAULT_STANDARD_NOTATION_STAFF_BELOW_SPACING),
+      m_symbolSpacing(DEFAULT_SYMBOL_SPACING),
+      m_tablatureStaffBelowSpacing(DEFAULT_TABLATURE_STAFF_BELOW_SPACING),
+      m_isShown(true)
 {
     SetClef(clef);
     SetTablatureStaffType(tablatureStaffType);
@@ -70,7 +77,7 @@ Staff::~Staff()
 {
     for (size_t i = 0; i < positionArrays.size(); i++)
     {
-        std::vector<Position*>& positionArray = positionArrays[i];
+        std::vector<Position *> &positionArray = positionArrays[i];
         for (size_t j = 0; j < positionArray.size(); j++)
         {
             delete positionArray[j];
@@ -82,13 +89,13 @@ Staff::~Staff()
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Staff::Serialize(PowerTabOutputStream& stream) const
+bool Staff::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 5, 2005
-    stream << m_data << m_standardNotationStaffAboveSpacing <<
-        m_standardNotationStaffBelowSpacing << m_symbolSpacing <<
-        m_tablatureStaffBelowSpacing;
+    stream << m_data << m_standardNotationStaffAboveSpacing
+           << m_standardNotationStaffBelowSpacing << m_symbolSpacing
+           << m_tablatureStaffBelowSpacing;
     PTB_CHECK_THAT(stream.CheckState(), false);
 
     // TODO - should we serialize the number of voices??
@@ -105,11 +112,11 @@ bool Staff::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Staff::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool Staff::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     stream >> m_data >> m_standardNotationStaffAboveSpacing >>
-              m_standardNotationStaffBelowSpacing >> m_symbolSpacing >>
-              m_tablatureStaffBelowSpacing;
+        m_standardNotationStaffBelowSpacing >> m_symbolSpacing >>
+        m_tablatureStaffBelowSpacing;
 
     for (size_t i = 0; i < positionArrays.size(); i++)
     {
@@ -177,13 +184,13 @@ bool Staff::IsValidTablatureStaffType(uint8_t type) const
 
     for (size_t i = 0; i < positionArrays.size(); ++i)
     {
-        const std::vector<Position*>& voice = positionArrays[i];
+        const std::vector<Position *> &voice = positionArrays[i];
         for (size_t j = 0; j < voice.size(); ++j)
         {
-            const Position* pos = voice.at(j);
+            const Position *pos = voice.at(j);
             for (size_t m = 0; m < pos->GetNoteCount(); ++m)
             {
-                const Note* note = pos->GetNote(m);
+                const Note *note = pos->GetNote(m);
                 if (note->GetString() >= type)
                 {
                     return false;
@@ -235,7 +242,7 @@ size_t Staff::GetPositionCount(size_t voice) const
 /// @param voice Voice the position belongs to
 /// @param index Index of the position to get
 /// @throw std::out_of_range if the voice or index are invalid
-Position* Staff::GetPosition(size_t voice, size_t index) const
+Position *Staff::GetPosition(size_t voice, size_t index) const
 {
     if (!IsValidVoice(voice))
         throw std::out_of_range("Invalid voice");
@@ -249,4 +256,4 @@ bool Staff::IsShown() const
     return m_isShown;
 }
 
-}
+} // namespace PowerTabDocument

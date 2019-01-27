@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "barlinepainter.h"
 
-#include <app/pubsub/clickpubsub.h>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+#include <app/pubsub/clickpubsub.h>
 #include <score/barline.h>
 
 const double BarlinePainter::DOUBLE_BAR_WIDTH = 4;
@@ -41,15 +41,15 @@ BarlinePainter::BarlinePainter(const LayoutConstPtr &layout,
 
     switch (barline.getBarType())
     {
-    case Barline::SingleBar:
-        myWidth = 1;
-        break;
-    case Barline::RepeatStart:
-        myWidth = -DOUBLE_BAR_WIDTH;
-        break;
-    default:
-        myWidth = DOUBLE_BAR_WIDTH;
-        break;
+        case Barline::SingleBar:
+            myWidth = 1;
+            break;
+        case Barline::RepeatStart:
+            myWidth = -DOUBLE_BAR_WIDTH;
+            break;
+        default:
+            myWidth = DOUBLE_BAR_WIDTH;
+            break;
     }
 
     myX = LayoutInfo::centerItem(myX, myX + layout->getPositionSpacing(),
@@ -68,8 +68,8 @@ BarlinePainter::BarlinePainter(const LayoutConstPtr &layout,
         myX -= 2;
     }
 
-    myBounds = QRectF(0, 0, layout->getPositionSpacing(),
-                      layout->getStaffHeight());
+    myBounds =
+        QRectF(0, 0, layout->getPositionSpacing(), layout->getStaffHeight());
 }
 
 void BarlinePainter::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -122,7 +122,8 @@ void BarlinePainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
         repeatFont.setPixelSize(8);
         painter->setFont(repeatFont);
 
-        const QString message = QString::number(myBarline.getRepeatCount()) + "x";
+        const QString message =
+            QString::number(myBarline.getRepeatCount()) + "x";
         painter->drawText(3, myLayout->getTopStdNotationLine() - 3, message);
     }
 
@@ -154,11 +155,13 @@ void BarlinePainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
         // Draw dots for standard notation staff, on either side of the centre.
         height = (myLayout->getStdNotationLine(centreStaffLine) +
-                  myLayout->getStdNotationLine(centreStaffLine + 1)) / 2.0;
+                  myLayout->getStdNotationLine(centreStaffLine + 1)) /
+                 2.0;
         painter->drawRect(QRectF(dotLocation, height, radius, radius));
 
         height = (myLayout->getStdNotationLine(centreStaffLine) +
-                  myLayout->getStdNotationLine(centreStaffLine - 1)) / 2.0;
+                  myLayout->getStdNotationLine(centreStaffLine - 1)) /
+                 2.0;
         painter->drawRect(QRectF(dotLocation, height, radius, radius));
 
         // Offset the repeat dots 2 lines from the edge of the tab staff if
@@ -167,11 +170,15 @@ void BarlinePainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
         // Draw dots for tab staff.
         height = (myLayout->getTabLine(offsetFromEdge) +
-                  myLayout->getTabLine(offsetFromEdge + 1)) / 2.0;
+                  myLayout->getTabLine(offsetFromEdge + 1)) /
+                 2.0;
         painter->drawRect(QRectF(dotLocation, height, radius, radius));
 
-        height = (myLayout->getTabLine(myLayout->getStringCount() - offsetFromEdge) +
-                  myLayout->getTabLine(myLayout->getStringCount() - offsetFromEdge + 1)) / 2.0;
+        height =
+            (myLayout->getTabLine(myLayout->getStringCount() - offsetFromEdge) +
+             myLayout->getTabLine(myLayout->getStringCount() - offsetFromEdge +
+                                  1)) /
+            2.0;
         painter->drawRect(QRectF(dotLocation, height, radius, radius));
     }
 }
@@ -181,10 +188,10 @@ void BarlinePainter::drawVerticalLines(QPainter *painter, double x)
     QVector<QLine> lines(2);
 
     // Draw a single bar line.
-    lines[0] = QLine(x, myLayout->getTopStdNotationLine() + 1,
-                     x, myLayout->getBottomStdNotationLine());
-    lines[1] = QLine(x, myLayout->getTopTabLine() + 1,
-                     x, myLayout->getBottomTabLine());
+    lines[0] = QLine(x, myLayout->getTopStdNotationLine() + 1, x,
+                     myLayout->getBottomStdNotationLine());
+    lines[1] = QLine(x, myLayout->getTopTabLine() + 1, x,
+                     myLayout->getBottomTabLine());
 
     painter->drawLines(lines);
 }

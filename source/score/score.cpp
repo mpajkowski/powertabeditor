@@ -1,27 +1,26 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "score.h"
 
 const int Score::MIN_LINE_SPACING = 6;
 const int Score::MAX_LINE_SPACING = 14;
 
-Score::Score()
-    : myLineSpacing(9)
+Score::Score() : myLineSpacing(9)
 {
 }
 
@@ -97,7 +96,8 @@ boost::iterator_range<Score::InstrumentIterator> Score::getInstruments()
     return boost::make_iterator_range(myInstruments);
 }
 
-boost::iterator_range<Score::InstrumentConstIterator> Score::getInstruments() const
+boost::iterator_range<Score::InstrumentConstIterator> Score::getInstruments()
+    const
 {
     return boost::make_iterator_range(myInstruments);
 }
@@ -122,7 +122,8 @@ boost::iterator_range<Score::ViewFilterIterator> Score::getViewFilters()
     return boost::make_iterator_range(myViewFilters);
 }
 
-boost::iterator_range<Score::ViewFilterConstIterator> Score::getViewFilters() const
+boost::iterator_range<Score::ViewFilterConstIterator> Score::getViewFilters()
+    const
 {
     return boost::make_iterator_range(myViewFilters);
 }
@@ -165,7 +166,7 @@ const PlayerChange *ScoreUtils::getCurrentPlayers(const Score &score,
         for (const PlayerChange &change : system.getPlayerChanges())
         {
             if (i < systemIndex ||
-               (i == systemIndex && change.getPosition() <= positionIndex))
+                (i == systemIndex && change.getPosition() <= positionIndex))
             {
                 lastChange = &change;
             }
@@ -194,14 +195,14 @@ void ScoreUtils::adjustRehearsalSigns(Score &score)
                 if (letter == 'Z')
                 {
                     letter = 'A';
-					if (!letters.empty())
-						letters.back() = letter;
+                    if (!letters.empty())
+                        letters.back() = letter;
                     letters.push_back(letter);
                 }
                 else
                 {
                     ++letter;
-					letters.back() = letter;
+                    letters.back() = letter;
                 }
 
                 sign.setLetters(letters);

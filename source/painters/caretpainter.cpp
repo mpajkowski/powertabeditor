@@ -1,31 +1,31 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "caretpainter.h"
 
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QPainter>
 #include <app/caret.h>
 #include <app/viewoptions.h>
 #include <boost/lexical_cast.hpp>
 #include <painters/layoutinfo.h>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QPainter>
-#include <score/scorelocation.h>
 #include <score/score.h>
+#include <score/scorelocation.h>
 #include <score/system.h>
 
 const double CaretPainter::PEN_WIDTH = 0.75;
@@ -34,9 +34,8 @@ const double CaretPainter::CARET_NOTE_SPACING = 6;
 CaretPainter::CaretPainter(const Caret &caret, const ViewOptions &view_options)
     : myCaret(caret),
       myViewOptions(view_options),
-      myCaretConnection(caret.subscribeToChanges([=]() {
-          onLocationChanged();
-      }))
+      myCaretConnection(
+          caret.subscribeToChanges([=]() { onLocationChanged(); }))
 {
 }
 
@@ -63,9 +62,8 @@ void CaretPainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     double left = myLayout->getPositionX(location.getPositionIndex());
     const double y1 = 0;
     const double y2 = myLayout->getTabStaffHeight();
-    const double x = LayoutInfo::centerItem(left,
-                                            left + myLayout->getPositionSpacing(),
-                                            1);
+    const double x =
+        LayoutInfo::centerItem(left, left + myLayout->getPositionSpacing(), 1);
 
     // If in playback mode, just draw a vertical line and don't highlight
     // the selected note.
@@ -79,7 +77,7 @@ void CaretPainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
 
     // Calculations for the box around the selected note.
     const double stringHeight = myLayout->getTabLine(location.getString() + 1) -
-            myLayout->getTopTabLine();
+                                myLayout->getTopTabLine();
     const double boundary1 = stringHeight - CARET_NOTE_SPACING;
     const double boundary2 = stringHeight + CARET_NOTE_SPACING;
 
@@ -106,16 +104,16 @@ void CaretPainter::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->setBrush(QColor(168, 205, 241, 125));
     painter->setPen(QPen(QBrush(), 0));
 
-    left = myLayout->getPositionX(std::min(location.getSelectionStart(),
-                                           location.getPositionIndex()));
-    double right = myLayout->getPositionX(std::max(location.getSelectionStart(),
-                                                   location.getPositionIndex()));
+    left = myLayout->getPositionX(
+        std::min(location.getSelectionStart(), location.getPositionIndex()));
+    double right = myLayout->getPositionX(
+        std::max(location.getSelectionStart(), location.getPositionIndex()));
 
     if (left != right)
         right += myLayout->getPositionSpacing();
 
-    painter->drawRect(QRectF(left, 1, right - left,
-                             myLayout->getTabStaffHeight() - 1));
+    painter->drawRect(
+        QRectF(left, 1, right - left, myLayout->getTabStaffHeight() - 1));
 }
 
 QRectF CaretPainter::boundingRect() const
@@ -151,7 +149,7 @@ void CaretPainter::updatePosition()
 }
 
 boost::signals2::connection CaretPainter::subscribeToMovement(
-        const LocationChangedSlot::slot_type &subscriber)
+    const LocationChangedSlot::slot_type &subscriber)
 {
     return onMyLocationChanged.connect(subscriber);
 }
@@ -166,9 +164,9 @@ void CaretPainter::onLocationChanged()
     if (system.getStaves().empty())
         return;
 
-    myLayout.reset(new LayoutInfo(location.getScore(), system,
-                                  location.getSystemIndex(), location.getStaff(),
-                                  location.getStaffIndex()));
+    myLayout.reset(
+        new LayoutInfo(location.getScore(), system, location.getSystemIndex(),
+                       location.getStaff(), location.getStaffIndex()));
 
     const ViewFilter *filter =
         myViewOptions.getFilter()
@@ -182,23 +180,25 @@ void CaretPainter::onLocationChanged()
         if (!filter ||
             filter->accept(location.getScore(), location.getSystemIndex(), i))
         {
-            offset += LayoutInfo(location.getScore(), system,
-                                 location.getSystemIndex(),
-                                 system.getStaves()[i], i).getStaffHeight();
+            offset +=
+                LayoutInfo(location.getScore(), system,
+                           location.getSystemIndex(), system.getStaves()[i], i)
+                    .getStaffHeight();
         }
     }
 
     const QRectF oldRect = sceneBoundingRect();
-    setPos(0, mySystemRects.at(location.getSystemIndex()).top() + offset +
-           myLayout->getSystemSymbolSpacing() + myLayout->getStaffHeight() -
-           myLayout->getTabStaffBelowSpacing() - myLayout->STAFF_BORDER_SPACING -
-           myLayout->getTabStaffHeight());
+    setPos(0,
+           mySystemRects.at(location.getSystemIndex()).top() + offset +
+               myLayout->getSystemSymbolSpacing() + myLayout->getStaffHeight() -
+               myLayout->getTabStaffBelowSpacing() -
+               myLayout->STAFF_BORDER_SPACING - myLayout->getTabStaffHeight());
     update(boundingRect());
     // Ensure that a redraw always occurs at the old location.
     scene()->update(oldRect);
 
-    setToolTip(QString::fromStdString(
-                   boost::lexical_cast<std::string>(location)));
+    setToolTip(
+        QString::fromStdString(boost::lexical_cast<std::string>(location)));
 
     // Notify anyone interested in the caret being redrawn.
     onMyLocationChanged();

@@ -1,39 +1,41 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "beamgroup.h"
 
-#include <cmath>
-#include <painters/layoutinfo.h>
-#include <painters/musicfont.h>
-#include <painters/simpletextitem.h>
 #include <QFontMetricsF>
 #include <QGraphicsItem>
 #include <QPainterPath>
 #include <QPen>
+#include <cmath>
+#include <painters/layoutinfo.h>
+#include <painters/musicfont.h>
+#include <painters/simpletextitem.h>
 
 static const double FRACTIONAL_BEAM_WIDTH = 5.0;
 
 static int getNumExtraBeams(const NoteStem &stem)
 {
     // 16th note gets 1 extra beam, 32nd gets two, etc.
-    // Calculate log_2 of the note duration, and subtract three (so log_2(16) - 3 = 1).
+    // Calculate log_2 of the note duration, and subtract three (so log_2(16) -
+    // 3 = 1).
     return std::log(static_cast<double>(stem.getDurationType())) /
-               std::log(2.0) - 3;
+               std::log(2.0) -
+           3;
 }
 
 BeamGroup::BeamGroup(NoteStem::StemType direction,
@@ -118,14 +120,16 @@ void BeamGroup::drawExtraBeams(QPainterPath &path,
     {
         std::vector<NoteStem>::const_iterator prevStem;
         if (stem != begin)
-			prevStem = boost::prior(stem);
+            prevStem = boost::prior(stem);
 
         auto nextStem = boost::next(stem);
         const Position::DurationType duration = stem->getDurationType();
-        const Position::DurationType prevDuration = (stem != begin) ?
-                    prevStem->getDurationType() : Position::SixtyFourthNote;
-        const Position::DurationType nextDuration = (nextStem != end) ?
-                    nextStem->getDurationType() : Position::SixtyFourthNote;
+        const Position::DurationType prevDuration =
+            (stem != begin) ? prevStem->getDurationType()
+                            : Position::SixtyFourthNote;
+        const Position::DurationType nextDuration =
+            (nextStem != end) ? nextStem->getDurationType()
+                              : Position::SixtyFourthNote;
 
         const int extraBeams = getNumExtraBeams(*stem);
         if (extraBeams < 1)
@@ -171,7 +175,6 @@ void BeamGroup::drawExtraBeams(QPainterPath &path,
             }
         }
     }
-
 }
 
 QGraphicsItem *BeamGroup::createStaccato(const NoteStem &stem,
@@ -216,8 +219,9 @@ QGraphicsItem *BeamGroup::createFermata(const NoteStem &stem,
         y -= 25;
     }
 
-    const QChar symbol = (stem.getStemType() == NoteStem::StemUp) ?
-                MusicFont::FermataUp : MusicFont::FermataDown;
+    const QChar symbol = (stem.getStemType() == NoteStem::StemUp)
+                             ? MusicFont::FermataUp
+                             : MusicFont::FermataDown;
     auto fermata = new SimpleTextItem(symbol, musicFont);
     fermata->setPos(stem.getX(), y);
 
@@ -277,20 +281,20 @@ QGraphicsItem *BeamGroup::createNoteFlag(const NoteStem &stem,
     {
         switch (stem.getDurationType())
         {
-        case Position::EighthNote:
-            symbol = MusicFont::FlagUp1;
-            break;
-        case Position::SixteenthNote:
-            symbol = MusicFont::FlagUp2;
-            break;
-        case Position::ThirtySecondNote:
-            symbol = MusicFont::FlagUp3;
-            break;
-        case Position::SixtyFourthNote:
-            symbol = MusicFont::FlagUp4;
-            break;
-        default:
-            break;
+            case Position::EighthNote:
+                symbol = MusicFont::FlagUp1;
+                break;
+            case Position::SixteenthNote:
+                symbol = MusicFont::FlagUp2;
+                break;
+            case Position::ThirtySecondNote:
+                symbol = MusicFont::FlagUp3;
+                break;
+            case Position::SixtyFourthNote:
+                symbol = MusicFont::FlagUp4;
+                break;
+            default:
+                break;
         }
 
         if (stem.isGraceNote())
@@ -300,20 +304,20 @@ QGraphicsItem *BeamGroup::createNoteFlag(const NoteStem &stem,
     {
         switch (stem.getDurationType())
         {
-        case Position::EighthNote:
-            symbol = MusicFont::FlagDown1;
-            break;
-        case Position::SixteenthNote:
-            symbol = MusicFont::FlagDown2;
-            break;
-        case Position::ThirtySecondNote:
-            symbol = MusicFont::FlagDown3;
-            break;
-        case Position::SixtyFourthNote:
-            symbol = MusicFont::FlagDown4;
-            break;
-        default:
-            break;
+            case Position::EighthNote:
+                symbol = MusicFont::FlagDown1;
+                break;
+            case Position::SixteenthNote:
+                symbol = MusicFont::FlagDown2;
+                break;
+            case Position::ThirtySecondNote:
+                symbol = MusicFont::FlagDown3;
+                break;
+            case Position::SixtyFourthNote:
+                symbol = MusicFont::FlagDown4;
+                break;
+            default:
+                break;
         }
 
         if (stem.isGraceNote())

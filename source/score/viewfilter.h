@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2015 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2015 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_VIEWFILTER_H
 #define SCORE_VIEWFILTER_H
 
+#include "fileversion.h"
 #include <boost/range/iterator_range_core.hpp>
 #include <boost/regex.hpp>
 #include <cassert>
-#include "fileversion.h"
 #include <string>
 #include <vector>
 
@@ -55,10 +55,22 @@ public:
 
     bool operator==(const FilterRule &other) const;
 
-    Subject getSubject() const { return mySubject; }
-    Operation getOperation() const { return myOperation; }
-    int getIntValue() const { return myIntValue; }
-    const std::string &getStringValue() const { return myStrValue; }
+    Subject getSubject() const
+    {
+        return mySubject;
+    }
+    Operation getOperation() const
+    {
+        return myOperation;
+    }
+    int getIntValue() const
+    {
+        return myIntValue;
+    }
+    const std::string &getStringValue() const
+    {
+        return myStrValue;
+    }
 
     template <class Archive>
     void serialize(Archive &ar, const FileVersion version);
@@ -120,15 +132,15 @@ void FilterRule::serialize(Archive &ar, const FileVersion /*version*/)
 
     switch (mySubject)
     {
-    case PLAYER_NAME:
-        ar("value", myStrValue);
-        break;
-    case NUM_STRINGS:
-        ar("value", myIntValue);
-        break;
-    default:
-        assert(!"Unexpected subject for filter.");
-        break;
+        case PLAYER_NAME:
+            ar("value", myStrValue);
+            break;
+        case NUM_STRINGS:
+            ar("value", myIntValue);
+            break;
+        default:
+            assert(!"Unexpected subject for filter.");
+            break;
     }
 }
 

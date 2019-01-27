@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "scoreinfo.h"
 
@@ -40,8 +40,8 @@ bool SongData::AudioReleaseInfo::operator==(const AudioReleaseInfo &other) const
            myYear == other.myYear && myIsLive == other.myIsLive;
 }
 
-SongData::AudioReleaseInfo::ReleaseType
-SongData::AudioReleaseInfo::getReleaseType() const
+SongData::AudioReleaseInfo::ReleaseType SongData::AudioReleaseInfo::
+    getReleaseType() const
 {
     return myReleaseType;
 }
@@ -144,23 +144,20 @@ const std::string &SongData::AuthorInfo::getLyricist() const
 }
 
 SongData::SongData()
-    : myAudioReleaseInfo(AudioReleaseInfo()),
-      myAuthorInfo(AuthorInfo())
+    : myAudioReleaseInfo(AudioReleaseInfo()), myAuthorInfo(AuthorInfo())
 {
 }
 
 bool SongData::operator==(const SongData &other) const
 {
-    return myTitle == other.myTitle &&
-           myArtist == other.myArtist &&
+    return myTitle == other.myTitle && myArtist == other.myArtist &&
            myAudioReleaseInfo == other.myAudioReleaseInfo &&
            myVideoReleaseInfo == other.myVideoReleaseInfo &&
            myBootlegReleaseInfo == other.myBootlegReleaseInfo &&
            myAuthorInfo == other.myAuthorInfo &&
            myArranger == other.myArranger &&
            myTranscriber == other.myTranscriber &&
-           myCopyright == other.myCopyright &&
-           myLyrics == other.myLyrics &&
+           myCopyright == other.myCopyright && myLyrics == other.myLyrics &&
            myPerformanceNotes == other.myPerformanceNotes;
 }
 
@@ -316,12 +313,10 @@ const std::string &SongData::getPerformanceNotes() const
 
 bool LessonData::operator==(const LessonData &other) const
 {
-    return myTitle == other.myTitle &&
-           mySubtitle == other.mySubtitle &&
+    return myTitle == other.myTitle && mySubtitle == other.mySubtitle &&
            myMusicStyle == other.myMusicStyle &&
            myDifficultyLevel == other.myDifficultyLevel &&
-           myAuthor == other.myAuthor &&
-           myNotes == other.myNotes &&
+           myAuthor == other.myAuthor && myNotes == other.myNotes &&
            myCopyright == other.myCopyright;
 }
 
@@ -395,8 +390,7 @@ const std::string &LessonData::getCopyright() const
     return myCopyright;
 }
 
-ScoreInfo::ScoreInfo()
-	: mySongData(SongData())
+ScoreInfo::ScoreInfo() : mySongData(SongData())
 {
 }
 
@@ -412,28 +406,28 @@ ScoreInfo::ScoreType ScoreInfo::getScoreType() const
 
 const SongData &ScoreInfo::getSongData() const
 {
-	if (!mySongData.is_initialized())
-		throw std::logic_error("Invalid attempt to read song data");
+    if (!mySongData.is_initialized())
+        throw std::logic_error("Invalid attempt to read song data");
 
-	return *mySongData;
+    return *mySongData;
 }
 
 void ScoreInfo::setSongData(const SongData &data)
 {
-	mySongData = data;
-	myLessonData.reset();
+    mySongData = data;
+    myLessonData.reset();
 }
 
 const LessonData &ScoreInfo::getLessonData() const
 {
-	if (!myLessonData.is_initialized())
-		throw std::logic_error("Invalid attempt to read lesson data");
+    if (!myLessonData.is_initialized())
+        throw std::logic_error("Invalid attempt to read lesson data");
 
-	return *myLessonData;
+    return *myLessonData;
 }
 
 void ScoreInfo::setLessonData(const LessonData &data)
 {
-	myLessonData = data;
-	mySongData.reset();
+    myLessonData = data;
+    mySongData.reset();
 }

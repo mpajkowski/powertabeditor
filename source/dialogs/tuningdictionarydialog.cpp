@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2012 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2012 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "tuningdictionarydialog.h"
 #include "ui_tuningdictionarydialog.h"
@@ -40,11 +40,12 @@ TuningDictionaryDialog::TuningDictionaryDialog(QWidget *parent,
     for (int i = Tuning::MIN_STRING_COUNT; i <= Tuning::MAX_STRING_COUNT; ++i)
         ui->stringsComboBox->addItem(QString::number(i), i);
 
-    connect(ui->stringsComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(onNumStringsChanged(int)));
+    connect(ui->stringsComboBox, SIGNAL(currentIndexChanged(int)), this,
+            SLOT(onNumStringsChanged(int)));
     connect(ui->tuningsList,
-            SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this,
-            SLOT(onCurrentTuningChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+            SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
+            this,
+            SLOT(onCurrentTuningChanged(QTreeWidgetItem *, QTreeWidgetItem *)));
     connect(ui->newTuningButton, SIGNAL(clicked()), this, SLOT(onNewTuning()));
     connect(ui->editTuningButton, SIGNAL(clicked()), this,
             SLOT(onEditTuning()));
@@ -125,6 +126,7 @@ void TuningDictionaryDialog::onTuningModified()
 
 Tuning *TuningDictionaryDialog::selectedTuning() const
 {
-    return ui->tuningsList->currentItem()->data(
-                0, Qt::UserRole).value<Tuning *>();
+    return ui->tuningsList->currentItem()
+        ->data(0, Qt::UserRole)
+        .value<Tuning *>();
 }

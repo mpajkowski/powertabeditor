@@ -14,26 +14,31 @@
 
 #include "powertabobject.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 /// Stores and renders Rehearsal Sign symbols
 class RehearsalSign : public PowerTabObject
 {
 public:
-    static const int8_t         DEFAULT_LETTER;         ///< Default value for the rehearsal sign letter
-    static const std::string    DEFAULT_DESCRIPTION;    ///< Default value for the rehearsal sign description
+    static const int8_t DEFAULT_LETTER; ///< Default value for the rehearsal
+                                        ///< sign letter
+    static const std::string DEFAULT_DESCRIPTION; ///< Default value for the
+                                                  ///< rehearsal sign
+                                                  ///< description
 
     enum flags
     {
-        notSet = 0x7f   ///< Marker used to indicate the rehearsal sign is not set (not used)
+        notSet = 0x7f ///< Marker used to indicate the rehearsal sign is not set
+                      ///< (not used)
     };
 
 public:
     RehearsalSign();
-    RehearsalSign(int8_t letter, const std::string& description);
+    RehearsalSign(int8_t letter, const std::string &description);
 
-    bool operator==(const RehearsalSign& rehearsalSign) const;
-    bool operator!=(const RehearsalSign& rehearsalSign) const;
+    bool operator==(const RehearsalSign &rehearsalSign) const;
+    bool operator!=(const RehearsalSign &rehearsalSign) const;
 
     // MFC Class Functions
     /// Gets the MFC Class Name for the object
@@ -60,7 +65,7 @@ public:
     int8_t GetLetter() const;
 
     // Description functions
-    bool SetDescription(const std::string& description);
+    bool SetDescription(const std::string &description);
     std::string GetDescription() const;
 
     // Operations
@@ -73,14 +78,13 @@ public:
 private:
     /// The letter used to uniquely identify the rehearsal sign
     /// (i.e. A, B, F, etc. - must be a capital letter).
-    int8_t      m_letter;
+    int8_t m_letter;
 
     /// A description that indicates the passage the rehearsal sign is
     /// marking (i.e. Chorus, Intro, etc.).
     std::string m_description;
-
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // POWERTABDOCUMENT_REHEARSAL_SIGN_H

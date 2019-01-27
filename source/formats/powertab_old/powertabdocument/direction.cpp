@@ -2,9 +2,9 @@
 // Name:            direction.cpp
 // Purpose:         Stores and renders directions
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Jan 12, 2005
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -14,47 +14,62 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default constants
-const uint8_t        Direction::DEFAULT_POSITION                 = 0;
+const uint8_t Direction::DEFAULT_POSITION = 0;
 
 // Position Constants
-const uint32_t      Direction::MIN_POSITION                     = 0;
-const uint32_t      Direction::MAX_POSITION                     = 255;
+const uint32_t Direction::MIN_POSITION = 0;
+const uint32_t Direction::MAX_POSITION = 255;
 
 // Symbol Constants
-const uint8_t        Direction::MAX_SYMBOLS                      = 3;
-const uint8_t        Direction::NUM_SYMBOL_TYPES                 = 19;
+const uint8_t Direction::MAX_SYMBOLS = 3;
+const uint8_t Direction::NUM_SYMBOL_TYPES = 19;
 
 // Repeat Number Constants
-const uint8_t        Direction::MIN_REPEAT_NUMBER                = 0;
-const uint8_t        Direction::MAX_REPEAT_NUMBER                = 31;
+const uint8_t Direction::MIN_REPEAT_NUMBER = 0;
+const uint8_t Direction::MAX_REPEAT_NUMBER = 31;
 
-static std::string shortDirectionText[Direction::NUM_SYMBOL_TYPES] =
-{
-    "Coda", "Double Coda", "Segno", "Segno Segno",
-    "Fine", "D.C.", "D.S.", "D.S.S.", "To Coda",
-    "To Dbl. Coda", "D.C. al Coda", "D.C. al Dbl. Coda",
-    "D.S. al Coda", "D.S. al Dbl. Coda", "D.S.S. al Coda",
-    "D.S.S. al Dbl. Coda", "D.C. al Fine", "D.S. al Fine",
+static std::string shortDirectionText[Direction::NUM_SYMBOL_TYPES] = {
+    "Coda",           "Double Coda",
+    "Segno",          "Segno Segno",
+    "Fine",           "D.C.",
+    "D.S.",           "D.S.S.",
+    "To Coda",        "To Dbl. Coda",
+    "D.C. al Coda",   "D.C. al Dbl. Coda",
+    "D.S. al Coda",   "D.S. al Dbl. Coda",
+    "D.S.S. al Coda", "D.S.S. al Dbl. Coda",
+    "D.C. al Fine",   "D.S. al Fine",
     "D.S.S. al Fine"
 };
 
-static std::string longDirectionText[Direction::NUM_SYMBOL_TYPES] =
-{
-    "Coda", "Double Coda", "Segno", "Segno Segno",
-    "Fine", "Da Capo", "Dal Segno", "Dal Segno Segno", "To Coda",
-    "To Double Coda", "Da Capo al Coda", "Da Capo al Double Coda",
-    "Dal Segno al Coda", "Dal Segno al Double Coda", "Dal Segno Segno al Coda",
-    "Dal Segno Segno al Double Coda", "Da Capo al Fine", "Dal Segno al Fine",
+static std::string longDirectionText[Direction::NUM_SYMBOL_TYPES] = {
+    "Coda",
+    "Double Coda",
+    "Segno",
+    "Segno Segno",
+    "Fine",
+    "Da Capo",
+    "Dal Segno",
+    "Dal Segno Segno",
+    "To Coda",
+    "To Double Coda",
+    "Da Capo al Coda",
+    "Da Capo al Double Coda",
+    "Dal Segno al Coda",
+    "Dal Segno al Double Coda",
+    "Dal Segno Segno al Coda",
+    "Dal Segno Segno al Double Coda",
+    "Da Capo al Fine",
+    "Dal Segno al Fine",
     "Dal Segno Segno al Fine"
 };
 
 // Constructor/Destructor
 /// Default Constructor
-Direction::Direction() : 
-    m_position(DEFAULT_POSITION)
+Direction::Direction() : m_position(DEFAULT_POSITION)
 {
 }
 
@@ -71,16 +86,16 @@ Direction::Direction(uint32_t position, uint8_t symbolType,
     : m_position(position)
 {
     assert(IsValidPosition(position));
-    AddSymbol(symbolType, activeSymbol, repeatNumber);   
+    AddSymbol(symbolType, activeSymbol, repeatNumber);
 }
 
-Direction::Direction(const Direction& direction) :
-    PowerTabObject(), m_position(DEFAULT_POSITION)
+Direction::Direction(const Direction &direction)
+    : PowerTabObject(), m_position(DEFAULT_POSITION)
 {
     *this = direction;
 }
 
-const Direction& Direction::operator=(const Direction& direction)
+const Direction &Direction::operator=(const Direction &direction)
 {
     if (this != &direction)
     {
@@ -90,13 +105,13 @@ const Direction& Direction::operator=(const Direction& direction)
     return *this;
 }
 
-bool Direction::operator==(const Direction& direction) const
+bool Direction::operator==(const Direction &direction) const
 {
     return (m_position == direction.m_position &&
             m_symbolArray == direction.m_symbolArray);
 }
 
-bool Direction::operator!=(const Direction& direction) const
+bool Direction::operator!=(const Direction &direction) const
 {
     return !operator==(direction);
 }
@@ -110,7 +125,7 @@ bool Direction::operator<(const Direction &direction) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Direction::Serialize(PowerTabOutputStream& stream) const
+bool Direction::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_position;
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -123,7 +138,7 @@ bool Direction::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Direction::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool Direction::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_position;
 
@@ -152,7 +167,7 @@ bool Direction::SetPosition(size_t position)
 
 /// Gets the position within the system where the direction is anchored
 /// @return The position within the system where the direction is anchored
-size_t Direction::GetPosition() const                           
+size_t Direction::GetPosition() const
 {
     return m_position;
 }
@@ -160,7 +175,7 @@ size_t Direction::GetPosition() const
 /// Determines if a symbol type is valid
 /// @param symbolType Symbol type to validate
 /// @return True if the symbol is valid, false if not
-bool Direction::IsValidSymbolType(uint8_t symbolType)            
+bool Direction::IsValidSymbolType(uint8_t symbolType)
 {
     return symbolType <= dalSegnoSegnoAlFine;
 }
@@ -190,20 +205,20 @@ bool Direction::IsValidRepeatNumber(uint8_t repeatNumber)
 /// triggered (0 = none)
 /// @return True if the symbol was added, false if not
 bool Direction::AddSymbol(uint8_t symbolType, uint8_t activeSymbol,
-    uint8_t repeatNumber)
+                          uint8_t repeatNumber)
 {
     PTB_CHECK_THAT(IsValidSymbolType(symbolType), false);
     PTB_CHECK_THAT(IsValidActiveSymbol(activeSymbol), false);
     PTB_CHECK_THAT(IsValidRepeatNumber(repeatNumber), false);
-    
+
     // Can't add anymore symbols
     if (GetSymbolCount() == MAX_SYMBOLS)
         return false;
 
-    // Add a symbol to the end of the array, then set the data    
+    // Add a symbol to the end of the array, then set the data
     m_symbolArray.push_back(0);
     return (SetSymbol(GetSymbolCount() - 1, symbolType, activeSymbol,
-        repeatNumber));
+                      repeatNumber));
 }
 
 /// Sets the data for an existing symbol in the symbol array
@@ -215,19 +230,19 @@ bool Direction::AddSymbol(uint8_t symbolType, uint8_t activeSymbol,
 /// triggered (0 = none)
 /// @return True if the symbol data was set, false if not
 bool Direction::SetSymbol(size_t index, uint8_t symbolType,
-    uint8_t activeSymbol, uint8_t repeatNumber)
+                          uint8_t activeSymbol, uint8_t repeatNumber)
 {
     PTB_CHECK_THAT(IsValidSymbolIndex(index), false);
     PTB_CHECK_THAT(IsValidSymbolType(symbolType), false);
     PTB_CHECK_THAT(IsValidActiveSymbol(activeSymbol), false);
     PTB_CHECK_THAT(IsValidRepeatNumber(repeatNumber), false);
-    
+
     uint16_t symbol = (uint16_t)(symbolType << 8);
     symbol |= (uint16_t)(activeSymbol << 6);
     symbol |= (uint16_t)repeatNumber;
-   
+
     m_symbolArray[index] = symbol;
-    
+
     return true;
 }
 
@@ -237,17 +252,17 @@ bool Direction::SetSymbol(size_t index, uint8_t symbolType,
 /// @param activeSymbol Holds the active symbol return value
 /// @param repeatNumber Holds the repeat number return value
 /// @return True if the direction data was retrieved, false if not
-bool Direction::GetSymbol(size_t index, uint8_t& symbolType,
-    uint8_t& activeSymbol, uint8_t& repeatNumber) const
+bool Direction::GetSymbol(size_t index, uint8_t &symbolType,
+                          uint8_t &activeSymbol, uint8_t &repeatNumber) const
 {
     PTB_CHECK_THAT(IsValidSymbolIndex(index), false);
-   
+
     symbolType = activeSymbol = repeatNumber = 0;
-    
+
     symbolType = (uint8_t)((m_symbolArray[index] & symbolTypeMask) >> 8);
     activeSymbol = (uint8_t)((m_symbolArray[index] & activeSymbolMask) >> 6);
     repeatNumber = (uint8_t)(m_symbolArray[index] & repeatNumberMask);
-    
+
     return true;
 }
 
@@ -259,16 +274,16 @@ bool Direction::IsSymbolType(size_t index, uint8_t symbolType) const
 {
     PTB_CHECK_THAT(IsValidSymbolIndex(index), false);
     PTB_CHECK_THAT(IsValidSymbolType(symbolType), false);
-    
+
     uint8_t type = 0;
     uint8_t activeSymbol = 0;
     uint8_t repeatNumber = 0;
-    
+
     if (!GetSymbol(index, type, activeSymbol, repeatNumber))
     {
         return false;
     }
-        
+
     return type == symbolType;
 }
 
@@ -278,9 +293,9 @@ bool Direction::IsSymbolType(size_t index, uint8_t symbolType) const
 bool Direction::RemoveSymbolAtIndex(size_t index)
 {
     PTB_CHECK_THAT(IsValidSymbolIndex(index), false);
- 
+
     m_symbolArray.erase(m_symbolArray.begin() + index);
-    
+
     return true;
 }
 
@@ -292,14 +307,14 @@ std::string Direction::GetText(size_t index) const
     uint8_t symbolType = 0;
     uint8_t activeSymbol = 0;
     uint8_t repeatNumber = 0;
-    
+
     if (!GetSymbol(index, symbolType, activeSymbol, repeatNumber))
     {
         return "";
     }
-    
+
     PTB_CHECK_THAT(IsValidSymbolType(symbolType), "");
-    
+
     return shortDirectionText[symbolType];
 }
 
@@ -314,7 +329,7 @@ std::string Direction::GetDetailedText(uint8_t symbolType)
 /// Determines if a symbol index is valid
 /// @param index Index to validate
 /// @return True if the symbol index is valid, false if not
-bool Direction::IsValidSymbolIndex(size_t index) const         
+bool Direction::IsValidSymbolIndex(size_t index) const
 {
     return index < GetSymbolCount();
 }
@@ -326,4 +341,4 @@ size_t Direction::GetSymbolCount() const
     return m_symbolArray.size();
 }
 
-}
+} // namespace PowerTabDocument

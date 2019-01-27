@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2014 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2014 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "repeatindexer.h"
 
@@ -78,7 +78,8 @@ int RepeatedSection::getTotalRepeatCount() const
     return count;
 }
 
-boost::optional<SystemLocation> RepeatedSection::findAlternateEnding(int number) const
+boost::optional<SystemLocation> RepeatedSection::findAlternateEnding(
+    int number) const
 {
     if (myAlternateEndings.find(number) != myAlternateEndings.end())
         return myAlternateEndings.find(number)->second;
@@ -226,15 +227,14 @@ const RepeatedSection *RepeatIndexer::findRepeat(
     return nullptr;
 }
 
-RepeatedSection *RepeatIndexer::findRepeat(
-    const SystemLocation &loc)
+RepeatedSection *RepeatIndexer::findRepeat(const SystemLocation &loc)
 {
     return const_cast<RepeatedSection *>(
         const_cast<const RepeatIndexer *>(this)->findRepeat(loc));
 }
 
-boost::iterator_range<RepeatIndexer::RepeatedSectionIterator>
-RepeatIndexer::getRepeats() const
+boost::iterator_range<RepeatIndexer::RepeatedSectionIterator> RepeatIndexer::
+    getRepeats() const
 {
     return boost::make_iterator_range(myRepeats);
 }

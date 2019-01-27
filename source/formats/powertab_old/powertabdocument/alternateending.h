@@ -2,9 +2,9 @@
 // Name:            alternateending.h
 // Purpose:         Stores and renders alternate ending symbols
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Dec 3, 2004
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -12,27 +12,29 @@
 #ifndef ALTERNATEENDING_H
 #define ALTERNATEENDING_H
 
-#include <vector>
 #include "systemsymbol.h"
+#include <vector>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 /// Stores and renders alternate ending symbols
 class AlternateEnding : public SystemSymbol
 {
-// Constants
+    // Constants
 public:
     enum alternateEndingFlags
     {
-        daCapo              =   (uint16_t)9,
-        dalSegno            =   (uint16_t)10,
-        dalSegnoSegno       =   (uint16_t)11,
-        numbersMask         =   (uint16_t)0x7ff           ///< Mask used to retrieve all allowable numbers
+        daCapo = (uint16_t)9,
+        dalSegno = (uint16_t)10,
+        dalSegnoSegno = (uint16_t)11,
+        numbersMask =
+            (uint16_t)0x7ff ///< Mask used to retrieve all allowable numbers
     };
-    
+
 public:
     AlternateEnding();
-    
+
     // Serialization Functions
     bool Serialize(PowerTabOutputStream &stream) const override;
     bool Deserialize(PowerTabInputStream &stream, uint16_t version) override;
@@ -50,18 +52,24 @@ public:
     {
         return 1;
     }
-    
+
     std::vector<uint8_t> GetListOfNumbers() const;
     bool IsNumberSet(uint32_t number) const;
-    
-    bool IsDaCapoSet() const                                    
-        {return (IsNumberSet(daCapo));}
-    bool IsDalSegnoSet() const                                  
-        {return (IsNumberSet(dalSegno));}
+
+    bool IsDaCapoSet() const
+    {
+        return (IsNumberSet(daCapo));
+    }
+    bool IsDalSegnoSet() const
+    {
+        return (IsNumberSet(dalSegno));
+    }
     bool IsDalSegnoSegnoSet() const
-        {return (IsNumberSet(dalSegnoSegno));}
+    {
+        return (IsNumberSet(dalSegnoSegno));
+    }
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // ALTERNATEENDING_H

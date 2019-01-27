@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef FORMATS_GPX_DOCUMENTREADER_H
 #define FORMATS_GPX_DOCUMENTREADER_H
 
@@ -112,7 +112,8 @@ private:
     void readKeySignature(const pugi::xml_node &masterBar, KeySignature &key);
     void readTimeSignature(const pugi::xml_node &masterBar,
                            TimeSignature &timeSignature);
-    Note convertNote(int noteId, Position &position, const Tuning &tuning) const;
+    Note convertNote(int noteId, Position &position,
+                     const Tuning &tuning) const;
 
     pugi::xml_document myXmlData;
     pugi::xml_node myFile;
@@ -124,6 +125,6 @@ private:
     std::map<int, Gpx::TabNote> myNotes;
     std::map<int, Gpx::Automation> myAutomations;
 };
-}
+} // namespace Gpx
 
 #endif

@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "timesignature.h"
 
@@ -43,8 +43,7 @@ bool TimeSignature::operator==(const TimeSignature &other) const
            myBeatsPerMeasure == other.myBeatsPerMeasure &&
            myBeatValue == other.myBeatValue &&
            myBeamingPattern == other.myBeamingPattern &&
-           myNumPulses == other.myNumPulses &&
-           myIsVisible == other.myIsVisible;
+           myNumPulses == other.myNumPulses && myIsVisible == other.myIsVisible;
 }
 
 TimeSignature::MeterType TimeSignature::getMeterType() const
@@ -57,16 +56,16 @@ void TimeSignature::setMeterType(MeterType type)
     // FIXME - update the metronome pulses and beaming pattern automatically.
     switch (type)
     {
-    case Normal:
-        break;
-    case CutTime:
-        myBeatsPerMeasure = 2;
-        myBeatValue = 2;
-        break;
-    case CommonTime:
-        myBeatsPerMeasure = 4;
-        myBeatValue = 4;
-        break;
+        case Normal:
+            break;
+        case CutTime:
+            myBeatsPerMeasure = 2;
+            myBeatValue = 2;
+            break;
+        case CommonTime:
+            myBeatsPerMeasure = 4;
+            myBeatValue = 4;
+            break;
     }
 
     myMeterType = type;
@@ -121,7 +120,7 @@ bool TimeSignature::isValidNumPulses(int pulses) const
 {
     // The number of pulses must divide evenly into the number of beats.
     return pulses <= MAX_PULSES &&
-            (pulses == 0 || getBeatsPerMeasure() % pulses == 0);
+           (pulses == 0 || getBeatsPerMeasure() % pulses == 0);
 }
 
 int TimeSignature::getNumPulses() const
