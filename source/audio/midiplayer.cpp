@@ -49,6 +49,7 @@ MidiPlayer::~MidiPlayer()
     wait();
 }
 
+#include <iostream>
 void MidiPlayer::run()
 {
     // Workaround to fix errors with the Microsoft GS Wavetable Synth on
@@ -187,6 +188,8 @@ void MidiPlayer::run()
             current_location = new_location;
         }
     }
+
+    stopPlayback(device);
 }
 
 void MidiPlayer::performCountIn(MidiOutputDevice &device,
@@ -233,6 +236,17 @@ void MidiPlayer::performCountIn(MidiOutputDevice &device,
         device.playNote(METRONOME_CHANNEL, preset, velocity);
         usleep(tick_duration * (100.0 / myPlaybackSpeed));
         device.stopNote(METRONOME_CHANNEL, preset);
+    }
+}
+
+void MidiPlayer::stopPlayback(MidiOutputDevice &device)
+{
+    for (std::uint8_t channel = 0; channel < 16; ++channel)
+    {
+        for (std::uint8_t pitch = 0; pitch < 128; ++pitch)
+        {
+            device.stopNote(channel, pitch);
+        }
     }
 }
 

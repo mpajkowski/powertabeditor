@@ -60,6 +60,8 @@ private:
     void setIsPlaying(bool set);
     bool isPlaying() const;
 
+    void stopPlayback(MidiOutputDevice &device);
+
     SettingsManager &mySettingsManager;
     const Score &myScore;
     ScoreLocation myStartLocation;
