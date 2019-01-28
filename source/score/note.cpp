@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "note.h"
 
@@ -25,22 +25,20 @@
 const int Note::MIN_FRET_NUMBER = 0;
 const int Note::MAX_FRET_NUMBER = 29;
 
-namespace {
-    /// Mapping of frets to pitch offsets (counted in half-steps or frets).
-    /// For example, the natural harmonic at the 7th fret is an octave and
-    /// a fifth (19 frets) above the pitch of the open string.
-	const std::map<int, int> theHarmonicOffsets = {
-        {2, 38}, {3, 31}, {4, 28}, {5, 24}, {7, 19}, {9, 28}, {10, 38},
-        {12, 12}, {14, 38}, {15, 34}, {16, 28}, {17, 36}, {19, 19}, {22, 34},
-        {24, 24}, {28, 28}
-    };
-}
+namespace
+{
+/// Mapping of frets to pitch offsets (counted in half-steps or frets).
+/// For example, the natural harmonic at the 7th fret is an octave and
+/// a fifth (19 frets) above the pitch of the open string.
+const std::map<int, int> theHarmonicOffsets = {
+    { 2, 38 },  { 3, 31 },  { 4, 28 },  { 5, 24 },  { 7, 19 },  { 9, 28 },
+    { 10, 38 }, { 12, 12 }, { 14, 38 }, { 15, 34 }, { 16, 28 }, { 17, 36 },
+    { 19, 19 }, { 22, 34 }, { 24, 24 }, { 28, 28 }
+};
+} // namespace
 
 Note::Note()
-    : myString(0),
-      myFretNumber(0),
-      myTrilledFret(-1),
-      myTappedHarmonicFret(-1)
+    : myString(0), myFretNumber(0), myTrilledFret(-1), myTappedHarmonicFret(-1)
 {
 }
 
@@ -307,16 +305,13 @@ ArtificialHarmonic::ArtificialHarmonic()
 ArtificialHarmonic::ArtificialHarmonic(ChordName::Key key,
                                        ChordName::Variation variation,
                                        ArtificialHarmonic::Octave octave)
-    : myKey(key),
-      myVariation(variation),
-      myOctave(octave)
+    : myKey(key), myVariation(variation), myOctave(octave)
 {
 }
 
 bool ArtificialHarmonic::operator==(const ArtificialHarmonic &other) const
 {
-    return myKey == other.myKey &&
-           myVariation == other.myVariation &&
+    return myKey == other.myKey && myVariation == other.myVariation &&
            myOctave == other.myOctave;
 }
 
@@ -432,14 +427,12 @@ std::string Bend::getPitchText(int pitch)
 }
 
 LeftHandFingering::LeftHandFingering()
-    : myFinger(None),
-      myDisplayPosition(AboveLeft)
+    : myFinger(None), myDisplayPosition(AboveLeft)
 {
 }
 
 LeftHandFingering::LeftHandFingering(Finger finger, DisplayPosition pos)
-    : myFinger(finger),
-      myDisplayPosition(pos)
+    : myFinger(finger), myDisplayPosition(pos)
 {
 }
 

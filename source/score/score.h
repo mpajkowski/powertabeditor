@@ -1,30 +1,30 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_SCORE_H
 #define SCORE_SCORE_H
 
-#include <boost/range/iterator_range_core.hpp>
 #include "fileversion.h"
 #include "instrument.h"
 #include "player.h"
 #include "scoreinfo.h"
 #include "system.h"
 #include "viewfilter.h"
+#include <boost/range/iterator_range_core.hpp>
 #include <vector>
 
 class PlayerChange;
@@ -127,7 +127,8 @@ void Score::serialize(Archive &ar, const FileVersion version)
         ar("view_filters", myViewFilters);
 }
 
-namespace ScoreUtils {
+namespace ScoreUtils
+{
 /// Get the current player change for the given position.
 const PlayerChange *getCurrentPlayers(const Score &score, int systemIndex,
                                       int positionIndex);
@@ -138,6 +139,6 @@ void adjustRehearsalSigns(Score &score);
 
 /// Add the standard view filters (guitar and bass) to the score.
 void addStandardFilters(Score &score);
-}
+} // namespace ScoreUtils
 
 #endif

@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "midioutputdevice.h"
 
 #include <RtMidi.h>
+#include <cassert>
 #include <score/dynamic.h>
 #include <score/generalmidi.h>
-#include <cassert>
 
 MidiOutputDevice::MidiOutputDevice() : myMidiOut(nullptr)
 {
@@ -40,7 +40,7 @@ MidiOutputDevice::MidiOutputDevice() : myMidiOut(nullptr)
         catch (...)
         {
             // continue anyway, another api might work
-            // found on mac that the Core API kept failing after repeated 
+            // found on mac that the Core API kept failing after repeated
             // creations and the exceptions weren't caught
             // TODO investigate why.
         }
@@ -51,8 +51,7 @@ MidiOutputDevice::~MidiOutputDevice()
 {
 }
 
-void
-MidiOutputDevice::sendMessage(const std::vector<uint8_t> &data)
+void MidiOutputDevice::sendMessage(const std::vector<uint8_t> &data)
 {
     // FIXME - fix const correctness in RtMidi api.
     myMidiOut->sendMessage(const_cast<std::vector<uint8_t> *>(&data));
@@ -77,7 +76,7 @@ bool MidiOutputDevice::sendMidiMessage(unsigned char a, unsigned char b,
     }
     catch (...)
     {
-         return false;
+        return false;
     }
 
     return true;
@@ -104,7 +103,7 @@ bool MidiOutputDevice::initialize(size_t preferredApi,
     }
     catch (...)
     {
-         return false;
+        return false;
     }
 
     return true;
@@ -141,7 +140,7 @@ bool MidiOutputDevice::setPatch(int channel, uint8_t patch)
     return sendMidiMessage(ProgramChange + channel, patch, -1);
 }
 
-bool MidiOutputDevice::setVolume (int channel, uint8_t volume)
+bool MidiOutputDevice::setVolume(int channel, uint8_t volume)
 {
     assert(volume <= 127);
 
@@ -158,13 +157,13 @@ bool MidiOutputDevice::setPan(int channel, uint8_t pan)
         pan = 127;
 
     // MIDI control change
-    // first parameter is 0xB0-0xBF with B being the id and 0-F being the channel (0-15)
-    // second parameter is the control to change (0-127), 10 is channel pan
-    // third parameter is the new pan (0-127)
+    // first parameter is 0xB0-0xBF with B being the id and 0-F being the
+    // channel (0-15) second parameter is the control to change (0-127), 10 is
+    // channel pan third parameter is the new pan (0-127)
     return sendMidiMessage(ControlChange + channel, PanChange, pan);
 }
 
-bool MidiOutputDevice::setPitchBend (int channel, uint8_t bend)
+bool MidiOutputDevice::setPitchBend(int channel, uint8_t bend)
 {
     if (bend > 127)
         bend = 127;
@@ -189,20 +188,22 @@ bool MidiOutputDevice::playNote(int channel, uint8_t pitch, uint8_t velocity)
     }
 
     // MIDI note on
-    // first parameter 0x90-9x9F with 9 being the id and 0-F being the channel (0-15)
-    // second parameter is the pitch of the note (0-127), 60 would be a 'middle C'
-    // third parameter is the velocity of the note (1-127), 0 is not allowed, 64 would be no velocity
+    // first parameter 0x90-9x9F with 9 being the id and 0-F being the channel
+    // (0-15) second parameter is the pitch of the note (0-127), 60 would be a
+    // 'middle C' third parameter is the velocity of the note (1-127), 0 is not
+    // allowed, 64 would be no velocity
     return sendMidiMessage(NoteOn + channel, pitch, velocity);
 }
 
 bool MidiOutputDevice::stopNote(int channel, uint8_t pitch)
 {
     if (pitch > 127)
-        pitch=127;
+        pitch = 127;
 
     // MIDI note off
-    // first parameter 0x80-9x8F with 8 being the id and 0-F being the channel (0-15)
-    // second parameter is the pitch of the note (0-127), 60 would be a 'middle C'
+    // first parameter 0x80-9x8F with 8 being the id and 0-F being the channel
+    // (0-15) second parameter is the pitch of the note (0-127), 60 would be a
+    // 'middle C'
     return sendMidiMessage(NoteOff + channel, pitch, 127);
 }
 
@@ -217,7 +218,7 @@ bool MidiOutputDevice::setVibrato(int channel, uint8_t modulation)
 bool MidiOutputDevice::setSustain(int channel, bool sustainOn)
 {
     const uint8_t value = sustainOn ? 127 : 0;
-    
+
     return sendMidiMessage(ControlChange + channel, HoldPedal, value);
 }
 
@@ -236,7 +237,8 @@ void MidiOutputDevice::setChannelMaxVolume(int channel, uint8_t newMaxVolume)
     const bool maxVolumeChanged = myMaxVolumes[channel] != newMaxVolume;
     myMaxVolumes[channel] = newMaxVolume;
 
-    // If the new volume is different from the existing volume, send out a MIDI message
+    // If the new volume is different from the existing volume, send out a MIDI
+    // message
     if (maxVolumeChanged)
         setVolume(channel, myActiveVolumes[channel]);
 }

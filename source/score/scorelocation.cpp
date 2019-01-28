@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "scorelocation.h"
 
@@ -80,7 +80,7 @@ const Position *ScoreLocation::getPosition() const
 Position *ScoreLocation::getPosition()
 {
     return const_cast<Position *>(
-                const_cast<const ScoreLocation &>(*this).getPosition());
+        const_cast<const ScoreLocation &>(*this).getPosition());
 }
 
 const Position *ScoreLocation::findMultiBarRest() const
@@ -118,7 +118,8 @@ bool ScoreLocation::isEmptyBar() const
         {
             if (!ScoreUtils::findInRange(voice.getPositions(),
                                          bar->getPosition(),
-                                         nextBar->getPosition()).empty())
+                                         nextBar->getPosition())
+                     .empty())
             {
                 return false;
             }
@@ -146,7 +147,8 @@ bool ScoreLocation::hasSelection() const
 std::vector<Position *> ScoreLocation::getSelectedPositions()
 {
     // Avoid duplicate logic between const and non-const versions.
-    auto positions = const_cast<const ScoreLocation *>(this)->getSelectedPositions();
+    auto positions =
+        const_cast<const ScoreLocation *>(this)->getSelectedPositions();
     std::vector<Position *> nc_positions;
     for (const Position *pos : positions)
         nc_positions.push_back(const_cast<Position *>(pos));
@@ -269,7 +271,7 @@ const Note *ScoreLocation::getNote() const
 Note *ScoreLocation::getNote()
 {
     return const_cast<Note *>(
-                const_cast<const ScoreLocation &>(*this).getNote());
+        const_cast<const ScoreLocation &>(*this).getNote());
 }
 
 std::vector<Note *> ScoreLocation::getSelectedNotes()
@@ -304,8 +306,8 @@ void ScoreLocation::setVoiceIndex(int voice)
     myVoiceIndex = voice;
 }
 
-std::vector<const IrregularGrouping *>
-ScoreLocation::getSelectedIrregularGroupings() const
+std::vector<const IrregularGrouping *> ScoreLocation::
+    getSelectedIrregularGroupings() const
 {
     std::vector<const IrregularGrouping *> groups;
     const int min = std::min(myPositionIndex, mySelectionStart);
@@ -319,9 +321,11 @@ ScoreLocation::getSelectedIrregularGroupings() const
     {
         const int groupLeft = group.getPosition();
         const int groupRight =
-            voice.getPositions()[ScoreUtils::findIndexByPosition(
-                                     voice.getPositions(), groupLeft) +
-                                 group.getLength() - 1].getPosition();
+            voice
+                .getPositions()[ScoreUtils::findIndexByPosition(
+                                    voice.getPositions(), groupLeft) +
+                                group.getLength() - 1]
+                .getPosition();
 
         if (groupLeft >= min && groupRight <= max)
             groups.push_back(&group);
@@ -330,7 +334,7 @@ ScoreLocation::getSelectedIrregularGroupings() const
     return groups;
 }
 
-std::ostream &operator <<(std::ostream &os, const ScoreLocation &location)
+std::ostream &operator<<(std::ostream &os, const ScoreLocation &location)
 {
     os << "System: " << location.getSystemIndex() + 1;
     os << ", Staff: " << location.getStaffIndex() + 1;

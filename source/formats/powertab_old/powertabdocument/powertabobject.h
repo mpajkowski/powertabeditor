@@ -1,12 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:            powertabobject.h
-// Purpose:         Provides support for polymorphic reading/writing of Power Tab objects
-// Author:          Brad Larsen
-// Modified by:     
-// Created:         Dec 18, 2004
-// RCS-ID:          
-// Copyright:       (c) Brad Larsen
-// License:         wxWindows license
+// Purpose:         Provides support for polymorphic reading/writing of Power
+// Tab objects Author:          Brad Larsen Modified by: Created:         Dec
+// 18, 2004 RCS-ID: Copyright:       (c) Brad Larsen License:         wxWindows
+// license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef POWERTABOBJECT_H
@@ -15,7 +12,8 @@
 #include <boost/cstdint.hpp>
 #include <string>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 class PowerTabOutputStream;
 class PowerTabInputStream;
@@ -25,8 +23,9 @@ class PowerTabObject
 {
     // Constructor/Destructor
 public:
-
-    virtual ~PowerTabObject() {}
+    virtual ~PowerTabObject()
+    {
+    }
 
     // MFC Class Functions
     /// Gets the MFC Class Name for the object
@@ -38,10 +37,10 @@ public:
     virtual uint16_t GetMFCClassSchema() const = 0;
 
     // Serialization Functions
-    virtual bool Serialize(PowerTabOutputStream& stream) const = 0;
-    virtual bool Deserialize(PowerTabInputStream& stream, uint16_t version) = 0;
+    virtual bool Serialize(PowerTabOutputStream &stream) const = 0;
+    virtual bool Deserialize(PowerTabInputStream &stream, uint16_t version) = 0;
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // POWERTABOBJECT_H

@@ -1,27 +1,27 @@
 /*
-  * Copyright (C) 2016 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "scoreinforenderer.h"
 
 #include "layoutinfo.h"
 #include "simpletextitem.h"
 
-#include <score/scoreinfo.h>
 #include <QDate>
+#include <score/scoreinfo.h>
 
 static const double VERTICAL_SPACING = 10.0;
 static const double AUTHOR_INFO_WIDTH = LayoutInfo::STAFF_WIDTH * 0.4;
@@ -29,13 +29,12 @@ static const int TITLE_SIZE = 36;
 static const int SUBTITLE_SIZE = 20;
 static const int AUTHOR_SIZE = 14;
 
-static const QString theAudioReleaseTypes[] = {
-    "Single", "EP", "Album", "Double Album", "Triple Album", "Boxset"
-};
+static const QString theAudioReleaseTypes[] = { "Single",       "EP",
+                                                "Album",        "Double Album",
+                                                "Triple Album", "Boxset" };
 
-static const QString theDifficulties[] = {
-    "Beginner", "Intermediate", "Advanced"
-};
+static const QString theDifficulties[] = { "Beginner", "Intermediate",
+                                           "Advanced" };
 
 static double getNextY(const QGraphicsItemGroup &group)
 {
@@ -89,8 +88,9 @@ static void renderReleaseInfo(QGraphicsItemGroup &group, const QFont &font,
             return;
 
         // TODO - handle live video / audio releases?
-        release_info = QString("(From the Video \"%1\")").arg(
-            QString::fromStdString(video_release.getTitle()));
+        release_info =
+            QString("(From the Video \"%1\")")
+                .arg(QString::fromStdString(video_release.getTitle()));
     }
     else if (song_data.isBootleg())
     {
@@ -101,9 +101,9 @@ static void renderReleaseInfo(QGraphicsItemGroup &group, const QFont &font,
         QDate date(bootleg.getDate().year(), bootleg.getDate().month(),
                    bootleg.getDate().day());
 
-        release_info = QString("(From the %1 Bootleg \"%2\")").arg(
-            date.toString("MMM d yyyy"),
-            QString::fromStdString(bootleg.getTitle()));
+        release_info = QString("(From the %1 Bootleg \"%2\")")
+                           .arg(date.toString("MMM d yyyy"),
+                                QString::fromStdString(bootleg.getTitle()));
     }
     else
         return;
@@ -208,7 +208,7 @@ static void renderSongInfo(QGraphicsItemGroup &group, const QFont &font,
 }
 
 static void renderLessonInfo(QGraphicsItemGroup &group, const QFont &font,
-                           const LessonData &lesson_data)
+                             const LessonData &lesson_data)
 {
     if (!lesson_data.getTitle().empty())
     {
@@ -227,8 +227,8 @@ static void renderLessonInfo(QGraphicsItemGroup &group, const QFont &font,
     if (!lesson_data.getAuthor().empty())
     {
         QString author_text("Written by %1");
-        author_text = author_text.arg(
-            QString::fromStdString(lesson_data.getAuthor()));
+        author_text =
+            author_text.arg(QString::fromStdString(lesson_data.getAuthor()));
 
         addAuthorText(group, font, author_text, y, /* right_align */ true);
     }
@@ -238,8 +238,7 @@ static void renderLessonInfo(QGraphicsItemGroup &group, const QFont &font,
     addAuthorText(group, font, level_text, y, /* right_align */ false);
 }
 
-QGraphicsItem *
-ScoreInfoRenderer::render(const ScoreInfo &score_info)
+QGraphicsItem *ScoreInfoRenderer::render(const ScoreInfo &score_info)
 {
     QFont font("Liberation Serif");
 

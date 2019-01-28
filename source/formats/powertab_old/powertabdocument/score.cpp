@@ -11,31 +11,31 @@
 
 #include "score.h"
 
-#include "staff.h"
-#include "barline.h"
-#include "powertabfileheader.h"
-#include "system.h"
-#include "guitar.h"
-#include "chorddiagram.h"
-#include "floatingtext.h"
-#include "guitarin.h"
-#include "tempomarker.h"
 #include "alternateending.h"
-#include "position.h"
-#include "powertabinputstream.h"
-#include "powertaboutputstream.h"
+#include "barline.h"
+#include "chorddiagram.h"
 #include "direction.h"
 #include "dynamic.h"
+#include "floatingtext.h"
+#include "guitar.h"
+#include "guitarin.h"
+#include "position.h"
+#include "powertabfileheader.h"
+#include "powertabinputstream.h"
+#include "powertaboutputstream.h"
+#include "staff.h"
+#include "system.h"
+#include "tempomarker.h"
 #include "tuning.h"
 
-#include <map>
-#include <bitset>
 #include <algorithm>
+#include <bitset>
+#include <map>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
-Score::Score(const char* name)
-    : m_scoreName(name)
+Score::Score(const char *name) : m_scoreName(name)
 {
 }
 
@@ -43,7 +43,7 @@ Score::Score(const char* name)
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Score::Serialize(PowerTabOutputStream& stream) const
+bool Score::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 5, 2005
@@ -78,7 +78,7 @@ bool Score::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Score::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool Score::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     stream.ReadVector(m_guitarArray, version);
     stream.ReadVector(m_chordDiagramArray, version);
@@ -95,96 +95,103 @@ bool Score::Deserialize(PowerTabInputStream& stream, uint16_t version)
 namespace
 {
 
-template <class Symbol>
-struct IsSymbolInSystem : std::unary_function<const Symbol&, bool>
-{
-    IsSymbolInSystem(size_t systemIndex) :
-        systemIndex(systemIndex)
+    template <class Symbol>
+    struct IsSymbolInSystem : std::unary_function<const Symbol &, bool>
     {
-    }
-
-    bool operator()(const Symbol& symbol) const
-    {
-        return symbol->GetSystem() == systemIndex;
-    }
-
-    const size_t systemIndex;
-};
-
-/// Helper for GetAlternateEndingsInSystem, GetTempoMarkersInSystem, etc.
-template <class Symbol>
-void GetSymbolsInSystem(std::vector<Symbol>& output, const std::vector<Symbol>& symbolList, const size_t systemIndex)
-{
-    output.clear();
-
-    // remove_copy_if did not compile on OSX, maybe I could have worked out what
-    // was wrong but this is a lot easier to understand and works
-    typename std::vector<Symbol>::const_iterator it;
-    for (it = symbolList.begin() ; it != symbolList.end(); ++it)
-    {
-        if ((*it)->GetSystem() == systemIndex)
+        IsSymbolInSystem(size_t systemIndex) : systemIndex(systemIndex)
         {
-            output.push_back(*it);
+        }
+
+        bool operator()(const Symbol &symbol) const
+        {
+            return symbol->GetSystem() == systemIndex;
+        }
+
+        const size_t systemIndex;
+    };
+
+    /// Helper for GetAlternateEndingsInSystem, GetTempoMarkersInSystem, etc.
+    template <class Symbol>
+    void GetSymbolsInSystem(std::vector<Symbol> &output,
+                            const std::vector<Symbol> &symbolList,
+                            const size_t systemIndex)
+    {
+        output.clear();
+
+        // remove_copy_if did not compile on OSX, maybe I could have worked out
+        // what was wrong but this is a lot easier to understand and works
+        typename std::vector<Symbol>::const_iterator it;
+        for (it = symbolList.begin(); it != symbolList.end(); ++it)
+        {
+            if ((*it)->GetSystem() == systemIndex)
+            {
+                output.push_back(*it);
+            }
         }
     }
-}
 
-/// Removes the symbols in the specified system, and moves lower symbols up by
-/// one system.
-template <class Symbol>
-void RemoveSymbolsInSystem(std::vector<Symbol>& symbolList, const size_t systemIndex)
-{
-    symbolList.erase(std::remove_if(symbolList.begin(), symbolList.end(),
-                                    IsSymbolInSystem<Symbol>(systemIndex)),
-                     symbolList.end());
-
-    // Shift following symbols up by one system.
-    for (const Symbol &symbol : symbolList)
+    /// Removes the symbols in the specified system, and moves lower symbols up
+    /// by one system.
+    template <class Symbol>
+    void RemoveSymbolsInSystem(std::vector<Symbol> &symbolList,
+                               const size_t systemIndex)
     {
-        if (symbol->GetSystem() > systemIndex)
+        symbolList.erase(std::remove_if(symbolList.begin(), symbolList.end(),
+                                        IsSymbolInSystem<Symbol>(systemIndex)),
+                         symbolList.end());
+
+        // Shift following symbols up by one system.
+        for (const Symbol &symbol : symbolList)
         {
-            symbol->SetSystem(symbol->GetSystem() - 1);
+            if (symbol->GetSystem() > systemIndex)
+            {
+                symbol->SetSystem(symbol->GetSystem() - 1);
+            }
         }
     }
-}
 
-/// Shifts symbols down by one system if they are either in or are below the
-/// specified system.
-template <class Symbol>
-void ShiftFollowingSymbols(std::vector<Symbol>& symbolList, const size_t systemIndex)
-{
-    for (const Symbol &symbol : symbolList)
+    /// Shifts symbols down by one system if they are either in or are below the
+    /// specified system.
+    template <class Symbol>
+    void ShiftFollowingSymbols(std::vector<Symbol> &symbolList,
+                               const size_t systemIndex)
     {
-        if (symbol->GetSystem() >= systemIndex)
+        for (const Symbol &symbol : symbolList)
         {
-            symbol->SetSystem(symbol->GetSystem() + 1);
+            if (symbol->GetSystem() >= systemIndex)
+            {
+                symbol->SetSystem(symbol->GetSystem() + 1);
+            }
         }
     }
-}
-}
+} // namespace
 
 // Finds the index of a system within the score
-int Score::FindSystemIndex(const SystemConstPtr& system) const
+int Score::FindSystemIndex(const SystemConstPtr &system) const
 {
-    std::vector<SystemPtr>::const_iterator result = std::find(m_systemArray.begin(),
-                                                                   m_systemArray.end(), system);
+    std::vector<SystemPtr>::const_iterator result =
+        std::find(m_systemArray.begin(), m_systemArray.end(), system);
     return static_cast<int>(std::distance(m_systemArray.begin(), result));
 }
 
-
 /// Finds all of the tempo markers that are in the given system
-void Score::GetTempoMarkersInSystem(std::vector<TempoMarkerPtr>& tempoMarkers, SystemConstPtr system) const
+void Score::GetTempoMarkersInSystem(std::vector<TempoMarkerPtr> &tempoMarkers,
+                                    SystemConstPtr system) const
 {
-    GetSymbolsInSystem(tempoMarkers, m_tempoMarkerArray, FindSystemIndex(system));
+    GetSymbolsInSystem(tempoMarkers, m_tempoMarkerArray,
+                       FindSystemIndex(system));
 }
 
-void Score::GetAlternateEndingsInSystem(std::vector<AlternateEndingPtr>& endings, SystemConstPtr system) const
+void Score::GetAlternateEndingsInSystem(
+    std::vector<AlternateEndingPtr> &endings, SystemConstPtr system) const
 {
-    GetSymbolsInSystem(endings, m_alternateEndingArray, FindSystemIndex(system));
+    GetSymbolsInSystem(endings, m_alternateEndingArray,
+                       FindSystemIndex(system));
 }
 
 /// Returns all of the dynamics located in the given system
-void Score::GetDynamicsInSystem(std::vector<Score::DynamicPtr> &dynamics, Score::SystemConstPtr system) const
+void Score::GetDynamicsInSystem(std::vector<Score::DynamicPtr> &dynamics,
+                                Score::SystemConstPtr system) const
 {
     GetSymbolsInSystem(dynamics, m_dynamicArray, FindSystemIndex(system));
 }
@@ -399,4 +406,4 @@ std::string Score::GetScoreName() const
     return m_scoreName;
 }
 
-}
+} // namespace PowerTabDocument

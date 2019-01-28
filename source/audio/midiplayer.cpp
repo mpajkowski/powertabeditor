@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "midiplayer.h"
 
 #include <app/settingsmanager.h>
@@ -55,9 +55,11 @@ void MidiPlayer::run()
     // Windows 10 - see http://stackoverflow.com/a/32553208/586978
 #ifdef _WIN32
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-    BOOST_SCOPE_EXIT(this_) {
+    BOOST_SCOPE_EXIT(this_)
+    {
         CoUninitialize();
-    } BOOST_SCOPE_EXIT_END
+    }
+    BOOST_SCOPE_EXIT_END
 #endif
 
     boost::signals2::scoped_connection connection(
@@ -105,7 +107,8 @@ void MidiPlayer::run()
         events.concat(track);
     }
 
-    // TODO - since each track is already sorted, an n-way merge should be faster.
+    // TODO - since each track is already sorted, an n-way merge should be
+    // faster.
     std::stable_sort(events.begin(), events.end());
     events.convertToDeltaTicks();
 
@@ -174,7 +177,7 @@ void MidiPlayer::run()
 
             // Don't move backwards unless a repeat occurred.
             if (new_location < current_location && !event->isPositionChange())
-                    continue;
+                continue;
 
             if (new_location.getSystem() != current_location.getSystem())
                 emit playbackSystemChanged(new_location.getSystem());
@@ -184,6 +187,8 @@ void MidiPlayer::run()
             current_location = new_location;
         }
     }
+
+    stopPlayback(device);
 }
 
 void MidiPlayer::performCountIn(MidiOutputDevice &device,
@@ -215,7 +220,8 @@ void MidiPlayer::performCountIn(MidiOutputDevice &device,
     const int tick_duration = boost::rational_cast<int>(
         boost::rational<int>(4, time_sig.getBeatValue()) *
         boost::rational<int>(time_sig.getBeatsPerMeasure(),
-                             time_sig.getNumPulses()) * beat_duration);
+                             time_sig.getNumPulses()) *
+        beat_duration);
 
     // Play the count-in.
     device.setChannelMaxVolume(METRONOME_CHANNEL,
@@ -229,6 +235,17 @@ void MidiPlayer::performCountIn(MidiOutputDevice &device,
         device.playNote(METRONOME_CHANNEL, preset, velocity);
         usleep(tick_duration * (100.0 / myPlaybackSpeed));
         device.stopNote(METRONOME_CHANNEL, preset);
+    }
+}
+
+void MidiPlayer::stopPlayback(MidiOutputDevice &device)
+{
+    for (std::uint8_t channel = 0; channel < 16; ++channel)
+    {
+        for (std::uint8_t pitch = 0; pitch < 128; ++pitch)
+        {
+            device.stopNote(channel, pitch);
+        }
     }
 }
 

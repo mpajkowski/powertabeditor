@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2015 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2015 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "midifile.h"
 
 #include "repeatcontroller.h"
@@ -150,7 +150,6 @@ void MidiFile::load(const Score &score, const LoadOptions &options)
         {
             regular_tracks[i].append(event);
         }
-
     }
 
     SystemLocation location(0, 0);
@@ -177,13 +176,13 @@ void MidiFile::load(const Score &score, const LoadOptions &options)
             addTempoEvent(master_track, start_tick, current_tempo, system,
                           current_bar->getPosition(), next_bar->getPosition());
 
-        for (unsigned int staff_index = 0; staff_index < system.getStaves().size();
-             ++staff_index)
+        for (unsigned int staff_index = 0;
+             staff_index < system.getStaves().size(); ++staff_index)
         {
             const Staff &staff = system.getStaves()[staff_index];
 
-            for (unsigned int voice_index = 0; voice_index < staff.getVoices().size();
-                 ++voice_index)
+            for (unsigned int voice_index = 0;
+                 voice_index < staff.getVoices().size(); ++voice_index)
             {
                 const int end_tick = addEventsForBar(
                     regular_tracks, active_bends[staff_index], start_tick,
@@ -208,7 +207,8 @@ void MidiFile::load(const Score &score, const LoadOptions &options)
     }
 
     myTracks.push_back(master_track);
-    myTracks.insert(myTracks.end(), regular_tracks.begin(), regular_tracks.end());
+    myTracks.insert(myTracks.end(), regular_tracks.begin(),
+                    regular_tracks.end());
     if (options.myEnableMetronome)
         myTracks.push_back(metronome_track);
 
@@ -324,7 +324,7 @@ static int getWholeRestDuration(const System &system, const Voice &voice,
     // Otherwise, extend the rest for the entire bar.
     const Barline *barline =
         ScoreUtils::findByPosition(system.getBarlines(), bar_start);
-    const TimeSignature& time_sig = barline->getTimeSignature();
+    const TimeSignature &time_sig = barline->getTimeSignature();
 
     return boost::rational_cast<int>(
         time_sig.getBeatsPerMeasure() *
@@ -355,7 +355,8 @@ static int getActualNotePitch(const Note &note, const Tuning &tuning)
 
         ArtificialHarmonic harmonic = note.getArtificialHarmonic();
         pitch = (Midi::getMidiNoteOctave(pitch) +
-                 static_cast<int>(harmonic.getOctave()) + 2) * 12 +
+                 static_cast<int>(harmonic.getOctave()) + 2) *
+                    12 +
                 theKeyOffsets[harmonic.getKey()] + harmonic.getVariation();
     }
 
@@ -704,11 +705,12 @@ int MidiFile::addEventsForBar(
 
             let_ring_active = false;
         }
-        // Make sure that we end the let ring after the last position in the bar.
+        // Make sure that we end the let ring after the last position in the
+        // bar.
         else if (let_ring_active &&
-                 (pos ==
-                  &ScoreUtils::findInRange(voice.getPositions(), bar_start,
-                                           bar_end) .back()))
+                 (pos == &ScoreUtils::findInRange(voice.getPositions(),
+                                                  bar_start, bar_end)
+                              .back()))
         {
             for (const ActivePlayer &player : active_players)
             {
@@ -772,7 +774,8 @@ int MidiFile::addEventsForBar(
                         {
                             // Continue back to the previous system to handle
                             // ties between systems.
-                            // TODO - handle ties that stretch across > 2 systems?
+                            // TODO - handle ties that stretch across > 2
+                            // systems?
                             current_voice = prev_voice;
                             prev_pos = VoiceUtils::getPreviousPosition(
                                 *prev_voice, std::numeric_limits<int>::max());
@@ -781,7 +784,8 @@ int MidiFile::addEventsForBar(
                             break;
                     }
 
-                    prev_note = Utils::findByString(*prev_pos, note.getString());
+                    prev_note =
+                        Utils::findByString(*prev_pos, note.getString());
                 }
 
                 if (prev_note)
@@ -847,8 +851,7 @@ int MidiFile::addEventsForBar(
                     for (const ActivePlayer &player : active_players)
                     {
                         tracks[player.getPlayerNumber()].append(
-                            MidiEvent::noteOff(tick,
-                                               getChannel(player), pitch,
+                            MidiEvent::noteOff(tick, getChannel(player), pitch,
                                                system_location));
                     }
 

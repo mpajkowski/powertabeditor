@@ -20,31 +20,34 @@
 #include "rhythmslash.h"
 #include "staff.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
-const Rect System::DEFAULT_RECT                                   = Rect(50, 20, 750, 0);
-const uint8_t System::DEFAULT_POSITION_SPACING                       = 20;
-const uint8_t System::DEFAULT_RHYTHM_SLASH_SPACING_ABOVE             = 0;
-const uint8_t System::DEFAULT_RHYTHM_SLASH_SPACING_BELOW             = 0;
-const uint8_t System::DEFAULT_EXTRA_SPACING                          = 0;
-const uint8_t System::SYSTEM_SYMBOL_SPACING = 18; ///< spacing given to a system symbol (i.e. rehearsal sign)
+const Rect System::DEFAULT_RECT = Rect(50, 20, 750, 0);
+const uint8_t System::DEFAULT_POSITION_SPACING = 20;
+const uint8_t System::DEFAULT_RHYTHM_SLASH_SPACING_ABOVE = 0;
+const uint8_t System::DEFAULT_RHYTHM_SLASH_SPACING_BELOW = 0;
+const uint8_t System::DEFAULT_EXTRA_SPACING = 0;
+const uint8_t System::SYSTEM_SYMBOL_SPACING =
+    18; ///< spacing given to a system symbol (i.e. rehearsal sign)
 const uint8_t System::RHYTHM_SLASH_SPACING = 2 * System::SYSTEM_SYMBOL_SPACING;
 const uint8_t System::CLEF_PADDING = 3; ///< padding surrounding a clef
 const uint8_t System::CLEF_WIDTH = 22; ///< width of a clef
 
 // Position Spacing Constants
-const uint8_t System::MIN_POSITION_SPACING                           = 3;
+const uint8_t System::MIN_POSITION_SPACING = 3;
 
 // Constructor/Destructor
 /// Default Constructor
-System::System() :
-    m_rect(DEFAULT_RECT), m_positionSpacing(DEFAULT_POSITION_SPACING),
-    m_rhythmSlashSpacingAbove(DEFAULT_RHYTHM_SLASH_SPACING_ABOVE),
-    m_rhythmSlashSpacingBelow(DEFAULT_RHYTHM_SLASH_SPACING_BELOW),
-    m_extraSpacing(DEFAULT_EXTRA_SPACING),
-    m_startBar(new Barline),
-    m_endBar(new Barline)
+System::System()
+    : m_rect(DEFAULT_RECT),
+      m_positionSpacing(DEFAULT_POSITION_SPACING),
+      m_rhythmSlashSpacingAbove(DEFAULT_RHYTHM_SLASH_SPACING_ABOVE),
+      m_rhythmSlashSpacingBelow(DEFAULT_RHYTHM_SLASH_SPACING_BELOW),
+      m_extraSpacing(DEFAULT_EXTRA_SPACING),
+      m_startBar(new Barline),
+      m_endBar(new Barline)
 {
 }
 
@@ -52,7 +55,7 @@ System::System() :
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool System::Serialize(PowerTabOutputStream& stream) const
+bool System::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 14, 2005
@@ -61,10 +64,10 @@ bool System::Serialize(PowerTabOutputStream& stream) const
 
     // Note: End bar is stored as a byte; we use Barline class to make it easier
     // for the user
-    uint8_t endBar = (uint8_t)((m_endBar->GetType() << 5) |
-        (m_endBar->GetRepeatCount()));
-    stream << endBar << m_positionSpacing << m_rhythmSlashSpacingAbove <<
-        m_rhythmSlashSpacingBelow << m_extraSpacing;
+    uint8_t endBar =
+        (uint8_t)((m_endBar->GetType() << 5) | (m_endBar->GetRepeatCount()));
+    stream << endBar << m_positionSpacing << m_rhythmSlashSpacingAbove
+           << m_rhythmSlashSpacingBelow << m_extraSpacing;
     PTB_CHECK_THAT(stream.CheckState(), false);
 
     m_startBar->Serialize(stream);
@@ -92,7 +95,7 @@ bool System::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool System::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool System::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     // Version 1.0 and 1.0.2
     if (version == PowerTabFileHeader::Version_1_0 ||
@@ -119,8 +122,8 @@ bool System::Deserialize(PowerTabInputStream& stream, uint16_t version)
             m_startBar->GetKeySignature().SetCancellation();
         }
 
-        keyType = (uint8_t)(((keyType % 2) == 1) ? KeySignature::majorKey :
-            KeySignature::minorKey);
+        keyType = (uint8_t)(((keyType % 2) == 1) ? KeySignature::majorKey
+                                                 : KeySignature::minorKey);
 
         m_startBar->GetKeySignature().SetKey(keyType, keyAccidentals);
 
@@ -129,7 +132,7 @@ bool System::Deserialize(PowerTabInputStream& stream, uint16_t version)
         uint8_t repeatCount = LOBYTE(endBar);
 
         m_endBar->SetBarlineData(barType, repeatCount);
-        //SetEndBar(barType, repeatCount);
+        // SetEndBar(barType, repeatCount);
 
         stream.ReadVector(m_directionArray, version);
         stream.ReadVector(m_chordTextArray, version);
@@ -152,7 +155,7 @@ bool System::Deserialize(PowerTabInputStream& stream, uint16_t version)
         }
 
         // Update key signs that aren't show to match active key sign
-        KeySignature& activeKeySignature = m_startBar->GetKeySignature();
+        KeySignature &activeKeySignature = m_startBar->GetKeySignature();
 
         for (auto &bar : m_barlineArray)
         {
@@ -185,7 +188,7 @@ bool System::Deserialize(PowerTabInputStream& stream, uint16_t version)
 
         // Update end bar (using Barline class is easier to use)
         m_endBar->SetBarlineData((uint8_t)((endBar & 0xe0) >> 5),
-            (uint8_t)(endBar & 0x1f));
+                                 (uint8_t)(endBar & 0x1f));
 
         m_startBar->Deserialize(stream, version);
         stream.ReadVector(m_directionArray, version);
@@ -503,4 +506,4 @@ int System::GetCumulativeInternalKeyAndTimeSignatureWidth(int position) const
 
     return (returnValue);
 }
-}
+} // namespace PowerTabDocument

@@ -12,9 +12,7 @@ Q_DECLARE_METATYPE(SystemAndPosition)
 
 GoToRehearsalSignDialog::GoToRehearsalSignDialog(QWidget *parent,
                                                  const Score &score)
-    : QDialog(parent),
-      ui(new Ui::GoToRehearsalSignDialog),
-      myScore(score)
+    : QDialog(parent), ui(new Ui::GoToRehearsalSignDialog), myScore(score)
 {
     ui->setupUi(this);
 
@@ -26,14 +24,15 @@ GoToRehearsalSignDialog::GoToRehearsalSignDialog(QWidget *parent,
         {
             if (barline.hasRehearsalSign())
             {
-                SystemAndPosition location = std::make_pair(
-                            systemIndex, barline.getPosition());
+                SystemAndPosition location =
+                    std::make_pair(systemIndex, barline.getPosition());
                 const RehearsalSign &sign = barline.getRehearsalSign();
 
-                ui->rehearsalSignComboBox->addItem(QString("%1 -- %2").arg(
-                                QString::fromStdString(sign.getLetters()),
-                                QString::fromStdString(sign.getDescription())),
-                            QVariant::fromValue(location));
+                ui->rehearsalSignComboBox->addItem(
+                    QString("%1 -- %2")
+                        .arg(QString::fromStdString(sign.getLetters()),
+                             QString::fromStdString(sign.getDescription())),
+                    QVariant::fromValue(location));
             }
         }
 
@@ -51,8 +50,8 @@ ScoreLocation GoToRehearsalSignDialog::getLocation() const
     const int index = ui->rehearsalSignComboBox->currentIndex();
     Q_ASSERT(index >= 0);
 
-    SystemAndPosition location = ui->rehearsalSignComboBox->itemData(
-                index).value<SystemAndPosition>();
+    SystemAndPosition location =
+        ui->rehearsalSignComboBox->itemData(index).value<SystemAndPosition>();
 
     return ScoreLocation(myScore, location.first, 0, location.second);
 }

@@ -2,9 +2,9 @@
 // Name:            tempomarker.h
 // Purpose:         Stores and renders tempo markers
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Jan 13, 2005
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +14,8 @@
 
 #include "systemsymbol.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 /// Stores and renders tempo markers.
 class TempoMarker : public SystemSymbol
@@ -45,25 +46,25 @@ public:
 
     enum BeatType
     {
-        half                = 0x00,
-        halfDotted          = 0x01,
-        quarter             = 0x02,
-        quarterDotted       = 0x03,
-        eighth              = 0x04,
-        eighthDotted        = 0x05,
-        sixteenth           = 0x06,
-        sixteenDotted       = 0x07,
-        thirtySecond        = 0x08,
-        thirtySecondDotted  = 0x09
+        half = 0x00,
+        halfDotted = 0x01,
+        quarter = 0x02,
+        quarterDotted = 0x03,
+        eighth = 0x04,
+        eighthDotted = 0x05,
+        sixteenth = 0x06,
+        sixteenDotted = 0x07,
+        thirtySecond = 0x08,
+        thirtySecondDotted = 0x09
     };
 
     enum TripletFeelType
     {
-        noTripletFeel                   = 0x00,
-        tripletFeelEighth               = 0x01,
-        tripletFeelSixteenth            = 0x02,
-        tripletFeelEighthOff            = 0x03,
-        tripletFeelSixteenthOff         = 0x04
+        noTripletFeel = 0x00,
+        tripletFeelEighth = 0x01,
+        tripletFeelSixteenth = 0x02,
+        tripletFeelEighthOff = 0x03,
+        tripletFeelSixteenthOff = 0x04
     };
 
     enum Flags
@@ -83,15 +84,15 @@ public:
     // Constructor/Destructor.
     TempoMarker();
     TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
-                uint32_t beatsPerMinute, const std::string& description,
+                uint32_t beatsPerMinute, const std::string &description,
                 uint8_t tripletFeelType);
     TempoMarker(uint32_t system, uint32_t position, uint8_t beatType,
-                uint8_t listessoBeatType, const std::string& description);
+                uint8_t listessoBeatType, const std::string &description);
     TempoMarker(uint32_t system, uint32_t position, bool accelerando);
 
     // Operators
-    bool operator==(const TempoMarker& tempoMarker) const;
-    bool operator!=(const TempoMarker& tempoMarker) const;
+    bool operator==(const TempoMarker &tempoMarker) const;
+    bool operator!=(const TempoMarker &tempoMarker) const;
 
     // Serialize Functions
     bool Serialize(PowerTabOutputStream &stream) const override;
@@ -120,13 +121,13 @@ public:
 
     // Standard Marker Functions
     bool SetStandardMarker(uint8_t beatType, uint32_t beatsPerMinute,
-                           const std::string& description,
+                           const std::string &description,
                            uint8_t tripletFeelType = noTripletFeel);
     bool IsStandardMarker() const;
 
     // Listesso Functions
     bool SetListesso(uint8_t beatType, uint8_t listessoBeatType,
-                     const std::string& description = "");
+                     const std::string &description = "");
     bool IsListesso() const;
 
     // Alteration Of Pace Functions
@@ -156,13 +157,13 @@ public:
     uint32_t GetBeatsPerMinute() const;
 
     // Description Functions
-    bool SetDescription(const std::string& description);
+    bool SetDescription(const std::string &description);
     std::string GetDescription() const;
 
 private:
     std::string m_description;
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // POWERTABDOCUMENT_TEMPO_MARKER_H

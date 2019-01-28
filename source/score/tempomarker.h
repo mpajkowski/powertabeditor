@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef SCORE_TEMPOMARKER_H
 #define SCORE_TEMPOMARKER_H
@@ -67,8 +67,8 @@ public:
 
     bool operator==(const TempoMarker &other) const;
 
-	template <class Archive>
-	void serialize(Archive &ar, const FileVersion version);
+    template <class Archive>
+    void serialize(Archive &ar, const FileVersion version);
 
     /// Returns the position within the system where the marker is anchored.
     int getPosition() const;
@@ -131,14 +131,14 @@ private:
 template <class Archive>
 void TempoMarker::serialize(Archive &ar, const FileVersion /*version*/)
 {
-	ar("position", myPosition);
-	ar("marker_type", myMarkerType);
-	ar("beat_type", myBeatType);
-	ar("listesso_type", myListessoBeatType);
-	ar("triplet_feel", myTripletFeel);
-	ar("alteration_of_pace", myAlterationOfPace);
-	ar("bpm", myBeatsPerMinute);
-	ar("description", myDescription);
+    ar("position", myPosition);
+    ar("marker_type", myMarkerType);
+    ar("beat_type", myBeatType);
+    ar("listesso_type", myListessoBeatType);
+    ar("triplet_feel", myTripletFeel);
+    ar("alteration_of_pace", myAlterationOfPace);
+    ar("bpm", myBeatsPerMinute);
+    ar("description", myDescription);
 }
 
 #endif

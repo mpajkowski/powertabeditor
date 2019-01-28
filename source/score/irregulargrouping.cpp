@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "irregulargrouping.h"
 
@@ -37,7 +37,7 @@ bool IrregularGrouping::operator==(const IrregularGrouping &other) const
 {
     return myPosition == other.myPosition && myLength == other.myLength &&
            myNotesPlayed == other.myNotesPlayed &&
-            myNotesPlayedOver == other.myNotesPlayedOver;
+           myNotesPlayedOver == other.myNotesPlayedOver;
 }
 
 int IrregularGrouping::getPosition() const

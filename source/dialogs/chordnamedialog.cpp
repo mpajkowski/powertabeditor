@@ -18,8 +18,8 @@
 #include "chordnamedialog.h"
 #include "ui_chordnamedialog.h"
 
-#include <boost/lexical_cast.hpp>
 #include <QButtonGroup>
+#include <boost/lexical_cast.hpp>
 
 ChordNameDialog::ChordNameDialog(QWidget *parent)
     : QDialog(parent), ui(new Ui::ChordNameDialog)

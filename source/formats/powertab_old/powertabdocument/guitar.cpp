@@ -14,64 +14,71 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-#include "guitar.h"
 #include "generalmidi.h"
+#include "guitar.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Note: All MIDI constants and functions are defined in generalmidi.h
 // Default constants
-const uint8_t         Guitar::DEFAULT_NUMBER                 = 0;
-const std::string     Guitar::DEFAULT_DESCRIPTION            = "Untitled";
-const uint8_t         Guitar::DEFAULT_PRESET                 = midi::MIDI_PRESET_ACOUSTIC_GUITAR_STEEL;
-const uint8_t         Guitar::DEFAULT_INITIAL_VOLUME         = 104;
-const uint8_t         Guitar::DEFAULT_PAN                    = PAN_CENTER;
-const uint8_t         Guitar::DEFAULT_REVERB                 = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::DEFAULT_CHORUS                 = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::DEFAULT_TREMOLO                = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::DEFAULT_PHASER                 = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::DEFAULT_CAPO                   = 0;
+const uint8_t Guitar::DEFAULT_NUMBER = 0;
+const std::string Guitar::DEFAULT_DESCRIPTION = "Untitled";
+const uint8_t Guitar::DEFAULT_PRESET = midi::MIDI_PRESET_ACOUSTIC_GUITAR_STEEL;
+const uint8_t Guitar::DEFAULT_INITIAL_VOLUME = 104;
+const uint8_t Guitar::DEFAULT_PAN = PAN_CENTER;
+const uint8_t Guitar::DEFAULT_REVERB = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::DEFAULT_CHORUS = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::DEFAULT_TREMOLO = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::DEFAULT_PHASER = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::DEFAULT_CAPO = 0;
 
-const uint8_t         Guitar::MIN_PRESET                     = midi::FIRST_MIDI_PRESET;
-const uint8_t         Guitar::MAX_PRESET                     = midi::LAST_MIDI_PRESET;
+const uint8_t Guitar::MIN_PRESET = midi::FIRST_MIDI_PRESET;
+const uint8_t Guitar::MAX_PRESET = midi::LAST_MIDI_PRESET;
 
-const uint8_t         Guitar::MIN_INITIAL_VOLUME             = midi::MIN_MIDI_CHANNEL_VOLUME;
-const uint8_t         Guitar::MAX_INITIAL_VOLUME             = midi::MAX_MIDI_CHANNEL_VOLUME;
+const uint8_t Guitar::MIN_INITIAL_VOLUME = midi::MIN_MIDI_CHANNEL_VOLUME;
+const uint8_t Guitar::MAX_INITIAL_VOLUME = midi::MAX_MIDI_CHANNEL_VOLUME;
 
-const uint8_t         Guitar::MIN_PAN                        = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::MAX_PAN                        = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::PAN_HARD_LEFT                  = MIN_PAN;
-const uint8_t         Guitar::PAN_CENTER                     = 64;
-const uint8_t         Guitar::PAN_HARD_RIGHT                 = MAX_PAN;
+const uint8_t Guitar::MIN_PAN = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MAX_PAN = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::PAN_HARD_LEFT = MIN_PAN;
+const uint8_t Guitar::PAN_CENTER = 64;
+const uint8_t Guitar::PAN_HARD_RIGHT = MAX_PAN;
 
-const uint8_t         Guitar::MIN_REVERB                     = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::MAX_REVERB                     = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MIN_REVERB = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MAX_REVERB = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
 
-const uint8_t         Guitar::MIN_CHORUS                     = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::MAX_CHORUS                     = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MIN_CHORUS = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MAX_CHORUS = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
 
-const uint8_t         Guitar::MIN_TREMOLO                    = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::MAX_TREMOLO                    = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MIN_TREMOLO = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MAX_TREMOLO = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
 
-const uint8_t         Guitar::MIN_PHASER                     = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
-const uint8_t         Guitar::MAX_PHASER                     = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MIN_PHASER = midi::MIN_MIDI_CHANNEL_EFFECT_LEVEL;
+const uint8_t Guitar::MAX_PHASER = midi::MAX_MIDI_CHANNEL_EFFECT_LEVEL;
 
-const uint8_t         Guitar::MIN_CAPO                       = 0;
-const uint8_t         Guitar::MAX_CAPO                       = 12;
+const uint8_t Guitar::MIN_CAPO = 0;
+const uint8_t Guitar::MAX_CAPO = 12;
 
-Guitar::Guitar() :
-    m_number(DEFAULT_NUMBER), m_description(DEFAULT_DESCRIPTION),
-    m_preset(DEFAULT_PRESET), m_initialVolume(DEFAULT_INITIAL_VOLUME),
-    m_pan(DEFAULT_PAN), m_reverb(DEFAULT_REVERB), m_chorus(DEFAULT_CHORUS),
-    m_tremolo(DEFAULT_TREMOLO), m_phaser(DEFAULT_PHASER), m_capo(DEFAULT_CAPO),
-    m_isShown(true)
+Guitar::Guitar()
+    : m_number(DEFAULT_NUMBER),
+      m_description(DEFAULT_DESCRIPTION),
+      m_preset(DEFAULT_PRESET),
+      m_initialVolume(DEFAULT_INITIAL_VOLUME),
+      m_pan(DEFAULT_PAN),
+      m_reverb(DEFAULT_REVERB),
+      m_chorus(DEFAULT_CHORUS),
+      m_tremolo(DEFAULT_TREMOLO),
+      m_phaser(DEFAULT_PHASER),
+      m_capo(DEFAULT_CAPO),
+      m_isShown(true)
 {
 }
 
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Guitar::Serialize(PowerTabOutputStream& stream) const
+bool Guitar::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_number;
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -79,8 +86,8 @@ bool Guitar::Serialize(PowerTabOutputStream& stream) const
     stream.WriteMFCString(m_description);
     PTB_CHECK_THAT(stream.CheckState(), false);
 
-    stream << m_preset << m_initialVolume << m_pan << m_reverb << m_chorus <<
-              m_tremolo << m_phaser << m_capo;
+    stream << m_preset << m_initialVolume << m_pan << m_reverb << m_chorus
+           << m_tremolo << m_phaser << m_capo;
     PTB_CHECK_THAT(stream.CheckState(), false);
 
     m_tuning.Serialize(stream);
@@ -93,14 +100,14 @@ bool Guitar::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Guitar::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool Guitar::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     stream >> m_number;
 
     stream.ReadMFCString(m_description);
 
     stream >> m_preset >> m_initialVolume >> m_pan >> m_reverb >> m_chorus >>
-              m_tremolo >> m_phaser >> m_capo;
+        m_tremolo >> m_phaser >> m_capo;
 
     m_tuning.Deserialize(stream, version);
 
@@ -108,13 +115,13 @@ bool Guitar::Deserialize(PowerTabInputStream& stream, uint16_t version)
 }
 
 /// Gets the tuning used by the guitar
-Tuning& Guitar::GetTuning()
+Tuning &Guitar::GetTuning()
 {
     return m_tuning;
 }
 
 /// Gets the tuning used by the guitar
-const Tuning& Guitar::GetTuning() const
+const Tuning &Guitar::GetTuning() const
 {
     return m_tuning;
 }
@@ -139,7 +146,7 @@ uint8_t Guitar::GetNumber() const
 }
 
 /// Sets the description for the guitar
-void Guitar::SetDescription(const std::string& description)
+void Guitar::SetDescription(const std::string &description)
 {
     m_description = description;
 }
@@ -154,7 +161,7 @@ std::string Guitar::GetDescription() const
 /// @return True if the preset is valid, false if not
 bool Guitar::IsValidPreset(uint8_t preset)
 {
-    return /*(preset >= MIN_PRESET) && */(preset <= MAX_PRESET);
+    return /*(preset >= MIN_PRESET) && */ (preset <= MAX_PRESET);
 }
 
 /// Sets the preset (MIDI) used by the guitar
@@ -177,7 +184,8 @@ uint8_t Guitar::GetPreset() const
 /// @return True if the initial volume is valid, false if not
 bool Guitar::IsValidInitialVolume(uint8_t initialVolume)
 {
-    return /*(initialVolume >= MIN_INITIAL_VOLUME) &&*/ (initialVolume <= MAX_INITIAL_VOLUME);
+    return /*(initialVolume >= MIN_INITIAL_VOLUME) &&*/ (initialVolume <=
+                                                         MAX_INITIAL_VOLUME);
 }
 
 /// Sets the initial volume level of the guitar
@@ -199,7 +207,7 @@ uint8_t Guitar::GetInitialVolume() const
 /// @return True if the pan level is valid, false if not
 bool Guitar::IsValidPan(uint8_t pan)
 {
-    return /*(pan >= MIN_PAN) && */(pan <= MAX_PAN);
+    return /*(pan >= MIN_PAN) && */ (pan <= MAX_PAN);
 }
 
 /// Sets the pan level for the guitar
@@ -223,7 +231,7 @@ uint8_t Guitar::GetPan() const
 /// @return True if the reverb level is valid, false if not
 bool Guitar::IsValidReverb(uint8_t reverb)
 {
-    return /*(reverb >= MIN_REVERB) && */(reverb <= MAX_REVERB);
+    return /*(reverb >= MIN_REVERB) && */ (reverb <= MAX_REVERB);
 }
 
 /// Sets the reverb level for the guitar
@@ -246,7 +254,7 @@ uint8_t Guitar::GetReverb() const
 /// @return True if the chorus level is valid, false if not
 bool Guitar::IsValidChorus(uint8_t chorus)
 {
-    return /*(chorus >= MIN_CHORUS) && */(chorus <= MAX_CHORUS);
+    return /*(chorus >= MIN_CHORUS) && */ (chorus <= MAX_CHORUS);
 }
 
 /// Sets the chorus level for the guitar (0 - none, 127 - maximum chorus)
@@ -268,7 +276,7 @@ uint8_t Guitar::GetChorus() const
 /// @return True if the tremolo level is valid, false if not
 bool Guitar::IsValidTremolo(uint8_t tremolo)
 {
-    return /*(tremolo >= MIN_TREMOLO) && */(tremolo <= MAX_TREMOLO);
+    return /*(tremolo >= MIN_TREMOLO) && */ (tremolo <= MAX_TREMOLO);
 }
 
 /// Sets the tremolo level for the guitar (0 - none, 127 - maximum tremolo)
@@ -290,7 +298,7 @@ uint8_t Guitar::GetTremolo() const
 /// @return True if the phaser level is valid, false if not
 bool Guitar::IsValidPhaser(uint8_t phaser)
 {
-    return /*(phaser >= MIN_PHASER) && */(phaser <= MAX_PHASER);
+    return /*(phaser >= MIN_PHASER) && */ (phaser <= MAX_PHASER);
 }
 
 /// Sets the phaser level for the guitar (0 - none, 127 - maximum phaser)
@@ -312,7 +320,7 @@ uint8_t Guitar::GetPhaser() const
 /// @return True if the capo value is valid, false if not
 bool Guitar::IsValidCapo(uint8_t capo)
 {
-    return /*(capo >= MIN_CAPO) && */(capo <= MAX_CAPO);
+    return /*(capo >= MIN_CAPO) && */ (capo <= MAX_CAPO);
 }
 
 /// Sets the capo used by the guitar (0 - no capo, all other values
@@ -348,4 +356,4 @@ void Guitar::SetShown(bool set)
     m_isShown = set;
 }
 
-}
+} // namespace PowerTabDocument

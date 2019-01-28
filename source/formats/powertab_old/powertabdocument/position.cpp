@@ -16,38 +16,40 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Constants
 // Default Constants
-const uint8_t    Position::DEFAULT_POSITION                              = 0;
-const uint8_t    Position::DEFAULT_BEAMING                               = 0;
-const uint32_t  Position::DEFAULT_DATA                                  = (uint32_t)(DEFAULT_DURATION_TYPE << 24);
-const uint8_t    Position::DEFAULT_DURATION_TYPE                         = 8;
+const uint8_t Position::DEFAULT_POSITION = 0;
+const uint8_t Position::DEFAULT_BEAMING = 0;
+const uint32_t Position::DEFAULT_DATA = (uint32_t)(DEFAULT_DURATION_TYPE << 24);
+const uint8_t Position::DEFAULT_DURATION_TYPE = 8;
 
 // Position Constants
-const uint32_t  Position::MIN_POSITION                                  = 0;
-const uint32_t  Position::MAX_POSITION                                  = 255;
+const uint32_t Position::MIN_POSITION = 0;
+const uint32_t Position::MAX_POSITION = 255;
 
 // Irregular Grouping Constants
-const uint8_t    Position::MIN_IRREGULAR_GROUPING_NOTES_PLAYED           = 2;
-const uint8_t    Position::MAX_IRREGULAR_GROUPING_NOTES_PLAYED           = 16;
-const uint8_t    Position::MIN_IRREGULAR_GROUPING_NOTES_PLAYED_OVER      = 2;
-const uint8_t    Position::MAX_IRREGULAR_GROUPING_NOTES_PLAYED_OVER      = 8;
+const uint8_t Position::MIN_IRREGULAR_GROUPING_NOTES_PLAYED = 2;
+const uint8_t Position::MAX_IRREGULAR_GROUPING_NOTES_PLAYED = 16;
+const uint8_t Position::MIN_IRREGULAR_GROUPING_NOTES_PLAYED_OVER = 2;
+const uint8_t Position::MAX_IRREGULAR_GROUPING_NOTES_PLAYED_OVER = 8;
 
-const uint8_t    Position::MAX_VOLUME_SWELL_DURATION                     = 8;
+const uint8_t Position::MAX_VOLUME_SWELL_DURATION = 8;
 
-const uint8_t    Position::MAX_TREMOLO_BAR_DURATION                      = 8;
-const uint8_t    Position::MAX_TREMOLO_BAR_PITCH                         = 28;
+const uint8_t Position::MAX_TREMOLO_BAR_DURATION = 8;
+const uint8_t Position::MAX_TREMOLO_BAR_PITCH = 28;
 
 // Multibar Rest Constants
-const uint8_t    Position::MIN_MULTIBAR_REST_MEASURE_COUNT               = 2;
-const uint8_t    Position::MAX_MULTIBAR_REST_MEASURE_COUNT               = 255;
+const uint8_t Position::MIN_MULTIBAR_REST_MEASURE_COUNT = 2;
+const uint8_t Position::MAX_MULTIBAR_REST_MEASURE_COUNT = 255;
 
 /// Default Constructor
-Position::Position() :
-    m_position(DEFAULT_POSITION), m_beaming(DEFAULT_BEAMING),
-    m_data(DEFAULT_DATA)
+Position::Position()
+    : m_position(DEFAULT_POSITION),
+      m_beaming(DEFAULT_BEAMING),
+      m_data(DEFAULT_DATA)
 {
     ComplexSymbols::clearComplexSymbols(m_complexSymbolArray);
 }
@@ -65,7 +67,7 @@ Position::~Position()
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool Position::Serialize(PowerTabOutputStream& stream) const
+bool Position::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_position << m_beaming << m_data;
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -83,7 +85,7 @@ bool Position::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool Position::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool Position::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     stream >> m_position >> m_beaming >> m_data;
 
@@ -106,8 +108,8 @@ uint8_t Position::GetDurationType() const
 /// @param notesPlayed Top value for the irregular grouping timing
 /// @param notesPlayedOver Bottom value for the irregular grouping timing
 /// @return True if the irregular grouping was set, false if not
-void Position::GetIrregularGroupingTiming(uint8_t& notesPlayed,
-    uint8_t& notesPlayedOver) const
+void Position::GetIrregularGroupingTiming(uint8_t &notesPlayed,
+                                          uint8_t &notesPlayedOver) const
 {
     //------Last Checked------//
     // - Jan 18, 2005
@@ -136,8 +138,8 @@ bool Position::HasIrregularGroupingTiming() const
 /// @param endVolume Holds the end volume return value
 /// @param duration Holds the duration return value
 /// @return True if the data was returned, false if not
-bool Position::GetVolumeSwell(uint8_t& startVolume, uint8_t& endVolume,
-    uint8_t& duration) const
+bool Position::GetVolumeSwell(uint8_t &startVolume, uint8_t &endVolume,
+                              uint8_t &duration) const
 {
     //------Last Checked------//
     // - Jan 19, 2005
@@ -147,7 +149,8 @@ bool Position::GetVolumeSwell(uint8_t& startVolume, uint8_t& endVolume,
     duration = 0;
 
     // Get the index of the volume swell
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, volumeSwell);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, volumeSwell);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -164,7 +167,8 @@ bool Position::GetVolumeSwell(uint8_t& startVolume, uint8_t& endVolume,
 /// @return True if the position has a volume swell, false if not
 bool Position::HasVolumeSwell() const
 {
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, volumeSwell) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray,
+                                              volumeSwell) != (uint32_t)-1);
 }
 
 /// Gets the tremolo bar data (if any)
@@ -172,8 +176,8 @@ bool Position::HasVolumeSwell() const
 /// @param duration Holds the duration return value
 /// @param pitch Holds the pitch return value
 /// @return True if the data was returned, false if not
-bool Position::GetTremoloBar(uint8_t& type, uint8_t& duration,
-    uint8_t& pitch) const
+bool Position::GetTremoloBar(uint8_t &type, uint8_t &duration,
+                             uint8_t &pitch) const
 {
     //------Last Checked------//
     // - Jan 19, 2005
@@ -183,7 +187,8 @@ bool Position::GetTremoloBar(uint8_t& type, uint8_t& duration,
     pitch = 0;
 
     // Get the index of the tremolo bar
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tremoloBar);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tremoloBar);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -202,18 +207,20 @@ bool Position::HasTremoloBar() const
 {
     //------Last Checked------//
     // - Jan 19, 2005
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, tremoloBar) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray,
+                                              tremoloBar) != (uint32_t)-1);
 }
 
 /// Gets the multibar rest data (if any)
 /// @param measureCount Holds the measure count return value
 /// @return True if the data was returned, false if not
-bool Position::GetMultibarRest(uint8_t& measureCount) const
+bool Position::GetMultibarRest(uint8_t &measureCount) const
 {
     measureCount = 0;
 
     // Get the index of the multibar rest
-    uint32_t index = ComplexSymbols::findComplexSymbol(m_complexSymbolArray, multibarRest);
+    uint32_t index =
+        ComplexSymbols::findComplexSymbol(m_complexSymbolArray, multibarRest);
     if (index == (uint32_t)-1)
         return (false);
 
@@ -230,7 +237,8 @@ bool Position::HasMultibarRest() const
 {
     //------Last Checked------//
     // - Jan 19, 2005
-    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray, multibarRest) != (uint32_t)-1);
+    return (ComplexSymbols::findComplexSymbol(m_complexSymbolArray,
+                                              multibarRest) != (uint32_t)-1);
 }
 
-}
+} // namespace PowerTabDocument

@@ -2,9 +2,9 @@
 // Name:            chorddiagram.cpp
 // Purpose:         Stores and renders a chord diagram
 // Author:          Brad Larsen
-// Modified by:     
+// Modified by:
 // Created:         Dec 16, 2004
-// RCS-ID:          
+// RCS-ID:
 // Copyright:       (c) Brad Larsen
 // License:         wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -12,26 +12,26 @@
 #include <sstream>
 
 #include "chorddiagram.h"
-#include "tuning.h"
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
+#include "tuning.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
-const uint8_t ChordDiagram::DEFAULT_TOP_FRET     = 0;
+const uint8_t ChordDiagram::DEFAULT_TOP_FRET = 0;
 
 // Top Fret Constants
-const uint8_t ChordDiagram::MIN_TOP_FRET         = 0;
-const uint8_t ChordDiagram::MAX_TOP_FRET         = 20;
+const uint8_t ChordDiagram::MIN_TOP_FRET = 0;
+const uint8_t ChordDiagram::MAX_TOP_FRET = 20;
 
 // Fret Number Constants
-const uint8_t ChordDiagram::MIN_FRET_NUMBER      = 0;
-const uint8_t ChordDiagram::MAX_FRET_NUMBER      = 24;
+const uint8_t ChordDiagram::MIN_FRET_NUMBER = 0;
+const uint8_t ChordDiagram::MAX_FRET_NUMBER = 24;
 
 /// Default Constructor
-ChordDiagram::ChordDiagram() :
-    m_topFret(DEFAULT_TOP_FRET)
+ChordDiagram::ChordDiagram() : m_topFret(DEFAULT_TOP_FRET)
 {
 }
 
@@ -39,9 +39,10 @@ ChordDiagram::ChordDiagram() :
 /// @param chordName Chord name represented in the chord diagram
 /// @param topFret The fret represented at the top of the chord diagram (zero =
 /// the nut)
-/// @param fretNumbers Fret numbers for each string in the chord diagram (from high to low)
-ChordDiagram::ChordDiagram(const ChordName& chordName, uint8_t topFret,
-                           const std::vector<uint8_t>& fretNumbers)
+/// @param fretNumbers Fret numbers for each string in the chord diagram (from
+/// high to low)
+ChordDiagram::ChordDiagram(const ChordName &chordName, uint8_t topFret,
+                           const std::vector<uint8_t> &fretNumbers)
     : m_topFret(topFret)
 {
     assert(IsValidTopFret(topFret));
@@ -52,24 +53,26 @@ ChordDiagram::ChordDiagram(const ChordName& chordName, uint8_t topFret,
 /// Secondary Constructor
 /// @param topFret The fret represented at the top of the chord diagram (zero =
 /// the nut)
-/// @param fretNumbers Fret numbers for each string in the chord diagram (from high to low)
-ChordDiagram::ChordDiagram(uint8_t topFret, const std::vector<uint8_t>& fretNumbers) :
-    m_topFret(topFret)
+/// @param fretNumbers Fret numbers for each string in the chord diagram (from
+/// high to low)
+ChordDiagram::ChordDiagram(uint8_t topFret,
+                           const std::vector<uint8_t> &fretNumbers)
+    : m_topFret(topFret)
 {
     assert(IsValidTopFret(topFret));
     AddFretNumbers(fretNumbers);
 }
 
 /// Copy Constructor
-ChordDiagram::ChordDiagram(const ChordDiagram& chordDiagram) :
-    PowerTabObject(), m_topFret(DEFAULT_TOP_FRET)
+ChordDiagram::ChordDiagram(const ChordDiagram &chordDiagram)
+    : PowerTabObject(), m_topFret(DEFAULT_TOP_FRET)
 {
     *this = chordDiagram;
 }
 
 // Operators
 /// Assignment Operator
-const ChordDiagram& ChordDiagram::operator=(const ChordDiagram& chordDiagram)
+const ChordDiagram &ChordDiagram::operator=(const ChordDiagram &chordDiagram)
 {
     m_chordName = chordDiagram.m_chordName;
     m_topFret = chordDiagram.m_topFret;
@@ -78,7 +81,7 @@ const ChordDiagram& ChordDiagram::operator=(const ChordDiagram& chordDiagram)
 }
 
 /// Equality Operator
-bool ChordDiagram::operator==(const ChordDiagram& chordDiagram) const
+bool ChordDiagram::operator==(const ChordDiagram &chordDiagram) const
 {
     return (m_chordName == chordDiagram.m_chordName &&
             m_topFret == chordDiagram.m_topFret &&
@@ -86,7 +89,7 @@ bool ChordDiagram::operator==(const ChordDiagram& chordDiagram) const
 }
 
 /// Inequality Operator
-bool ChordDiagram::operator!=(const ChordDiagram& chordDiagram) const
+bool ChordDiagram::operator!=(const ChordDiagram &chordDiagram) const
 {
     return (!operator==(chordDiagram));
 }
@@ -95,7 +98,7 @@ bool ChordDiagram::operator!=(const ChordDiagram& chordDiagram) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool ChordDiagram::Serialize(PowerTabOutputStream& stream) const
+bool ChordDiagram::Serialize(PowerTabOutputStream &stream) const
 {
     m_chordName.Serialize(stream);
     PTB_CHECK_THAT(stream.CheckState(), false);
@@ -111,7 +114,7 @@ bool ChordDiagram::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool ChordDiagram::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool ChordDiagram::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     m_chordName.Deserialize(stream, version);
 
@@ -126,10 +129,11 @@ bool ChordDiagram::Deserialize(PowerTabInputStream& stream, uint16_t version)
 /// @param chordName Chord name represented in the chord diagram
 /// @param topFret The fret represented at the top of the chord diagram (zero =
 /// the nut)
-/// @param fretNumbers Fret numbers for each string in the chord diagram (from high to low)
+/// @param fretNumbers Fret numbers for each string in the chord diagram (from
+/// high to low)
 /// @return True if the chord diagram was set, false if not
-bool ChordDiagram::SetChordDiagram(const ChordName& chordName, uint8_t topFret,
-                                   const std::vector<uint8_t>& fretNumbers)
+bool ChordDiagram::SetChordDiagram(const ChordName &chordName, uint8_t topFret,
+                                   const std::vector<uint8_t> &fretNumbers)
 {
     SetChordName(chordName);
     if (!SetTopFret(topFret))
@@ -143,8 +147,7 @@ bool ChordDiagram::SetChordDiagram(const ChordName& chordName, uint8_t topFret,
 /// @return True if the fret number is valid, false if not
 bool ChordDiagram::IsValidFretNumber(uint8_t fretNumber)
 {
-    return (fretNumber <= MAX_FRET_NUMBER) ||
-           (fretNumber == stringMuted) ||
+    return (fretNumber <= MAX_FRET_NUMBER) || (fretNumber == stringMuted) ||
            (fretNumber == notUsed);
 }
 
@@ -170,9 +173,10 @@ uint8_t ChordDiagram::GetFretNumber(uint32_t string) const
 }
 
 /// Sets the fret numbers for the chord diagram
-/// @param fretNumbers Fret numbers for each string in the chord diagram (from high to low)
+/// @param fretNumbers Fret numbers for each string in the chord diagram (from
+/// high to low)
 /// @return True if the chord diagram fret numbers were set, false if not
-bool ChordDiagram::AddFretNumbers(const std::vector<uint8_t>& fretNumbers)
+bool ChordDiagram::AddFretNumbers(const std::vector<uint8_t> &fretNumbers)
 {
     PTB_CHECK_THAT(Tuning::IsValidStringCount(fretNumbers.size()), false);
 
@@ -190,15 +194,16 @@ bool ChordDiagram::AddFretNumbers(const std::vector<uint8_t>& fretNumbers)
 /// ChordDiagram object
 /// @param chordDiagram ChordDiagram object to compare with
 /// @return True if the chord diagrams have the same voicing, false if not
-bool ChordDiagram::IsSameVoicing(const ChordDiagram& chordDiagram) const
+bool ChordDiagram::IsSameVoicing(const ChordDiagram &chordDiagram) const
 {
     return chordDiagram.m_fretNumberArray == this->m_fretNumberArray;
 }
 
 /// Determines if the chord diagram's voicing is the same
-/// @param fretNumbers Fret numbers for each string in the chord diagram (from high to low)
+/// @param fretNumbers Fret numbers for each string in the chord diagram (from
+/// high to low)
 /// @return True if all of the chord diagram fret numbers match, false if not
-bool ChordDiagram::IsSameVoicing(const std::vector<uint8_t>& fretNumbers) const
+bool ChordDiagram::IsSameVoicing(const std::vector<uint8_t> &fretNumbers) const
 {
     ChordDiagram temp;
     temp.AddFretNumbers(fretNumbers);
@@ -220,7 +225,7 @@ std::string ChordDiagram::GetSpelling() const
         }
         else
         {
-            text << static_cast<int>(m_fretNumberArray[i-1]);
+            text << static_cast<int>(m_fretNumberArray[i - 1]);
         }
 
         if (i > 1)
@@ -232,17 +237,17 @@ std::string ChordDiagram::GetSpelling() const
     return text.str();
 }
 
-void ChordDiagram::SetChordName(const ChordName& chordName)
+void ChordDiagram::SetChordName(const ChordName &chordName)
 {
     m_chordName = chordName;
 }
 
-const ChordName& ChordDiagram::GetChordName() const
+const ChordName &ChordDiagram::GetChordName() const
 {
     return m_chordName;
 }
 
-ChordName& ChordDiagram::GetChordName()
+ChordName &ChordDiagram::GetChordName()
 {
     return m_chordName;
 }
@@ -287,4 +292,4 @@ uint8_t ChordDiagram::GetTopFret() const
     return m_topFret;
 }
 
-}
+} // namespace PowerTabDocument

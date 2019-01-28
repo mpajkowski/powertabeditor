@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "keysignaturepainter.h"
 
-#include <app/pubsub/clickpubsub.h>
-#include <painters/musicfont.h>
 #include <QCursor>
 #include <QPainter>
+#include <app/pubsub/clickpubsub.h>
+#include <painters/musicfont.h>
 #include <score/keysignature.h>
 
 KeySignaturePainter::KeySignaturePainter(
@@ -60,7 +60,7 @@ void KeySignaturePainter::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 }
 
 void KeySignaturePainter::paint(QPainter *painter,
-                                const QStyleOptionGraphicsItem*, QWidget*)
+                                const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->setFont(myMusicFont);
 
@@ -80,8 +80,7 @@ void KeySignaturePainter::adjustHeightOffset(QVector<double> &lst)
 }
 
 void KeySignaturePainter::drawAccidentals(QVector<double> &positions,
-                                          QChar accidental,
-                                          QPainter *painter)
+                                          QChar accidental, QPainter *painter)
 {
     // Display natural if a cancellation occurs.
     if (myKeySignature.isCancellation())
@@ -89,8 +88,8 @@ void KeySignaturePainter::drawAccidentals(QVector<double> &positions,
 
     for (int i = 0; i < myKeySignature.getNumAccidentals(true); ++i)
     {
-        painter->drawText(i * LayoutInfo::ACCIDENTAL_WIDTH,
-                          positions.at(i), accidental);
+        painter->drawText(i * LayoutInfo::ACCIDENTAL_WIDTH, positions.at(i),
+                          accidental);
     }
 }
 

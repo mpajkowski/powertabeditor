@@ -1,30 +1,31 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DIALOGS_KEYBOARDSETTINGSDIALOG_H
 #define DIALOGS_KEYBOARDSETTINGSDIALOG_H
 
 #include <QDialog>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
-namespace Ui {
-    class KeyboardSettingsDialog;
+namespace Ui
+{
+class KeyboardSettingsDialog;
 }
 
 class Command;
@@ -47,7 +48,8 @@ private slots:
     /// Reset the active command to its default shortcut.
     void resetToDefaultShortcut();
 
-    /// Switch the text in the shortcut editor when the selected command changes.
+    /// Switch the text in the shortcut editor when the selected command
+    /// changes.
     void activeCommandChanged(QTreeWidgetItem *current,
                               QTreeWidgetItem *previous);
 
@@ -76,7 +78,7 @@ private:
     Command *activeCommand() const;
 
     Ui::KeyboardSettingsDialog *ui;
-    std::vector<Command*> myCommands;
+    std::vector<Command *> myCommands;
     /// The known shortcuts (used when checking for duplicates).
     std::unordered_map<std::string, int> myKnownShortcuts;
 

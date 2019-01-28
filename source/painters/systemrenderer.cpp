@@ -1,22 +1,26 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "systemrenderer.h"
 
+#include <QBrush>
+#include <QDebug>
+#include <QGraphicsItem>
+#include <QPen>
 #include <app/pubsub/clickpubsub.h>
 #include <app/scorearea.h>
 #include <app/viewoptions.h>
@@ -34,10 +38,6 @@
 #include <painters/stdnotationnote.h>
 #include <painters/timesignaturepainter.h>
 #include <painters/verticallayout.h>
-#include <QBrush>
-#include <QDebug>
-#include <QGraphicsItem>
-#include <QPen>
 #include <score/score.h>
 #include <score/scorelocation.h>
 #include <score/system.h>
@@ -77,8 +77,7 @@ SystemRenderer::SystemRenderer(const ScoreArea *score_area, const Score &score,
     myRehearsalSignFont.setPixelSize(12);
 }
 
-QGraphicsItem *SystemRenderer::operator()(const System &system,
-                                          int systemIndex)
+QGraphicsItem *SystemRenderer::operator()(const System &system, int systemIndex)
 {
     // Draw the bounding rectangle for the system.
     myParentSystem = new QGraphicsRectItem();
@@ -110,9 +109,9 @@ QGraphicsItem *SystemRenderer::operator()(const System &system,
             height += layout->getSystemSymbolSpacing();
         }
 
-        myParentStaff = new StaffPainter(layout,
-                                         ScoreLocation(myScore, systemIndex, i),
-                                         myScoreArea->getClickPubSub());
+        myParentStaff =
+            new StaffPainter(layout, ScoreLocation(myScore, systemIndex, i),
+                             myScoreArea->getClickPubSub());
         myParentStaff->setPos(0, height);
         myParentStaff->setParentItem(myParentSystem);
         height += layout->getStaffHeight();
@@ -130,9 +129,8 @@ QGraphicsItem *SystemRenderer::operator()(const System &system,
                                            : QChar(MusicFont::BassClef),
                                        myMusicNotationFont);
         auto group = new ClickableGroup(
-            QObject::tr("Click to change clef type."), [=]() {
-            pubsub->publish(ClickType::Clef, location);
-        });
+            QObject::tr("Click to change clef type."),
+            [=]() { pubsub->publish(ClickType::Clef, location); });
         group->addToGroup(clef);
         group->setPos(LayoutInfo::CLEF_PADDING,
                       layout->getTopStdNotationLine() + CLEF_OFFSET);
@@ -173,9 +171,8 @@ void SystemRenderer::drawTabClef(double x, const LayoutInfo &layout,
 
     auto pubsub = myScoreArea->getClickPubSub();
     auto group = new ClickableGroup(
-        QObject::tr("Click to edit the number of strings."), [=]() {
-        pubsub->publish(ClickType::TabClef, location);
-    });
+        QObject::tr("Click to edit the number of strings."),
+        [=]() { pubsub->publish(ClickType::TabClef, location); });
     group->addToGroup(clef);
 
     // Position the clef symbol.
@@ -210,13 +207,13 @@ void SystemRenderer::drawBarlines(const System &system, int systemIndex,
         const KeySignature &keySig = barline.getKeySignature();
         const TimeSignature &timeSig = barline.getTimeSignature();
 
-        BarlinePainter *barlinePainter = new BarlinePainter(layout, barline,
-                location, myScoreArea->getClickPubSub());
+        BarlinePainter *barlinePainter = new BarlinePainter(
+            layout, barline, location, myScoreArea->getClickPubSub());
 
         double x = layout->getPositionX(barline.getPosition());
         double keySigX = x + barlinePainter->boundingRect().width() - 1;
         double timeSigX = x + barlinePainter->boundingRect().width() +
-                layout->getWidth(keySig);
+                          layout->getWidth(keySig);
         double rehearsalSignX = x + 0.5 * layout->getPositionSpacing();
 
         if (barline == system.getBarlines().front()) // Start bar of system.
@@ -241,12 +238,12 @@ void SystemRenderer::drawBarlines(const System &system, int systemIndex,
         else if (barline == system.getBarlines().back()) // End bar.
         {
             x = LayoutInfo::STAFF_WIDTH -
-                    barlinePainter->boundingRect().width() / 2 - 1;
+                barlinePainter->boundingRect().width() / 2 - 1;
 
             if (barline.getBarType() == Barline::RepeatEnd)
                 x -= 6; // bit of a positioning hack.
             else if (barline.getBarType() == Barline::SingleBar)
-                x += 1 ;
+                x += 1;
             else if (barline.getBarType() == Barline::FreeTimeBar)
                 x += 2;
         }
@@ -257,8 +254,7 @@ void SystemRenderer::drawBarlines(const System &system, int systemIndex,
         if (keySig.isVisible())
         {
             KeySignaturePainter *keySigPainter = new KeySignaturePainter(
-                        layout, keySig, location,
-                        myScoreArea->getClickPubSub());
+                layout, keySig, location, myScoreArea->getClickPubSub());
 
             keySigPainter->setPos(keySigX, layout->getTopStdNotationLine());
             keySigPainter->setParentItem(myParentStaff);
@@ -267,8 +263,7 @@ void SystemRenderer::drawBarlines(const System &system, int systemIndex,
         if (timeSig.isVisible())
         {
             TimeSignaturePainter *timeSigPainter = new TimeSignaturePainter(
-                        layout, timeSig, location,
-                        myScoreArea->getClickPubSub());
+                layout, timeSig, location, myScoreArea->getClickPubSub());
 
             timeSigPainter->setPos(timeSigX, layout->getTopStdNotationLine());
             timeSigPainter->setParentItem(myParentStaff);
@@ -285,7 +280,8 @@ void SystemRenderer::drawBarlines(const System &system, int systemIndex,
             centerSymbolVertically(*signLetters, 0);
 
             QFontMetricsF metrics(myRehearsalSignFont);
-            const Barline *nextBar = system.getNextBarline(barline.getPosition());
+            const Barline *nextBar =
+                system.getNextBarline(barline.getPosition());
             Q_ASSERT(nextBar);
             const double signTextX =
                 signLetters->x() + signLetters->boundingRect().width() + 7;
@@ -331,7 +327,7 @@ void SystemRenderer::drawTabNotes(const Staff &staff,
             for (const Note &note : pos.getNotes())
             {
                 const QString text = QString::fromStdString(
-                            boost::lexical_cast<std::string>(note));
+                    boost::lexical_cast<std::string>(note));
 
                 auto tabNote = new SimpleTextItem(
                     text, myPlainTextFont,
@@ -357,14 +353,14 @@ void SystemRenderer::drawTabNotes(const Staff &staff,
 }
 
 void SystemRenderer::drawArpeggio(const Position &position, double x,
-                                  const LayoutInfo& layout)
+                                  const LayoutInfo &layout)
 {
     // Get the highest and lowest strings used at this position, and
     // convert the string indices to positions on the staff.
-    const double top = layout.getTabLine(
-                position.getNotes().front().getString() + 1);
-    const double bottom = layout.getTabLine(
-                position.getNotes().back().getString() + 1);
+    const double top =
+        layout.getTabLine(position.getNotes().front().getString() + 1);
+    const double bottom =
+        layout.getTabLine(position.getNotes().back().getString() + 1);
     const double height = bottom - top;
 
     // Take a vibrato segment, spanning the distance from top to bottom note,
@@ -380,8 +376,9 @@ void SystemRenderer::drawArpeggio(const Position &position, double x,
     arpeggio->setParentItem(myParentStaff);
 
     // Draw the end of the arpeggio.
-    const QChar arpeggioEnd = position.hasProperty(Position::ArpeggioUp) ?
-                MusicFont::ArpeggioUp : MusicFont::ArpeggioDown;
+    const QChar arpeggioEnd = position.hasProperty(Position::ArpeggioUp)
+                                  ? MusicFont::ArpeggioUp
+                                  : MusicFont::ArpeggioDown;
 
     auto endPoint = new SimpleTextItem(arpeggioEnd, myMusicNotationFont);
     const double y = position.hasProperty(Position::ArpeggioUp) ? top : bottom;
@@ -390,7 +387,7 @@ void SystemRenderer::drawArpeggio(const Position &position, double x,
 }
 
 void SystemRenderer::drawSystemSymbols(const System &system,
-                                       const LayoutInfo& layout)
+                                       const LayoutInfo &layout)
 {
     double height = 0;
 
@@ -493,8 +490,8 @@ void SystemRenderer::drawAlternateEndings(const System &system,
         // Otherwise, if there is no repeat bar just go to the next barline.
         if (endX == 0)
         {
-            endX = layout.getPositionX(system.getNextBarline(
-                                    ending.getPosition())->getPosition());
+            endX = layout.getPositionX(
+                system.getNextBarline(ending.getPosition())->getPosition());
         }
 
         // Draw to the center of the barline's position.
@@ -504,7 +501,8 @@ void SystemRenderer::drawAlternateEndings(const System &system,
         endX = boost::algorithm::clamp(endX, 0.0, LayoutInfo::STAFF_WIDTH);
 
         auto horizLine = new QGraphicsLineItem();
-        horizLine->setLine(0, TOP_LINE_OFFSET, endX - location, TOP_LINE_OFFSET);
+        horizLine->setLine(0, TOP_LINE_OFFSET, endX - location,
+                           TOP_LINE_OFFSET);
         horizLine->setPos(location, height);
         horizLine->setParentItem(myParentSystem);
     }
@@ -570,8 +568,7 @@ static QString getTripletFeelImage(const TempoMarker &tempo)
 }
 
 void SystemRenderer::drawTempoMarkers(const System &system,
-                                      const LayoutInfo &layout,
-                                      double height)
+                                      const LayoutInfo &layout, double height)
 {
     for (const TempoMarker &tempo : system.getTempoMarkers())
     {
@@ -611,9 +608,9 @@ void SystemRenderer::drawTempoMarkers(const System &system,
             // Add the beat type image.
             QFontMetricsF fm(font);
             QPixmap image(getBeatTypeImage(tempo.getBeatType()));
-            auto pixmap = new QGraphicsPixmapItem(image.scaled(
-                fm.width(imageSpacing), NOTE_HEIGHT,
-                Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            auto pixmap = new QGraphicsPixmapItem(
+                image.scaled(fm.width(imageSpacing), NOTE_HEIGHT,
+                             Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             pixmap->setX(fm.width(text));
             centerSymbolVertically(*pixmap, height);
             group->addToGroup(pixmap);
@@ -626,8 +623,8 @@ void SystemRenderer::drawTempoMarkers(const System &system,
                 // Add the second beat type image.
                 QPixmap image(getBeatTypeImage(tempo.getListessoBeatType()));
                 auto pixmap = new QGraphicsPixmapItem(image.scaled(
-                    fm.width(imageSpacing), NOTE_HEIGHT,
-                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    fm.width(imageSpacing), NOTE_HEIGHT, Qt::IgnoreAspectRatio,
+                    Qt::SmoothTransformation));
                 pixmap->setX(fm.width(text));
                 centerSymbolVertically(*pixmap, height);
                 group->addToGroup(pixmap);
@@ -645,8 +642,8 @@ void SystemRenderer::drawTempoMarkers(const System &system,
                 const QString imageSpacing(12, ' ');
                 QPixmap image(getTripletFeelImage(tempo));
                 pixmap = new QGraphicsPixmapItem(image.scaled(
-                    fm.width(imageSpacing), 21,
-                    Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    fm.width(imageSpacing), 21, Qt::IgnoreAspectRatio,
+                    Qt::SmoothTransformation));
                 pixmap->setX(fm.width(text));
                 centerSymbolVertically(*pixmap, height);
                 group->addToGroup(pixmap);
@@ -825,7 +822,7 @@ void SystemRenderer::drawPlayerChanges(const System &system, int staffIndex,
     for (const PlayerChange &change : system.getPlayerChanges())
     {
         const std::vector<ActivePlayer> activePlayers =
-                change.getActivePlayers(staffIndex);
+            change.getActivePlayers(staffIndex);
 
         QString description;
         if (!activePlayers.empty())
@@ -846,8 +843,8 @@ void SystemRenderer::drawPlayerChanges(const System &system, int staffIndex,
         auto text = new SimpleTextItem(description, myPlainTextFont);
         text->setPos(layout.getPositionX(change.getPosition()),
                      layout.getBottomStdNotationLine() +
-                     LayoutInfo::STAFF_BORDER_SPACING +
-                     layout.getStdNotationStaffBelowSpacing());
+                         LayoutInfo::STAFF_BORDER_SPACING +
+                         layout.getStdNotationStaffBelowSpacing());
         text->setParentItem(myParentStaff);
     }
 }
@@ -879,15 +876,15 @@ void SystemRenderer::drawSlides(const Staff &staff, const LayoutInfo &layout)
                         const Note *nextNote = VoiceUtils::getNextNote(
                             voice, pos.getPosition(), string);
                         slideUp = nextNote && nextNote->getFretNumber() >
-                                note->getFretNumber();
+                                                  note->getFretNumber();
                     }
 
                     const Position *nextPos =
                         VoiceUtils::getNextPosition(voice, pos.getPosition());
 
                     drawSlide(layout, string, slideUp, pos.getPosition(),
-                              nextPos ? nextPos->getPosition() :
-                                        pos.getPosition() + 1);
+                              nextPos ? nextPos->getPosition()
+                                      : pos.getPosition() + 1);
                 }
 
                 // Draw any slides going into the note.
@@ -935,8 +932,7 @@ void SystemRenderer::drawSlide(const LayoutInfo &layout, int string,
     path.lineTo(width - layout.getPositionSpacing() / 2, height);
 
     auto slide = new AntialiasedPathItem(path);
-    slide->setPos(left + layout.getPositionSpacing() / 1.5 + 1,
-                  y + height / 2);
+    slide->setPos(left + layout.getPositionSpacing() / 1.5 + 1, y + height / 2);
     slide->setParentItem(myParentStaff);
 }
 
@@ -948,36 +944,39 @@ void SystemRenderer::drawSymbolsBelowTabStaff(const LayoutInfo &layout)
 
         switch (symbolGroup.getSymbolType())
         {
-        case SymbolGroup::PickStrokeUp:
-            renderedSymbol = createPickStroke(QChar(MusicFont::PickStrokeUp));
-            break;
-        case SymbolGroup::PickStrokeDown:
-            renderedSymbol = createPickStroke(QChar(MusicFont::PickStrokeDown));
-            break;
-        case SymbolGroup::Tap:
-            renderedSymbol = createPlainTextSymbol("T", QFont::StyleNormal);
-            break;
-        case SymbolGroup::Hammeron:
-            renderedSymbol = createPlainTextSymbol("H", QFont::StyleNormal);
-            break;
-        case SymbolGroup::Pulloff:
-            renderedSymbol = createPlainTextSymbol("P", QFont::StyleNormal);
-            break;
-        case SymbolGroup::Slide:
-            renderedSymbol = createPlainTextSymbol("sl.", QFont::StyleItalic);
-            break;
-        case SymbolGroup::ArtificialHarmonic:
-        {
-            const Position *pos = ScoreUtils::findByPosition(
-                symbolGroup.getVoice().getPositions(),
-                symbolGroup.getLeftPosition());
-            Q_ASSERT(pos);
-            renderedSymbol = createArtificialHarmonicText(*pos);
-            break;
-        }
-        default:
-            Q_ASSERT(false);
-            break;
+            case SymbolGroup::PickStrokeUp:
+                renderedSymbol =
+                    createPickStroke(QChar(MusicFont::PickStrokeUp));
+                break;
+            case SymbolGroup::PickStrokeDown:
+                renderedSymbol =
+                    createPickStroke(QChar(MusicFont::PickStrokeDown));
+                break;
+            case SymbolGroup::Tap:
+                renderedSymbol = createPlainTextSymbol("T", QFont::StyleNormal);
+                break;
+            case SymbolGroup::Hammeron:
+                renderedSymbol = createPlainTextSymbol("H", QFont::StyleNormal);
+                break;
+            case SymbolGroup::Pulloff:
+                renderedSymbol = createPlainTextSymbol("P", QFont::StyleNormal);
+                break;
+            case SymbolGroup::Slide:
+                renderedSymbol =
+                    createPlainTextSymbol("sl.", QFont::StyleItalic);
+                break;
+            case SymbolGroup::ArtificialHarmonic:
+            {
+                const Position *pos = ScoreUtils::findByPosition(
+                    symbolGroup.getVoice().getPositions(),
+                    symbolGroup.getLeftPosition());
+                Q_ASSERT(pos);
+                renderedSymbol = createArtificialHarmonicText(*pos);
+                break;
+            }
+            default:
+                Q_ASSERT(false);
+                break;
         }
 
         double x = layout.getPositionX(symbolGroup.getLeftPosition());
@@ -986,7 +985,8 @@ void SystemRenderer::drawSymbolsBelowTabStaff(const LayoutInfo &layout)
             symbolGroup.getSymbolType() == SymbolGroup::Pulloff ||
             symbolGroup.getSymbolType() == SymbolGroup::Slide)
         {
-            x += 0.5 * (layout.getPositionX(symbolGroup.getRightPosition()) - x);
+            x +=
+                0.5 * (layout.getPositionX(symbolGroup.getRightPosition()) - x);
         }
 
         centerHorizontally(*renderedSymbol, x, x + symbolGroup.getWidth());
@@ -1027,11 +1027,11 @@ QGraphicsItem *SystemRenderer::createPlainTextSymbol(const QString &text,
 }
 
 /// Creates the text portion of an artificial harmonic, which displays the note.
-QGraphicsItem* SystemRenderer::createArtificialHarmonicText(
-        const Position &position)
+QGraphicsItem *SystemRenderer::createArtificialHarmonicText(
+    const Position &position)
 {
     // Find the note that has the harmonic.
-    auto it = boost::range::find_if(position.getNotes(), [] (const Note &note) {
+    auto it = boost::range::find_if(position.getNotes(), [](const Note &note) {
         return note.hasArtificialHarmonic();
     });
 
@@ -1046,66 +1046,62 @@ QGraphicsItem* SystemRenderer::createArtificialHarmonicText(
     name.setBassVariation(harmonic.getVariation());
 
     return createPlainTextSymbol(
-                QString::fromStdString(boost::lexical_cast<std::string>(name)),
-                QFont::StyleNormal);
+        QString::fromStdString(boost::lexical_cast<std::string>(name)),
+        QFont::StyleNormal);
 }
 
 void SystemRenderer::drawSymbolsAboveTabStaff(const Staff &staff,
-                                              const LayoutInfo& layout)
+                                              const LayoutInfo &layout)
 {
     for (const SymbolGroup &symbolGroup : layout.getTabStaffAboveSymbols())
     {
         QGraphicsItem *renderedSymbol = nullptr;
         const double width = symbolGroup.getWidth();
 
-        switch(symbolGroup.getSymbolType())
+        switch (symbolGroup.getSymbolType())
         {
-        case SymbolGroup::Bend:
-            renderedSymbol = createBendGroup(symbolGroup, layout);
-            break;
-        case SymbolGroup::LetRing:
-            renderedSymbol = createConnectedSymbolGroup("let ring",
-                                                        QFont::StyleItalic,
-                                                        width, layout);
-            break;
-        case SymbolGroup::Vibrato:
-            renderedSymbol = drawContinuousFontSymbols(MusicFont::Vibrato,
-                                                       width);
-            break;
-        case SymbolGroup::WideVibrato:
-            renderedSymbol = drawContinuousFontSymbols(MusicFont::WideVibrato,
-                                                       width);
-            break;
-        case SymbolGroup::PalmMuting:
-            renderedSymbol = createConnectedSymbolGroup("P.M.",
-                                                        QFont::StyleNormal,
-                                                        width, layout);
-            break;
-        case SymbolGroup::TremoloPicking:
-            renderedSymbol = createTremoloPicking(layout);
-            break;
-        case SymbolGroup::Trill:
-            renderedSymbol = createTrill(layout);
-            break;
-        case SymbolGroup::NaturalHarmonic:
-            renderedSymbol = createConnectedSymbolGroup("N.H.",
-                                                        QFont::StyleNormal,
-                                                        width, layout);
-            break;
-        case SymbolGroup::Dynamic:
-        {
-            const Dynamic *dynamic = ScoreUtils::findByPosition(
-                staff.getDynamics(), symbolGroup.getLeftPosition());
-            Q_ASSERT(dynamic);
+            case SymbolGroup::Bend:
+                renderedSymbol = createBendGroup(symbolGroup, layout);
+                break;
+            case SymbolGroup::LetRing:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "let ring", QFont::StyleItalic, width, layout);
+                break;
+            case SymbolGroup::Vibrato:
+                renderedSymbol =
+                    drawContinuousFontSymbols(MusicFont::Vibrato, width);
+                break;
+            case SymbolGroup::WideVibrato:
+                renderedSymbol =
+                    drawContinuousFontSymbols(MusicFont::WideVibrato, width);
+                break;
+            case SymbolGroup::PalmMuting:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "P.M.", QFont::StyleNormal, width, layout);
+                break;
+            case SymbolGroup::TremoloPicking:
+                renderedSymbol = createTremoloPicking(layout);
+                break;
+            case SymbolGroup::Trill:
+                renderedSymbol = createTrill(layout);
+                break;
+            case SymbolGroup::NaturalHarmonic:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "N.H.", QFont::StyleNormal, width, layout);
+                break;
+            case SymbolGroup::Dynamic:
+            {
+                const Dynamic *dynamic = ScoreUtils::findByPosition(
+                    staff.getDynamics(), symbolGroup.getLeftPosition());
+                Q_ASSERT(dynamic);
 
-            renderedSymbol = createDynamic(*dynamic);
-            break;
-        }
-        case SymbolGroup::ArtificialHarmonic:
-            renderedSymbol = createConnectedSymbolGroup("A.H.",
-                                                        QFont::StyleNormal,
-                                                        width, layout);
-            break;
+                renderedSymbol = createDynamic(*dynamic);
+                break;
+            }
+            case SymbolGroup::ArtificialHarmonic:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "A.H.", QFont::StyleNormal, width, layout);
+                break;
 #if 0
         case Layout::SymbolVolumeSwell:
         {
@@ -1120,12 +1116,12 @@ void SystemRenderer::drawSymbolsAboveTabStaff(const Staff &staff,
         case Layout::SymbolTremoloBar:
             renderedSymbol = new TremoloBarPainter(staff->GetPosition(0, symbolGroup.leftPosIndex),
                                                    width);
-            break;        
+            break;
 #endif
 
-        default:
-            Q_ASSERT(false);
-            break;
+            default:
+                Q_ASSERT(false);
+                break;
         }
 
         // Bends are positioned differently, since they overlap with the
@@ -1142,33 +1138,31 @@ void SystemRenderer::drawSymbolsAboveTabStaff(const Staff &staff,
     }
 }
 
-void SystemRenderer::drawSymbolsAboveStdNotationStaff(const LayoutInfo& layout)
+void SystemRenderer::drawSymbolsAboveStdNotationStaff(const LayoutInfo &layout)
 {
-    for (const SymbolGroup &symbolGroup : layout.getStdNotationStaffAboveSymbols())
+    for (const SymbolGroup &symbolGroup :
+         layout.getStdNotationStaffAboveSymbols())
     {
         QGraphicsItem *renderedSymbol = nullptr;
 
         switch (symbolGroup.getSymbolType())
         {
-        case SymbolGroup::Octave8va:
-            renderedSymbol = createConnectedSymbolGroup("8va",
-                                                        QFont::StyleItalic,
-                                                        symbolGroup.getWidth(),
-                                                        layout);
-            break;
-        case SymbolGroup::Octave15ma:
-            renderedSymbol = createConnectedSymbolGroup("15ma",
-                                                        QFont::StyleItalic,
-                                                        symbolGroup.getWidth(),
-                                                        layout);
-            break;
-        default:
-            // All symbol types should have been dealt with by now.
-            Q_ASSERT(false);
-            break;
+            case SymbolGroup::Octave8va:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "8va", QFont::StyleItalic, symbolGroup.getWidth(), layout);
+                break;
+            case SymbolGroup::Octave15ma:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "15ma", QFont::StyleItalic, symbolGroup.getWidth(), layout);
+                break;
+            default:
+                // All symbol types should have been dealt with by now.
+                Q_ASSERT(false);
+                break;
         }
 
-        renderedSymbol->setPos(layout.getPositionX(symbolGroup.getLeftPosition()), 0);
+        renderedSymbol->setPos(
+            layout.getPositionX(symbolGroup.getLeftPosition()), 0);
         renderedSymbol->setParentItem(myParentStaff);
     }
 }
@@ -1182,35 +1176,31 @@ void SystemRenderer::drawSymbolsBelowStdNotationStaff(const LayoutInfo &layout)
 
         switch (symbolGroup.getSymbolType())
         {
-        case SymbolGroup::Octave8vb:
-            renderedSymbol = createConnectedSymbolGroup("8vb",
-                                                        QFont::StyleItalic,
-                                                        symbolGroup.getWidth(),
-                                                        layout);
-            break;
-        case SymbolGroup::Octave15mb:
-            renderedSymbol = createConnectedSymbolGroup("15mb",
-                                                        QFont::StyleItalic,
-                                                        symbolGroup.getWidth(),
-                                                        layout);
-            break;
-        default:
-            // All symbol types should have been dealt with by now.
-            Q_ASSERT(false);
-            break;
+            case SymbolGroup::Octave8vb:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "8vb", QFont::StyleItalic, symbolGroup.getWidth(), layout);
+                break;
+            case SymbolGroup::Octave15mb:
+                renderedSymbol = createConnectedSymbolGroup(
+                    "15mb", QFont::StyleItalic, symbolGroup.getWidth(), layout);
+                break;
+            default:
+                // All symbol types should have been dealt with by now.
+                Q_ASSERT(false);
+                break;
         }
 
-        renderedSymbol->setPos(layout.getPositionX(symbolGroup.getLeftPosition()),
-                               layout.getBottomStdNotationLine() +
-                               layout.getStdNotationStaffBelowSpacing());
+        renderedSymbol->setPos(
+            layout.getPositionX(symbolGroup.getLeftPosition()),
+            layout.getBottomStdNotationLine() +
+                layout.getStdNotationStaffBelowSpacing());
         renderedSymbol->setParentItem(myParentStaff);
     }
 }
 
-QGraphicsItem *SystemRenderer::createConnectedSymbolGroup(const QString &text,
-                                                          QFont::Style style,
-                                                          double width,
-                                                          const LayoutInfo &layout)
+QGraphicsItem *SystemRenderer::createConnectedSymbolGroup(
+    const QString &text, QFont::Style style, double width,
+    const LayoutInfo &layout)
 {
     mySymbolTextFont.setStyle(style);
 
@@ -1289,7 +1279,7 @@ QGraphicsItem *SystemRenderer::drawContinuousFontSymbols(QChar symbol,
     return group;
 }
 
-QGraphicsItem *SystemRenderer::createTremoloPicking(const LayoutInfo& layout)
+QGraphicsItem *SystemRenderer::createTremoloPicking(const LayoutInfo &layout)
 {
     const double offset = LayoutInfo::TAB_SYMBOL_SPACING / 3;
 
@@ -1307,7 +1297,7 @@ QGraphicsItem *SystemRenderer::createTremoloPicking(const LayoutInfo& layout)
     return group;
 }
 
-QGraphicsItem *SystemRenderer::createTrill(const LayoutInfo& layout)
+QGraphicsItem *SystemRenderer::createTrill(const LayoutInfo &layout)
 {
     QFont font(MusicFont::getFont(21));
 
@@ -1362,7 +1352,8 @@ void SystemRenderer::drawStdNotation(const System &system, const Staff &staff,
         {
             const double x = layout.getPositionX(pos.getPosition());
 
-            const Barline *prevBar = system.getPreviousBarline(pos.getPosition());
+            const Barline *prevBar =
+                system.getPreviousBarline(pos.getPosition());
             if (!prevBar)
                 prevBar = &system.getBarlines().front();
 
@@ -1402,8 +1393,8 @@ void SystemRenderer::drawStdNotation(const System &system, const Staff &staff,
         const double accidental_width = fm->width(accidental_text);
 
         const double x = layout.getPositionX(note.getPosition()) +
-                0.5 * (layout.getPositionSpacing() - note_head_width) -
-                accidental_width;
+                         0.5 * (layout.getPositionSpacing() - note_head_width) -
+                         accidental_width;
         const double y =
             note.getY() + layout.getTopStdNotationLine() - fm->ascent();
         const QString note_text = accidental_text + note_head_char;
@@ -1428,60 +1419,59 @@ void SystemRenderer::drawStdNotation(const System &system, const Staff &staff,
                 group->addToGroup(dotText2);
             }
         }
-        
+
         if (note.getNote()->hasLeftHandFingering())
         {
             if (!group)
             {
                 group = new QGraphicsItemGroup();
             }
-            
-            
+
             const auto fingering = note.getNote()->getLeftHandFingering();
             const auto number = fingering.getFingerNumber();
-            auto numberText = new SimpleTextItem(QString::number(number), myPlainTextFont);
-            
+            auto numberText =
+                new SimpleTextItem(QString::number(number), myPlainTextFont);
+
             double numberX;
             double numberY;
             switch (fingering.getDisplayPosition())
             {
-            case LeftHandFingering::DisplayPosition::Left:
-                numberX = -note_head_width - 1;
-                numberY = 25;
-                break;
-            case LeftHandFingering::DisplayPosition::AboveLeft:
-                numberX = -note_head_width + 1;
-                numberY = 18;
-                break;
-            case LeftHandFingering::DisplayPosition::Above:
-                numberX = 0;
-                numberY = 17;
-                break;
-            case LeftHandFingering::DisplayPosition::AboveRight:
-                numberX = note_head_width + 1;
-                numberY = 18;
-                break;
-            case LeftHandFingering::DisplayPosition::Right:
-                numberX = note_head_width + 3;
-                numberY = 25;
-                break;
-            case LeftHandFingering::DisplayPosition::BelowRight:
-                numberX = note_head_width + 1;
-                numberY = 32;
-                break;
-            case LeftHandFingering::DisplayPosition::Below:
-                numberX = 0;
-                numberY = 33;
-                break;
-            case LeftHandFingering::DisplayPosition::BelowLeft:
-                numberX = -note_head_width + 1;
-                numberY = 32;
-                break;
+                case LeftHandFingering::DisplayPosition::Left:
+                    numberX = -note_head_width - 1;
+                    numberY = 25;
+                    break;
+                case LeftHandFingering::DisplayPosition::AboveLeft:
+                    numberX = -note_head_width + 1;
+                    numberY = 18;
+                    break;
+                case LeftHandFingering::DisplayPosition::Above:
+                    numberX = 0;
+                    numberY = 17;
+                    break;
+                case LeftHandFingering::DisplayPosition::AboveRight:
+                    numberX = note_head_width + 1;
+                    numberY = 18;
+                    break;
+                case LeftHandFingering::DisplayPosition::Right:
+                    numberX = note_head_width + 3;
+                    numberY = 25;
+                    break;
+                case LeftHandFingering::DisplayPosition::BelowRight:
+                    numberX = note_head_width + 1;
+                    numberY = 32;
+                    break;
+                case LeftHandFingering::DisplayPosition::Below:
+                    numberX = 0;
+                    numberY = 33;
+                    break;
+                case LeftHandFingering::DisplayPosition::BelowLeft:
+                    numberX = -note_head_width + 1;
+                    numberY = 32;
+                    break;
             }
-            
+
             numberText->setPos(numberX, numberY);
             group->addToGroup(numberText);
-            
         }
 
         if (group)
@@ -1497,10 +1487,10 @@ void SystemRenderer::drawStdNotation(const System &system, const Staff &staff,
         }
 
         const int position = note.getPosition();
-        minNoteLocations[position] = std::min(minNoteLocations[position],
-                                              note.getY());
-        maxNoteLocations[position] = std::max(maxNoteLocations[position],
-                                              note.getY());
+        minNoteLocations[position] =
+            std::min(minNoteLocations[position], note.getY());
+        maxNoteLocations[position] =
+            std::max(maxNoteLocations[position], note.getY());
         noteHeadWidths[position] = note_head_width;
         noteHeadCenters[position] = x;
     }
@@ -1590,7 +1580,8 @@ void SystemRenderer::drawIrregularGroups(const Voice &voice,
         {
             NoteStem highestStem = NoteStem::findHighestStem(begin, end);
 
-            y1 = highestStem.getTop() - LayoutInfo::IRREGULAR_GROUP_BEAM_SPACING;
+            y1 =
+                highestStem.getTop() - LayoutInfo::IRREGULAR_GROUP_BEAM_SPACING;
             y2 = highestStem.getTop() -
                  topLayout.addBox(begin->getPositionIndex(),
                                   last->getPositionIndex(), 1) *
@@ -1600,7 +1591,8 @@ void SystemRenderer::drawIrregularGroups(const Voice &voice,
         {
             NoteStem lowestStem = NoteStem::findLowestStem(begin, end);
 
-            y1 = lowestStem.getBottom() + LayoutInfo::IRREGULAR_GROUP_BEAM_SPACING;
+            y1 = lowestStem.getBottom() +
+                 LayoutInfo::IRREGULAR_GROUP_BEAM_SPACING;
             y2 = lowestStem.getBottom() +
                  bottomLayout.addBox(begin->getPositionIndex(),
                                      last->getPositionIndex(), 1) *
@@ -1611,8 +1603,8 @@ void SystemRenderer::drawIrregularGroups(const Voice &voice,
         const double rightX = last->getX();
 
         // Draw the value of the irregular grouping.
-        const QString text = QString::fromStdString(
-                    boost::lexical_cast<std::string>(group));
+        const QString text =
+            QString::fromStdString(boost::lexical_cast<std::string>(group));
 
         QFont font = myMusicNotationFont;
         font.setItalic(true);
@@ -1657,13 +1649,13 @@ void SystemRenderer::drawMultiBarRest(const System &system,
     const Barline *rightBar = system.getNextBarline(leftBar.getPosition());
     Q_ASSERT(rightBar);
 
-    const double leftX = (leftBar.getPosition() == 0) ?
-                layout.getPositionX(leftBar.getPosition()) :
-                layout.getPositionX(leftBar.getPosition() + 1);
+    const double leftX = (leftBar.getPosition() == 0)
+                             ? layout.getPositionX(leftBar.getPosition())
+                             : layout.getPositionX(leftBar.getPosition() + 1);
 
     const double rightX = boost::algorithm::clamp(
-                layout.getPositionX(rightBar->getPosition()), 0.0,
-                LayoutInfo::STAFF_WIDTH - layout.getPositionSpacing() / 2.0);
+        layout.getPositionX(rightBar->getPosition()), 0.0,
+        LayoutInfo::STAFF_WIDTH - layout.getPositionSpacing() / 2.0);
 
     // Draw the measure count.
     auto measureCountText =
@@ -1686,46 +1678,48 @@ void SystemRenderer::drawMultiBarRest(const System &system,
     vertLineRight->setParentItem(myParentStaff);
 
     auto horizontalLine = new QGraphicsRectItem(
-        leftX, layout.getStdNotationLine(2) +
-                   0.5 * LayoutInfo::STD_NOTATION_LINE_SPACING,
+        leftX,
+        layout.getStdNotationLine(2) +
+            0.5 * LayoutInfo::STD_NOTATION_LINE_SPACING,
         rightX - leftX, LayoutInfo::STD_NOTATION_LINE_SPACING * 0.9);
 
     horizontalLine->setBrush(QBrush(Qt::black));
     horizontalLine->setParentItem(myParentStaff);
 }
 
-void SystemRenderer::drawRest(const Position &pos, double x, const LayoutInfo &layout)
+void SystemRenderer::drawRest(const Position &pos, double x,
+                              const LayoutInfo &layout)
 {
     // Position it approximately in the middle of the staff.
-    double y = 2 * LayoutInfo::STD_NOTATION_LINE_SPACING -
-            myMusicFontMetrics.ascent();
+    double y =
+        2 * LayoutInfo::STD_NOTATION_LINE_SPACING - myMusicFontMetrics.ascent();
 
     QChar symbol;
     switch (pos.getDurationType())
     {
-    case Position::WholeNote:
-        symbol = MusicFont::WholeRest;
-        y -= LayoutInfo::STD_NOTATION_LINE_SPACING - 1;
-        break;
-    case Position::HalfNote:
-        symbol = MusicFont::HalfRest;
-        break;
-    case Position::QuarterNote:
-        symbol = MusicFont::QuarterRest;
-        break;
-    case Position::EighthNote:
-        symbol = MusicFont::EighthRest;
-        break;
-    case Position::SixteenthNote:
-        symbol = MusicFont::SixteenthRest;
-        break;
-    case Position::ThirtySecondNote:
-        symbol = MusicFont::ThirtySecondRest;
-        break;
-    case Position::SixtyFourthNote:
-        symbol = MusicFont::SixtyFourthRest;
-        y -= 3; // Compensate for the extra height of this symbol.
-        break;
+        case Position::WholeNote:
+            symbol = MusicFont::WholeRest;
+            y -= LayoutInfo::STD_NOTATION_LINE_SPACING - 1;
+            break;
+        case Position::HalfNote:
+            symbol = MusicFont::HalfRest;
+            break;
+        case Position::QuarterNote:
+            symbol = MusicFont::QuarterRest;
+            break;
+        case Position::EighthNote:
+            symbol = MusicFont::EighthRest;
+            break;
+        case Position::SixteenthNote:
+            symbol = MusicFont::SixteenthRest;
+            break;
+        case Position::ThirtySecondNote:
+            symbol = MusicFont::ThirtySecondRest;
+            break;
+        case Position::SixtyFourthNote:
+            symbol = MusicFont::SixtyFourthRest;
+            y -= 3; // Compensate for the extra height of this symbol.
+            break;
     }
 
     auto group = new QGraphicsItemGroup();
@@ -1738,7 +1732,7 @@ void SystemRenderer::drawRest(const Position &pos, double x, const LayoutInfo &l
     const double dotX = myMusicNotationFont.pixelSize() / 2.0;
     // Position just below second line of staff.
     const double dotY = 1.6 * LayoutInfo::STD_NOTATION_LINE_SPACING -
-            myMusicFontMetrics.ascent();
+                        myMusicFontMetrics.ascent();
 
     if (pos.hasProperty(Position::Dotted) ||
         pos.hasProperty(Position::DoubleDotted))
@@ -1761,10 +1755,9 @@ void SystemRenderer::drawRest(const Position &pos, double x, const LayoutInfo &l
 }
 
 void SystemRenderer::drawLedgerLines(
-        const LayoutInfo &layout,
-        const std::map<int, double> &minNoteLocations,
-        const std::map<int, double> &maxNoteLocations,
-        const std::map<int, double> &noteHeadWidths)
+    const LayoutInfo &layout, const std::map<int, double> &minNoteLocations,
+    const std::map<int, double> &maxNoteLocations,
+    const std::map<int, double> &noteHeadWidths)
 {
     QPainterPath path;
 
@@ -1773,11 +1766,11 @@ void SystemRenderer::drawLedgerLines(
         const double highestNote = minNoteLocations.at(position);
         const double lowestNote = maxNoteLocations.at(position);
 
-        const int numLedgerLinesTop = -highestNote /
-                LayoutInfo::STD_NOTATION_LINE_SPACING;
+        const int numLedgerLinesTop =
+            -highestNote / LayoutInfo::STD_NOTATION_LINE_SPACING;
         const int numLedgerLinesBottom =
-                (lowestNote - layout.getStdNotationStaffHeight()) /
-                LayoutInfo::STD_NOTATION_LINE_SPACING;
+            (lowestNote - layout.getStdNotationStaffHeight()) /
+            LayoutInfo::STD_NOTATION_LINE_SPACING;
 
         std::vector<double> ledgerLineLocations;
 
@@ -1787,7 +1780,7 @@ void SystemRenderer::drawLedgerLines(
             for (int i = 1; i <= numLedgerLinesTop; ++i)
             {
                 ledgerLineLocations.push_back(
-                            topLine - i * LayoutInfo::STD_NOTATION_LINE_SPACING);
+                    topLine - i * LayoutInfo::STD_NOTATION_LINE_SPACING);
             }
         }
 
@@ -1796,14 +1789,14 @@ void SystemRenderer::drawLedgerLines(
             const int bottomLine = layout.getBottomStdNotationLine();
             for (int i = 1; i <= numLedgerLinesBottom; ++i)
             {
-                ledgerLineLocations.push_back(bottomLine +
-                            i * LayoutInfo::STD_NOTATION_LINE_SPACING);
+                ledgerLineLocations.push_back(
+                    bottomLine + i * LayoutInfo::STD_NOTATION_LINE_SPACING);
             }
         }
 
         const double ledgerLineWidth = noteHeadWidths.at(position) * 2;
         const double x = layout.getPositionX(position) +
-                0.5 * (layout.getPositionSpacing() - ledgerLineWidth);
+                         0.5 * (layout.getPositionSpacing() - ledgerLineWidth);
 
         for (double location : ledgerLineLocations)
         {
@@ -1897,10 +1890,10 @@ QGraphicsItem *SystemRenderer::createBendGroup(const SymbolGroup &group,
         {
             if (!note.hasBend())
                 continue;
-            
+
             const Bend &bend = note.getBend();
             const Bend::BendType type = bend.getType();
-            
+
             const double x = layout.getPositionX(i);
             const double leftX = x + 0.75 * layout.getPositionSpacing();
 
@@ -1924,17 +1917,19 @@ QGraphicsItem *SystemRenderer::createBendGroup(const SymbolGroup &group,
                 }
 
                 rightX = nextPos ? layout.getPositionX(nextPos->getPosition())
-                                 : LayoutInfo::STAFF_WIDTH - layout.getPositionSpacing();
+                                 : LayoutInfo::STAFF_WIDTH -
+                                       layout.getPositionSpacing();
                 // Move to the middle of the position.
                 rightX += 0.5 * layout.getPositionSpacing();
             }
 
-            const double yStart = getBendHeight(bend.getStartPoint(), note, layout);
+            const double yStart =
+                getBendHeight(bend.getStartPoint(), note, layout);
             const double yEnd = getBendHeight(bend.getEndPoint(), note, layout);
             // If the bend has a release, move the final position up a bit to
             // make room for the tab note.
             const double yRelease = yEnd - 0.5 * layout.getTabLineSpacing();
-            
+
             if (type == Bend::ImmediateRelease)
                 createDashedLine(itemGroup, prevX, rightX, yStart);
             else if (type == Bend::GradualRelease)

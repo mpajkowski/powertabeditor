@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2015 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2015 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "viewfilterdialog.h"
 #include "ui_viewfilterdialog.h"
@@ -34,12 +34,10 @@ void ViewFilterDialog::setPresenter(ViewFilterPresenter *presenter)
 {
     myPresenter = presenter;
 
-    connect(ui->addFilterButton, &QToolButton::clicked, [&]() {
-        myPresenter->addFilter();
-    });
-    connect(ui->removeFilterButton, &QToolButton::clicked, [&]() {
-        myPresenter->removeSelectedFilter();
-    });
+    connect(ui->addFilterButton, &QToolButton::clicked,
+            [&]() { myPresenter->addFilter(); });
+    connect(ui->removeFilterButton, &QToolButton::clicked,
+            [&]() { myPresenter->removeSelectedFilter(); });
     connect(ui->filterList, &QListWidget::itemClicked, [&](QListWidgetItem *) {
         myPresenter->selectFilter(ui->filterList->currentRow());
     });
@@ -47,9 +45,8 @@ void ViewFilterDialog::setPresenter(ViewFilterPresenter *presenter)
     connect(ui->nameLineEdit, &QLineEdit::textEdited, [&](const QString &s) {
         myPresenter->editFilterDescription(s.toStdString());
     });
-    connect(ui->addRuleButton, &QToolButton::clicked, [&]() {
-        myPresenter->addRule();
-    });
+    connect(ui->addRuleButton, &QToolButton::clicked,
+            [&]() { myPresenter->addRule(); });
 }
 
 bool ViewFilterDialog::launch()
@@ -96,11 +93,10 @@ void ViewFilterDialog::update(const std::vector<std::string> &names,
 
             connect(widget, &FilterRuleWidget::changed,
                     [=](const FilterRule &rule) {
-                myPresenter->editRule(i, rule);
-            });
-            connect(widget, &FilterRuleWidget::removeRequested, [=]() {
-                myPresenter->removeRule(i);
-            });
+                        myPresenter->editRule(i, rule);
+                    });
+            connect(widget, &FilterRuleWidget::removeRequested,
+                    [=]() { myPresenter->removeRule(i); });
         }
 
         // Update widgets.

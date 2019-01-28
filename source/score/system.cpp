@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "system.h"
 
+#include "utils.h"
 #include <algorithm>
 #include <boost/range/adaptor/reversed.hpp>
 #include <cstddef>
-#include "utils.h"
 
 System::System()
 {
@@ -38,8 +38,7 @@ bool System::operator==(const System &other) const
            myAlternateEndings == other.myAlternateEndings &&
            myDirections == other.myDirections &&
            myPlayerChanges == other.myPlayerChanges &&
-           myChords == other.myChords &&
-           myTextItems == other.myTextItems;
+           myChords == other.myChords && myTextItems == other.myTextItems;
 }
 
 boost::iterator_range<System::StaffIterator> System::getStaves()
@@ -128,7 +127,8 @@ boost::iterator_range<System::TempoMarkerIterator> System::getTempoMarkers()
     return boost::make_iterator_range(myTempoMarkers);
 }
 
-boost::iterator_range<System::TempoMarkerConstIterator> System::getTempoMarkers() const
+boost::iterator_range<System::TempoMarkerConstIterator> System::
+    getTempoMarkers() const
 {
     return boost::make_iterator_range(myTempoMarkers);
 }
@@ -143,12 +143,14 @@ void System::removeTempoMarker(const TempoMarker &marker)
     ScoreUtils::removeObject(myTempoMarkers, marker);
 }
 
-boost::iterator_range<System::AlternateEndingIterator> System::getAlternateEndings()
+boost::iterator_range<System::AlternateEndingIterator> System::
+    getAlternateEndings()
 {
     return boost::make_iterator_range(myAlternateEndings);
 }
 
-boost::iterator_range<System::AlternateEndingConstIterator> System::getAlternateEndings() const
+boost::iterator_range<System::AlternateEndingConstIterator> System::
+    getAlternateEndings() const
 {
     return boost::make_iterator_range(myAlternateEndings);
 }
@@ -168,7 +170,8 @@ boost::iterator_range<System::DirectionIterator> System::getDirections()
     return boost::make_iterator_range(myDirections);
 }
 
-boost::iterator_range<System::DirectionConstIterator> System::getDirections() const
+boost::iterator_range<System::DirectionConstIterator> System::getDirections()
+    const
 {
     return boost::make_iterator_range(myDirections);
 }
@@ -188,7 +191,8 @@ boost::iterator_range<System::PlayerChangeIterator> System::getPlayerChanges()
     return boost::make_iterator_range(myPlayerChanges);
 }
 
-boost::iterator_range<System::PlayerChangeConstIterator> System::getPlayerChanges() const
+boost::iterator_range<System::PlayerChangeConstIterator> System::
+    getPlayerChanges() const
 {
     return boost::make_iterator_range(myPlayerChanges);
 }
@@ -228,7 +232,8 @@ boost::iterator_range<System::TextItemIterator> System::getTextItems()
     return boost::make_iterator_range(myTextItems);
 }
 
-boost::iterator_range<System::TextItemConstIterator> System::getTextItems() const
+boost::iterator_range<System::TextItemConstIterator> System::getTextItems()
+    const
 {
     return boost::make_iterator_range(myTextItems);
 }
@@ -244,8 +249,7 @@ void System::removeTextItem(const TextItem &text)
 }
 
 template <typename T>
-static void shift(const T &range, int position,
-                  int offset)
+static void shift(const T &range, int position, int offset)
 {
     for (auto &obj : range)
     {

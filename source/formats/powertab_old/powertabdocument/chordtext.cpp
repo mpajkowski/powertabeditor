@@ -14,15 +14,15 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 // Default Constants
 const uint8_t ChordText::DEFAULT_POSITION = 0;
 
 // Constructor/Destructor
 /// Default Constructor
-ChordText::ChordText() :
-    m_position(DEFAULT_POSITION)
+ChordText::ChordText() : m_position(DEFAULT_POSITION)
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -32,8 +32,8 @@ ChordText::ChordText() :
 /// @param position Zero-based index of the position within the system where the
 /// chord text is anchored
 /// @param chordName Chord name represented in the chord text
-ChordText::ChordText(uint32_t position, const ChordName& chordName) :
-    m_position((uint8_t)position), m_chordName(chordName)
+ChordText::ChordText(uint32_t position, const ChordName &chordName)
+    : m_position((uint8_t)position), m_chordName(chordName)
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -41,8 +41,8 @@ ChordText::ChordText(uint32_t position, const ChordName& chordName) :
 }
 
 /// Copy Constructor
-ChordText::ChordText(const ChordText& chordText) :
-    PowerTabObject(), m_position(DEFAULT_POSITION)
+ChordText::ChordText(const ChordText &chordText)
+    : PowerTabObject(), m_position(DEFAULT_POSITION)
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -58,7 +58,7 @@ ChordText::~ChordText()
 
 // Operators
 /// Assignment Operator
-const ChordText& ChordText::operator=(const ChordText& chordText)
+const ChordText &ChordText::operator=(const ChordText &chordText)
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -73,18 +73,16 @@ const ChordText& ChordText::operator=(const ChordText& chordText)
 }
 
 /// Equality Operator
-bool ChordText::operator==(const ChordText& chordText) const
+bool ChordText::operator==(const ChordText &chordText) const
 {
     //------Last Checked------//
     // - Jan 3, 2005
-    return (
-        (m_position == chordText.m_position) &&
-        (m_chordName == chordText.m_chordName)
-    );
+    return ((m_position == chordText.m_position) &&
+            (m_chordName == chordText.m_chordName));
 }
 
 /// Inequality Operator
-bool ChordText::operator!=(const ChordText& chordText) const
+bool ChordText::operator!=(const ChordText &chordText) const
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -95,7 +93,7 @@ bool ChordText::operator!=(const ChordText& chordText) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool ChordText::Serialize(PowerTabOutputStream& stream) const
+bool ChordText::Serialize(PowerTabOutputStream &stream) const
 {
     //------Last Checked------//
     // - Jan 3, 2005
@@ -112,7 +110,7 @@ bool ChordText::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool ChordText::Deserialize(PowerTabInputStream& stream, uint16_t version)
+bool ChordText::Deserialize(PowerTabInputStream &stream, uint16_t version)
 {
     stream >> m_position;
 
@@ -121,4 +119,4 @@ bool ChordText::Deserialize(PowerTabInputStream& stream, uint16_t version)
     return true;
 }
 
-}
+} // namespace PowerTabDocument

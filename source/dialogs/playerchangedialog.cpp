@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "playerchangedialog.h"
 #include "ui_playerchangedialog.h"
@@ -25,8 +25,7 @@
 PlayerChangeDialog::PlayerChangeDialog(QWidget *parent, const Score &score,
                                        const System &system,
                                        const PlayerChange *currentPlayers)
-    : QDialog(parent),
-      ui(new Ui::PlayerChangeDialog)
+    : QDialog(parent), ui(new Ui::PlayerChangeDialog)
 {
     ui->setupUi(this);
 
@@ -49,8 +48,7 @@ PlayerChangeDialog::PlayerChangeDialog(QWidget *parent, const Score &score,
         layout->addWidget(getInstrumentComboBox(score));
 
         ui->formLayout->addRow(
-                    QString::fromStdString(player.getDescription() + ":"),
-                    layout);
+            QString::fromStdString(player.getDescription() + ":"), layout);
     }
 
     // Initialize the dialog with the current staff/instrument for each player.
@@ -59,7 +57,7 @@ PlayerChangeDialog::PlayerChangeDialog(QWidget *parent, const Score &score,
         for (unsigned int staff = 0; staff < system.getStaves().size(); ++staff)
         {
             std::vector<ActivePlayer> players =
-                    currentPlayers->getActivePlayers(staff);
+                currentPlayers->getActivePlayers(staff);
 
             for (const ActivePlayer &player : players)
             {
@@ -67,7 +65,7 @@ PlayerChangeDialog::PlayerChangeDialog(QWidget *parent, const Score &score,
                 const int idx = myStaffComboBoxes.at(i)->findData(staff);
                 myStaffComboBoxes.at(i)->setCurrentIndex(idx < 0 ? 0 : idx);
                 myInstrumentComboBoxes.at(i)->setCurrentIndex(
-                            player.getInstrumentNumber());
+                    player.getInstrumentNumber());
             }
         }
     }
@@ -89,8 +87,9 @@ PlayerChange PlayerChangeDialog::getPlayerChange() const
         if (myStaffComboBoxes[i]->currentIndex() < 0)
             continue;
 
-        const int staff = myStaffComboBoxes[i]->itemData(
-                    myStaffComboBoxes[i]->currentIndex()).toInt();
+        const int staff = myStaffComboBoxes[i]
+                              ->itemData(myStaffComboBoxes[i]->currentIndex())
+                              .toInt();
         if (staff >= 0)
         {
             change.insertActivePlayer(

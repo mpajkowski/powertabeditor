@@ -1,23 +1,24 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "rect.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 Rect::Rect(void)
 {
@@ -32,11 +33,9 @@ Rect::Rect(int32_t x, int32_t y, int32_t width, int32_t height)
     height_ = height;
 }
 
-bool Rect::operator==(const Rect& rhs) const
+bool Rect::operator==(const Rect &rhs) const
 {
-    return (x_ == rhs.x_ &&
-            y_ == rhs.y_ &&
-            width_ == rhs.width_ &&
+    return (x_ == rhs.x_ && y_ == rhs.y_ && width_ == rhs.width_ &&
             height_ == rhs.height_);
 }
 
@@ -120,4 +119,4 @@ void Rect::SetRight(int32_t right)
     width_ = right - x_ - 1;
 }
 
-}
+} // namespace PowerTabDocument

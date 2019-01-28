@@ -7,6 +7,8 @@ set( CMAKE_OSX_DEPLOYMENT_TARGET "10.9"
 
 project( powertabeditor )
 
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 enable_testing()
 
 set( CMAKE_MODULE_PATH

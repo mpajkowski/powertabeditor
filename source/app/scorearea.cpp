@@ -1,22 +1,27 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "scorearea.h"
 
+#include <QDebug>
+#include <QGraphicsItem>
+#include <QGraphicsSceneDragDropEvent>
+#include <QPrinter>
+#include <QScrollBar>
 #include <app/documentmanager.h>
 #include <app/pubsub/clickpubsub.h>
 #include <chrono>
@@ -24,11 +29,6 @@
 #include <painters/caretpainter.h>
 #include <painters/scoreinforenderer.h>
 #include <painters/systemrenderer.h>
-#include <QDebug>
-#include <QGraphicsItem>
-#include <QGraphicsSceneDragDropEvent>
-#include <QPrinter>
-#include <QScrollBar>
 #include <score/score.h>
 
 static const double SYSTEM_SPACING = 50;
@@ -59,9 +59,7 @@ void ScoreArea::renderDocument(const Document &document)
 
     myCaretPainter =
         new CaretPainter(document.getCaret(), document.getViewOptions());
-    myCaretPainter->subscribeToMovement([=]() {
-        adjustScroll();
-    });
+    myCaretPainter->subscribeToMovement([=]() { adjustScroll(); });
 
     myScoreInfoBlock = ScoreInfoRenderer::render(score.getScoreInfo());
 
@@ -84,14 +82,17 @@ void ScoreArea::renderDocument(const Document &document)
         const int right = (i == num_threads - 1) ? myRenderedSystems.size()
                                                  : (i + 1) * work_size;
 
-        tasks.push_back(std::async(std::launch::async, [&](int left, int right)
-        {
-            for (int i = left; i < right; ++i)
-            {
-                SystemRenderer render(this, score, document.getViewOptions());
-                myRenderedSystems[i] = render(score.getSystems()[i], i);
-            }
-        }, left, right));
+        tasks.push_back(std::async(
+            std::launch::async,
+            [&](int left, int right) {
+                for (int i = left; i < right; ++i)
+                {
+                    SystemRenderer render(this, score,
+                                          document.getViewOptions());
+                    myRenderedSystems[i] = render(score.getSystems()[i], i);
+                }
+            },
+            left, right));
     }
 
     for (auto &&task : tasks)
@@ -116,8 +117,10 @@ void ScoreArea::renderDocument(const Document &document)
 
     auto end = std::chrono::high_resolution_clock::now();
     qDebug() << "Score rendered in"
-             << std::chrono::duration_cast<std::chrono::milliseconds>(
-                    end - start).count() << "ms";
+             << std::chrono::duration_cast<std::chrono::milliseconds>(end -
+                                                                      start)
+                    .count()
+             << "ms";
     qDebug() << "Rendered " << myScene.items().size() << "items";
 }
 
@@ -134,7 +137,7 @@ void ScoreArea::redrawSystem(int index)
     if (index > 0)
     {
         height = myRenderedSystems.at(index - 1)->sceneBoundingRect().bottom() +
-                SYSTEM_SPACING;
+                 SYSTEM_SPACING;
     }
 
     newSystem->setPos(0, height);
@@ -169,7 +172,7 @@ void ScoreArea::print(QPrinter &printer)
     QRectF target_rect(0, 0, painter.device()->width(),
                        painter.device()->height());
 
-    QList<QGraphicsItem*> items;
+    QList<QGraphicsItem *> items;
     items.append(myScoreInfoBlock);
     items.append(myRenderedSystems);
 

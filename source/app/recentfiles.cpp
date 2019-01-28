@@ -1,25 +1,25 @@
 /*
-  * Copyright (C) 2012 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2012 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "recentfiles.h"
 
+#include <QMenu>
 #include <app/settings.h>
 #include <app/settingsmanager.h>
-#include <QMenu>
 #ifdef _WIN32
 #include <QDir>
 #include <shlobj.h>
@@ -79,22 +79,21 @@ void RecentFiles::updateMenu()
 {
     myRecentFilesMenu->clear();
 
-    for (const QString& fileName : myRecentFiles)
+    for (const QString &fileName : myRecentFiles)
     {
         auto fileAction = new QAction(fileName, myRecentFilesMenu);
         myRecentFilesMenu->addAction(fileAction);
 
-        connect(fileAction, &QAction::triggered, [=]() {
-            handleFileSelection(fileName);
-        });
+        connect(fileAction, &QAction::triggered,
+                [=]() { handleFileSelection(fileName); });
     }
 
     if (!myRecentFiles.isEmpty())
     {
         myRecentFilesMenu->addSeparator();
 
-        QAction *clearRecentFiles = new QAction(tr("Clear Recent Files"),
-                                                myRecentFilesMenu);
+        QAction *clearRecentFiles =
+            new QAction(tr("Clear Recent Files"), myRecentFilesMenu);
         connect(clearRecentFiles, &QAction::triggered, this,
                 &RecentFiles::clear);
         myRecentFilesMenu->addAction(clearRecentFiles);

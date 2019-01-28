@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "documentreader.h"
 
 #include <boost/date_time/gregorian/gregorian_types.hpp>
@@ -105,8 +105,8 @@ void Gpx::DocumentReader::readTracks(Score &score)
         Player player;
         Instrument instrument;
         player.setDescription(track.child_value("Name"));
-        instrument.setMidiPreset(track.child("GeneralMidi").child(
-                                     "Program").text().as_int());
+        instrument.setMidiPreset(
+            track.child("GeneralMidi").child("Program").text().as_int());
         instrument.setDescription(presetNames.at(instrument.getMidiPreset()));
 
         xml_node volume = track.child("ChannelStrip").child("Volume");
@@ -119,11 +119,11 @@ void Gpx::DocumentReader::readTracks(Score &score)
             Tuning tuning = player.getTuning();
             // Read the tuning - need to convert from a string of numbers
             // separated by spaces to a vector of integers.
-            xml_node pitches = properties.select_single_node(
-                        "./Property/Pitches").node();
+            xml_node pitches =
+                properties.select_single_node("./Property/Pitches").node();
             if (pitches)
-			{
-				std::vector<int> tuningNotes;
+            {
+                std::vector<int> tuningNotes;
                 convertStringToList(pitches.child_value(), tuningNotes);
 
                 tuning.setNotes(std::vector<uint8_t>(tuningNotes.rbegin(),
@@ -131,8 +131,8 @@ void Gpx::DocumentReader::readTracks(Score &score)
             }
 
             // Read capo
-            xml_node capo = properties.select_single_node(
-                        "./Property/Fret").node();
+            xml_node capo =
+                properties.select_single_node("./Property/Fret").node();
             tuning.setCapo(capo.text().as_int());
 
             player.setTuning(tuning);
@@ -185,8 +185,10 @@ void Gpx::DocumentReader::readBeats()
         if (properties)
         {
             // Search for brush direction in the properties list.
-            xml_node brush = properties.select_single_node(
-                        "./Property[@name = 'Brush']/Direction").node();
+            xml_node brush =
+                properties
+                    .select_single_node("./Property[@name = 'Brush']/Direction")
+                    .node();
             if (brush)
             {
                 beat.brushDirection = brush.child_value();
@@ -208,17 +210,16 @@ void Gpx::DocumentReader::readRhythms()
         const std::string noteValueStr = currentRhythm.child_value("NoteValue");
 
         std::map<std::string, int> noteValuesToInt = {
-			{ "Whole", 1 }, { "Half", 2 }, { "Quarter", 4 },
-			{ "Eighth", 8 }, { "16th", 16 }, { "32nd", 32 },
-			{ "64th", 64 }
-		};
+            { "Whole", 1 }, { "Half", 2 },  { "Quarter", 4 }, { "Eighth", 8 },
+            { "16th", 16 }, { "32nd", 32 }, { "64th", 64 }
+        };
 
         assert(noteValuesToInt.find(noteValueStr) != noteValuesToInt.end());
         rhythm.noteValue = noteValuesToInt.find(noteValueStr)->second;
 
         // Handle dotted/double dotted notes
-        int numDots = currentRhythm.child("AugmentationDot").attribute(
-                    "count").as_int();
+        int numDots =
+            currentRhythm.child("AugmentationDot").attribute("count").as_int();
 
         rhythm.dotted = numDots == 1;
         rhythm.doubleDotted = numDots == 2;
@@ -235,10 +236,11 @@ void Gpx::DocumentReader::readNotes()
         note.id = currentNote.attribute("id").as_int();
         note.properties = currentNote.child("Properties");
 
-        note.tied = currentNote.child("Tie").attribute(
-                    "destination").as_string() == std::string("true");
-        note.ghostNote = currentNote.child_value("AntiAccent") ==
-                std::string("Normal");
+        note.tied =
+            currentNote.child("Tie").attribute("destination").as_string() ==
+            std::string("true");
+        note.ghostNote =
+            currentNote.child_value("AntiAccent") == std::string("Normal");
         note.accentType = currentNote.child("Accent").text().as_int();
         note.vibratoType = currentNote.child_value("Vibrato");
         note.letRing = !currentNote.child("LetRing").empty();
@@ -256,15 +258,15 @@ void Gpx::DocumentReader::readAutomations()
         xml_node currentAutomation = node.node();
         Gpx::Automation gpxAutomation;
         gpxAutomation.type = currentAutomation.child_value("Type");
-        gpxAutomation.linear = currentAutomation.child(
-                    "Linear").text().as_bool();
+        gpxAutomation.linear =
+            currentAutomation.child("Linear").text().as_bool();
         gpxAutomation.bar = currentAutomation.child("Bar").text().as_int();
-        gpxAutomation.position = currentAutomation.child(
-                    "Position").text().as_double();
-        gpxAutomation.visible = currentAutomation.child(
-                    "Visible").text().as_bool();
-        convertStringToList(currentAutomation.child_value(
-                                "Value"), gpxAutomation.value);
+        gpxAutomation.position =
+            currentAutomation.child("Position").text().as_double();
+        gpxAutomation.visible =
+            currentAutomation.child("Visible").text().as_bool();
+        convertStringToList(currentAutomation.child_value("Value"),
+                            gpxAutomation.value);
 
         // TODO - this code doesn't support having multiple automations in a
         // bar.
@@ -338,7 +340,8 @@ void Gpx::DocumentReader::readMasterBars(Score &score)
         int nextPos = startPos;
 
         for (unsigned int i = 0; i < score.getPlayers().size() &&
-             i < static_cast<unsigned int>(barIds.size()); ++i)
+                                 i < static_cast<unsigned int>(barIds.size());
+             ++i)
         {
             Staff &staff = system.getStaves()[i];
             int currentPos = (startPos != 0) ? startPos + 1 : 0;
@@ -367,8 +370,8 @@ void Gpx::DocumentReader::readMasterBars(Score &score)
                 pos.setProperty(Position::Acciaccatura, beat.graceNote);
 
                 const Gpx::Rhythm &rhythm = myRhythms.at(beat.rhythmId);
-                pos.setDurationType(static_cast<Position::DurationType>(
-                                        rhythm.noteValue));
+                pos.setDurationType(
+                    static_cast<Position::DurationType>(rhythm.noteValue));
                 pos.setProperty(Position::Dotted, rhythm.dotted);
                 pos.setProperty(Position::DoubleDotted, rhythm.doubleDotted);
 
@@ -378,8 +381,8 @@ void Gpx::DocumentReader::readMasterBars(Score &score)
                                             score.getPlayers()[i].getTuning());
                     if (Utils::findByString(pos, note.getString()))
                     {
-                        std::cerr << "Colliding notes at string " <<
-                                     note.getString() << std::endl;
+                        std::cerr << "Colliding notes at string "
+                                  << note.getString() << std::endl;
                     }
                     else
                         pos.insertNote(note);
@@ -438,8 +441,10 @@ void Gpx::DocumentReader::readKeySignature(const xml_node &masterBar,
     xml_node key_node = masterBar.child("Key");
 
     // Guitar Pro numbers accidentals from -1 to -7 for flats.
-    const int numAccidentals = key_node.child("AccidentalCount").text().as_int();
-    key.setNumAccidentals(numAccidentals >= 0 ? numAccidentals : -numAccidentals);
+    const int numAccidentals =
+        key_node.child("AccidentalCount").text().as_int();
+    key.setNumAccidentals(numAccidentals >= 0 ? numAccidentals
+                                              : -numAccidentals);
     key.setSharps(numAccidentals >= 0);
 
     const std::string keyType = key_node.child_value("Mode");
@@ -568,8 +573,8 @@ Note Gpx::DocumentReader::convertNote(int noteId, Position &position,
                 ptbNote.setProperty(Note::NaturalHarmonic);
             else
             {
-                std::cerr << "Unsupported Harmonic Type - " <<
-                             harmonicType << std::endl;
+                std::cerr << "Unsupported Harmonic Type - " << harmonicType
+                          << std::endl;
             }
         }
         else

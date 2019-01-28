@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "powertaboldimporter.h"
 
@@ -55,7 +55,7 @@ void PowerTabOldImporter::load(const boost::filesystem::path &filename,
     score.setScoreInfo(info);
     score.setLineSpacing(document.GetTablatureStaffLineSpacing());
     ScoreUtils::addStandardFilters(score);
-    
+
     assert(document.GetNumberOfScores() == 2);
 
     // Convert the guitar score.
@@ -73,7 +73,7 @@ void PowerTabOldImporter::load(const boost::filesystem::path &filename,
 }
 
 void PowerTabOldImporter::convert(
-        const PowerTabDocument::PowerTabFileHeader &header, ScoreInfo &info)
+    const PowerTabDocument::PowerTabFileHeader &header, ScoreInfo &info)
 {
     using namespace PowerTabDocument;
 
@@ -89,29 +89,29 @@ void PowerTabOldImporter::convert(
         {
             data.setAudioReleaseInfo(SongData::AudioReleaseInfo(
                 static_cast<SongData::AudioReleaseInfo::ReleaseType>(
-                                             header.GetSongAudioReleaseType()),
+                    header.GetSongAudioReleaseType()),
                 header.GetSongAudioReleaseTitle(),
                 header.GetSongAudioReleaseYear(),
                 header.IsSongAudioReleaseLive()));
         }
         else if (releaseType == PowerTabFileHeader::RELEASETYPE_PUBLIC_VIDEO)
         {
-            data.setVideoReleaseInfo(SongData::VideoReleaseInfo(
-                header.GetSongVideoReleaseTitle(),
-                header.IsSongVideoReleaseLive()));
+            data.setVideoReleaseInfo(
+                SongData::VideoReleaseInfo(header.GetSongVideoReleaseTitle(),
+                                           header.IsSongVideoReleaseLive()));
         }
         else if (releaseType == PowerTabFileHeader::RELEASETYPE_BOOTLEG)
         {
             data.setBootlegInfo(SongData::BootlegInfo(
-                header.GetSongBootlegTitle(),
-                header.GetSongBootlegDate()));
+                header.GetSongBootlegTitle(), header.GetSongBootlegDate()));
         }
         else
         {
             data.setUnreleased();
         }
 
-        if (header.GetSongAuthorType() == PowerTabFileHeader::AUTHORTYPE_TRADITIONAL)
+        if (header.GetSongAuthorType() ==
+            PowerTabFileHeader::AUTHORTYPE_TRADITIONAL)
             data.setTraditionalAuthor();
         else
         {
@@ -133,10 +133,10 @@ void PowerTabOldImporter::convert(
 
         data.setTitle(header.GetLessonTitle());
         data.setSubtitle(header.GetLessonSubtitle());
-        data.setMusicStyle(static_cast<LessonData::MusicStyle>(
-                               header.GetLessonMusicStyle()));
-        data.setDifficultyLevel(static_cast<LessonData::DifficultyLevel>(
-                                    header.GetLessonLevel()));
+        data.setMusicStyle(
+            static_cast<LessonData::MusicStyle>(header.GetLessonMusicStyle()));
+        data.setDifficultyLevel(
+            static_cast<LessonData::DifficultyLevel>(header.GetLessonLevel()));
         data.setAuthor(header.GetLessonAuthor());
         data.setNotes(header.GetLessonNotes());
         data.setCopyright(header.GetLessonCopyright());
@@ -203,9 +203,9 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Tuning &oldTuning,
     // The capo is set from the Guitar object.
 }
 
-void PowerTabOldImporter::convert(const PowerTabDocument::Score &oldScore,
-                                  PowerTabDocument::Score::SystemConstPtr oldSystem,
-                                  System &system)
+void PowerTabOldImporter::convert(
+    const PowerTabDocument::Score &oldScore,
+    PowerTabDocument::Score::SystemConstPtr oldSystem, System &system)
 {
     // Ensure that there are a reasonable number of positions in the staff
     // so that things aren't too stretched out.
@@ -290,8 +290,8 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Score &oldScore,
         }
 
         Staff staff;
-        int lastPosInStaff = convert(*oldSystem->GetStaff(i), dynamicsInStaff,
-                                     staff);
+        int lastPosInStaff =
+            convert(*oldSystem->GetStaff(i), dynamicsInStaff, staff);
         system.insertStaff(staff);
         lastPosition = std::max(lastPosition, lastPosInStaff);
     }
@@ -323,7 +323,7 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Barline &oldBar,
 }
 
 void PowerTabOldImporter::convert(
-        const PowerTabDocument::RehearsalSign &oldSign, RehearsalSign &sign)
+    const PowerTabDocument::RehearsalSign &oldSign, RehearsalSign &sign)
 {
     sign.setLetters(std::string(1, oldSign.GetLetter()));
     sign.setDescription(oldSign.GetDescription());
@@ -340,7 +340,7 @@ void PowerTabOldImporter::convert(const PowerTabDocument::KeySignature &oldKey,
 }
 
 void PowerTabOldImporter::convert(
-        const PowerTabDocument::TimeSignature &oldTime, TimeSignature &time)
+    const PowerTabDocument::TimeSignature &oldTime, TimeSignature &time)
 {
     TimeSignature::MeterType type = TimeSignature::Normal;
     if (oldTime.IsCutTime())
@@ -366,15 +366,17 @@ void PowerTabOldImporter::convert(const PowerTabDocument::TempoMarker &oldTempo,
                                   TempoMarker &tempo)
 {
     tempo.setPosition(oldTempo.GetPosition());
-    tempo.setMarkerType(static_cast<TempoMarker::MarkerType>(
-                            oldTempo.GetType()));
-    tempo.setBeatType(static_cast<TempoMarker::BeatType>(oldTempo.GetBeatType()));
-    tempo.setListessoBeatType(static_cast<TempoMarker::BeatType>(
-                                  oldTempo.GetListessoBeatType()));
+    tempo.setMarkerType(
+        static_cast<TempoMarker::MarkerType>(oldTempo.GetType()));
+    tempo.setBeatType(
+        static_cast<TempoMarker::BeatType>(oldTempo.GetBeatType()));
+    tempo.setListessoBeatType(
+        static_cast<TempoMarker::BeatType>(oldTempo.GetListessoBeatType()));
     tempo.setTripletFeel(static_cast<TempoMarker::TripletFeelType>(
-                             oldTempo.GetTripletFeelType()));
+        oldTempo.GetTripletFeelType()));
 
-    TempoMarker::AlterationOfPaceType alteration(TempoMarker::NoAlterationOfPace);
+    TempoMarker::AlterationOfPaceType alteration(
+        TempoMarker::NoAlterationOfPace);
     if (oldTempo.IsRitardando())
         alteration = TempoMarker::Ritardando;
     else if (oldTempo.IsAccelerando())
@@ -387,8 +389,7 @@ void PowerTabOldImporter::convert(const PowerTabDocument::TempoMarker &oldTempo,
 }
 
 void PowerTabOldImporter::convert(
-        const PowerTabDocument::AlternateEnding &oldEnding,
-        AlternateEnding &ending)
+    const PowerTabDocument::AlternateEnding &oldEnding, AlternateEnding &ending)
 {
     ending.setPosition(oldEnding.GetPosition());
 
@@ -402,7 +403,7 @@ void PowerTabOldImporter::convert(
 }
 
 void PowerTabOldImporter::convert(
-        const PowerTabDocument::Direction &oldDirection, Direction &direction)
+    const PowerTabDocument::Direction &oldDirection, Direction &direction)
 {
     direction.setPosition(static_cast<int>(oldDirection.GetPosition()));
 
@@ -414,9 +415,8 @@ void PowerTabOldImporter::convert(
         oldDirection.GetSymbol(i, type, active, repeat);
 
         direction.insertSymbol(DirectionSymbol(
-                static_cast<DirectionSymbol::SymbolType>(type),
-                static_cast<DirectionSymbol::ActiveSymbolType>(active),
-                repeat));
+            static_cast<DirectionSymbol::SymbolType>(type),
+            static_cast<DirectionSymbol::ActiveSymbolType>(active), repeat));
     }
 }
 
@@ -560,9 +560,9 @@ void PowerTabOldImporter::convert(const PowerTabDocument::ChordText &oldChord,
 }
 
 int PowerTabOldImporter::convert(
-        const PowerTabDocument::Staff &oldStaff,
-        const std::vector<PowerTabDocument::Score::DynamicPtr> &dynamics,
-        Staff &staff)
+    const PowerTabDocument::Staff &oldStaff,
+    const std::vector<PowerTabDocument::Score::DynamicPtr> &dynamics,
+    Staff &staff)
 {
     int lastPosition = 0;
     staff.setClefType(static_cast<Staff::ClefType>(oldStaff.GetClef()));
@@ -611,7 +611,8 @@ int PowerTabOldImporter::convert(
             {
                 startPos = position.GetPosition();
                 positionCount = 1;
-                position.GetIrregularGroupingTiming(notesPlayed, notesPlayedOver);
+                position.GetIrregularGroupingTiming(notesPlayed,
+                                                    notesPlayedOver);
             }
             else if (position.IsIrregularGroupingMiddle())
                 positionCount++;
@@ -640,16 +641,16 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Dynamic &oldDynamic,
                                   Dynamic &dynamic)
 {
     dynamic.setPosition(oldDynamic.GetPosition());
-    dynamic.setVolume(static_cast<Dynamic::VolumeLevel>(
-                          oldDynamic.GetStaffVolume()));
+    dynamic.setVolume(
+        static_cast<Dynamic::VolumeLevel>(oldDynamic.GetStaffVolume()));
 }
 
 void PowerTabOldImporter::convert(const PowerTabDocument::Position &oldPosition,
                                   Position &position)
 {
     position.setPosition(oldPosition.GetPosition());
-    position.setDurationType(static_cast<Position::DurationType>(
-                                 oldPosition.GetDurationType()));
+    position.setDurationType(
+        static_cast<Position::DurationType>(oldPosition.GetDurationType()));
 
     // Import simple properties.
     if (oldPosition.IsDotted())
@@ -750,7 +751,8 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Note &oldNote,
     {
         uint8_t type = 0, bentPitch = 0, releasePitch = 0, duration = 0,
                 drawStartPoint = 0, drawEndPoint = 0;
-        oldNote.GetBend(type, bentPitch, releasePitch, duration, drawStartPoint, drawEndPoint);
+        oldNote.GetBend(type, bentPitch, releasePitch, duration, drawStartPoint,
+                        drawEndPoint);
 
         note.setBend(Bend(static_cast<Bend::BendType>(type), bentPitch,
                           releasePitch, duration,
@@ -799,7 +801,8 @@ void PowerTabOldImporter::convert(const PowerTabDocument::Note &oldNote,
         note.setProperty(Note::SlideOutOfUpwards);
 }
 
-namespace {
+namespace
+{
 
 typedef std::array<int, PowerTabDocument::Score::MAX_NUM_GUITARS> ActivePlayers;
 
@@ -815,18 +818,17 @@ PlayerChange getPlayerChange(const ActivePlayers &activePlayers,
         const int staff = activePlayers[player];
         if (staff >= 0)
         {
-            change.insertActivePlayer(staff,
-                                      ActivePlayer(player, player));
+            change.insertActivePlayer(staff, ActivePlayer(player, player));
         }
     }
 
     return change;
 }
 
-}
+} // namespace
 
 void PowerTabOldImporter::convertGuitarIns(
-        const PowerTabDocument::Score &oldScore, Score &score)
+    const PowerTabDocument::Score &oldScore, Score &score)
 {
     // For each guitar, keep track of its current staff.
     std::array<int, PowerTabDocument::Score::MAX_NUM_GUITARS> activePlayers;
@@ -890,7 +892,8 @@ void PowerTabOldImporter::convertInitialVolumes(
     if (oldScore.GetGuitarInCount() > 0)
     {
         auto firstIn = oldScore.GetGuitarIn(0);
-        const SystemLocation startPos(firstIn->GetSystem(), firstIn->GetPosition());
+        const SystemLocation startPos(firstIn->GetSystem(),
+                                      firstIn->GetPosition());
         System &system = score.getSystems()[firstIn->GetSystem()];
 
         // If there was a dynamic at or before the first guitar in, then that
@@ -926,7 +929,8 @@ void PowerTabOldImporter::convertInitialVolumes(
                         static_cast<Dynamic::VolumeLevel>(
                             oldScore.GetGuitar(j)->GetInitialVolume()));
 
-                    system.getStaves()[guitarIn->GetStaff()].insertDynamic(dynamic);
+                    system.getStaves()[guitarIn->GetStaff()].insertDynamic(
+                        dynamic);
                     break;
                 }
             }

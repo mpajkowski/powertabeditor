@@ -1,36 +1,33 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "direction.h"
 
-Direction::Direction()
-    : myPosition(0)
+Direction::Direction() : myPosition(0)
 {
 }
 
-Direction::Direction(int position)
-    : myPosition(position)
+Direction::Direction(int position) : myPosition(position)
 {
 }
 
 bool Direction::operator==(const Direction &other) const
 {
-    return myPosition == other.myPosition &&
-           mySymbols == other.mySymbols;
+    return myPosition == other.myPosition && mySymbols == other.mySymbols;
 }
 
 int Direction::getPosition() const
@@ -48,7 +45,8 @@ boost::iterator_range<Direction::SymbolIterator> Direction::getSymbols()
     return boost::make_iterator_range(mySymbols);
 }
 
-boost::iterator_range<Direction::SymbolConstIterator> Direction::getSymbols() const
+boost::iterator_range<Direction::SymbolConstIterator> Direction::getSymbols()
+    const
 {
     return boost::make_iterator_range(mySymbols);
 }
@@ -64,9 +62,7 @@ void Direction::removeSymbol(int index)
 }
 
 DirectionSymbol::DirectionSymbol()
-    : mySymbolType(Coda),
-      myActiveSymbolType(ActiveNone),
-      myRepeatNumber(0)
+    : mySymbolType(Coda), myActiveSymbolType(ActiveNone), myRepeatNumber(0)
 {
 }
 

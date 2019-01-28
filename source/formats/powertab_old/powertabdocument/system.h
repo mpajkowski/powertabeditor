@@ -12,13 +12,14 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "rect.h"
 #include "powertabobject.h"
+#include "rect.h"
 
 #include <memory>
 #include <vector>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 class Direction;
 class ChordText;
@@ -56,19 +57,29 @@ public:
 
     // Member Variables
 private:
-    Rect  m_rect;				///< Bounding rect for the system
-    uint8_t  m_positionSpacing;			///< Spacing between each position in the system
-    uint8_t  m_rhythmSlashSpacingAbove;		///< Spacing above the rhythm slashes
-    uint8_t  m_rhythmSlashSpacingBelow;		///< Spacing below the rhythm slashes
-    uint8_t  m_extraSpacing;			///< Extra spacing used within the system (for rehearsal signs + tempo markers)
+    Rect m_rect; ///< Bounding rect for the system
+    uint8_t m_positionSpacing; ///< Spacing between each position in the system
+    uint8_t m_rhythmSlashSpacingAbove; ///< Spacing above the rhythm slashes
+    uint8_t m_rhythmSlashSpacingBelow; ///< Spacing below the rhythm slashes
+    uint8_t m_extraSpacing; ///< Extra spacing used within the system (for
+                            ///< rehearsal signs + tempo markers)
 
-    BarlinePtr                      m_startBar;         ///< Barline at the start of the system (uses shared_ptr for consistency with barlines from m_barlineArray)
-    std::vector<DirectionPtr>       m_directionArray;   ///< List of directions used within the system
-    std::vector<ChordTextPtr>       m_chordTextArray;   ///< List of chord text items used within the system
-    std::vector<RhythmSlashPtr>     m_rhythmSlashArray; ///< List of rhythm slashes used within the system
-    std::vector<StaffPtr>           m_staffArray;       ///< List of staves used within the system
-    std::vector<BarlinePtr>         m_barlineArray;     ///< List of barlines (not including start and end bars) used within the system
-    BarlinePtr                      m_endBar;           ///< Barline at the end of the system (time and key signature are not used in this barline)
+    BarlinePtr m_startBar; ///< Barline at the start of the system (uses
+                           ///< shared_ptr for consistency with barlines from
+                           ///< m_barlineArray)
+    std::vector<DirectionPtr> m_directionArray; ///< List of directions used
+                                                ///< within the system
+    std::vector<ChordTextPtr> m_chordTextArray; ///< List of chord text items
+                                                ///< used within the system
+    std::vector<RhythmSlashPtr> m_rhythmSlashArray; ///< List of rhythm slashes
+                                                    ///< used within the system
+    std::vector<StaffPtr> m_staffArray; ///< List of staves used within the
+                                        ///< system
+    std::vector<BarlinePtr> m_barlineArray; ///< List of barlines (not including
+                                            ///< start and end bars) used within
+                                            ///< the system
+    BarlinePtr m_endBar; ///< Barline at the end of the system (time and key
+                         ///< signature are not used in this barline)
 
     // Constructor/Destructor
 public:
@@ -82,11 +93,15 @@ public:
     /// Gets the MFC Class Name for the object
     /// @return The MFC Class Name
     std::string GetMFCClassName() const override
-    {return "CSection";}
+    {
+        return "CSection";
+    }
     /// Gets the MFC Class Schema for the object
     /// @return The MFC Class Schema
     uint16_t GetMFCClassSchema() const override
-    {return ((uint16_t)1);}
+    {
+        return ((uint16_t)1);
+    }
 
     BarlinePtr GetStartBar() const;
     BarlinePtr GetEndBar() const;
@@ -126,6 +141,6 @@ public:
     size_t GetPositionFromX(int x) const;
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // SYSTEM_H

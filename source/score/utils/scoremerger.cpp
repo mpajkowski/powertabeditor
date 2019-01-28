@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2014 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2014 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "scoremerger.h"
 
@@ -47,20 +47,41 @@ public:
     {
     }
 
-    const SystemLocation &getLocation() const { return myLocation; }
+    const SystemLocation &getLocation() const
+    {
+        return myLocation;
+    }
 
-    int getMultiBarRestCount() const { return myMultiBarRestCount; }
+    int getMultiBarRestCount() const
+    {
+        return myMultiBarRestCount;
+    }
     void setMultiBarRestCount(int count)
     {
         myMultiBarRestCount = count;
     }
 
-    bool isExpanded() const { return myIsExpanded; }
+    bool isExpanded() const
+    {
+        return myIsExpanded;
+    }
 
-    const Barline &getStartBar() const { return myStartBar; }
-    int getRemainingRepeats() const { return myRemainingRepeats; }
-    bool isRepeatEnd() const { return myRepeatEnd; }
-    bool isAlternateEnding() const { return myAlternateEnding; }
+    const Barline &getStartBar() const
+    {
+        return myStartBar;
+    }
+    int getRemainingRepeats() const
+    {
+        return myRemainingRepeats;
+    }
+    bool isRepeatEnd() const
+    {
+        return myRepeatEnd;
+    }
+    bool isAlternateEnding() const
+    {
+        return myAlternateEnding;
+    }
 
     void clearRepeat()
     {
@@ -135,7 +156,8 @@ static void expandScore(Score &score, ExpandedBarList &expanded_bars)
 
         if (!ScoreUtils::findInRange(system.getAlternateEndings(),
                                      prev_bar->getPosition(),
-                                     next_bar->getPosition() - 1).empty())
+                                     next_bar->getPosition() - 1)
+                 .empty())
         {
             alternate_ending = true;
         }
@@ -339,11 +361,11 @@ static int importNotes(
 
 template <typename Symbol>
 static void copySymbols(
-    const boost::iterator_range<typename std::vector<Symbol>::const_iterator> &
-        src_symbols,
+    const boost::iterator_range<typename std::vector<Symbol>::const_iterator>
+        &src_symbols,
     System &dest_system,
-    const boost::iterator_range<typename std::vector<Symbol>::const_iterator> &
-        dest_symbols,
+    const boost::iterator_range<typename std::vector<Symbol>::const_iterator>
+        &dest_symbols,
     void (System::*add_symbol)(const Symbol &), int offset, int left, int right)
 {
     std::unordered_set<int> filled_positions;
@@ -501,7 +523,8 @@ static void mergePlayerChanges(ScoreLocation &dest_loc,
         // staff/player/instrument numbers.
         if (bass_change)
         {
-            for (unsigned int i = 0; i < bass_loc.getSystem().getStaves().size(); ++i)
+            for (unsigned int i = 0;
+                 i < bass_loc.getSystem().getStaves().size(); ++i)
             {
                 for (const ActivePlayer &player :
                      bass_change->getActivePlayers(i))

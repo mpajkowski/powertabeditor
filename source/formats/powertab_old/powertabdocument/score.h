@@ -17,7 +17,8 @@
 #include <memory>
 #include <vector>
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 class Guitar;
 class FloatingText;
@@ -30,12 +31,15 @@ class System;
 class Tuning;
 
 /// Stores and renders a score
-// Note: This is a class used to make life easier - it's not a class that exists in PTE v1.7
+// Note: This is a class used to make life easier - it's not a class that exists
+// in PTE v1.7
 class Score : public PowerTabObject
 {
 public:
-    static const uint8_t SYSTEM_SPACING = 50; ///< spacing between adjacent systems
-    static const uint8_t MAX_NUM_GUITARS = 7; ///< maximum number of guitars allowed (limited by MIDI channels)
+    static const uint8_t SYSTEM_SPACING =
+        50; ///< spacing between adjacent systems
+    static const uint8_t MAX_NUM_GUITARS =
+        7; ///< maximum number of guitars allowed (limited by MIDI channels)
 
     // some useful typedefs for smart pointers
     typedef std::shared_ptr<System> SystemPtr;
@@ -51,11 +55,11 @@ public:
     typedef std::shared_ptr<const GuitarIn> GuitarInConstPtr;
     typedef std::shared_ptr<TempoMarker> TempoMarkerPtr;
 
-// Constructor/Destructor
+    // Constructor/Destructor
 public:
-    Score(const char* name);
+    Score(const char *name);
 
-// Serialization Functions
+    // Serialization Functions
     bool Serialize(PowerTabOutputStream &stream) const override;
     bool Deserialize(PowerTabInputStream &stream, uint16_t version) override;
 
@@ -70,70 +74,78 @@ public:
         return 1;
     }
 
-// Guitar Functions
+    // Guitar Functions
     bool IsValidGuitarIndex(size_t index) const;
     size_t GetGuitarCount() const;
     GuitarPtr GetGuitar(size_t index) const;
 
-// Chord Diagram Functions
+    // Chord Diagram Functions
     bool IsValidChordDiagramIndex(size_t index) const;
     size_t GetChordDiagramCount() const;
     ChordDiagramPtr GetChordDiagram(size_t index) const;
 
-// Floating Text Functions
+    // Floating Text Functions
     bool IsValidFloatingTextIndex(size_t index) const;
     size_t GetFloatingTextCount() const;
     FloatingTextPtr GetFloatingText(size_t index) const;
 
-// Guitar In Functions
+    // Guitar In Functions
     bool IsValidGuitarInIndex(size_t index) const;
     size_t GetGuitarInCount() const;
     GuitarInPtr GetGuitarIn(size_t index) const;
-    void GetGuitarInsInSystem(std::vector<GuitarInPtr>& guitarIns,
+    void GetGuitarInsInSystem(std::vector<GuitarInPtr> &guitarIns,
                               SystemConstPtr system) const;
 
-// Tempo Marker Functions
+    // Tempo Marker Functions
     bool IsValidTempoMarkerIndex(size_t index) const;
     size_t GetTempoMarkerCount() const;
     TempoMarkerPtr GetTempoMarker(size_t index) const;
 
-    void GetTempoMarkersInSystem(std::vector<TempoMarkerPtr>& tempoMarkers,
+    void GetTempoMarkersInSystem(std::vector<TempoMarkerPtr> &tempoMarkers,
                                  SystemConstPtr system) const;
 
-// Dynamic Functions
+    // Dynamic Functions
     bool IsValidDynamicIndex(size_t index) const;
     size_t GetDynamicCount() const;
     DynamicPtr GetDynamic(size_t index) const;
-    void GetDynamicsInSystem(std::vector<DynamicPtr>& dynamics, SystemConstPtr system) const;
+    void GetDynamicsInSystem(std::vector<DynamicPtr> &dynamics,
+                             SystemConstPtr system) const;
 
-// Alternate Ending Functions
+    // Alternate Ending Functions
     bool IsValidAlternateEndingIndex(size_t index) const;
     size_t GetAlternateEndingCount() const;
     AlternateEndingPtr GetAlternateEnding(size_t index) const;
 
-    void GetAlternateEndingsInSystem(std::vector<AlternateEndingPtr>& endings, SystemConstPtr system) const;
+    void GetAlternateEndingsInSystem(std::vector<AlternateEndingPtr> &endings,
+                                     SystemConstPtr system) const;
 
-// System Functions
+    // System Functions
     bool IsValidSystemIndex(size_t index) const;
     size_t GetSystemCount() const;
     SystemPtr GetSystem(size_t index) const;
 
-    int FindSystemIndex(const SystemConstPtr& system) const;
+    int FindSystemIndex(const SystemConstPtr &system) const;
 
     std::string GetScoreName() const;
 
 private:
     std::vector<GuitarPtr> m_guitarArray; ///< Guitars used by the score.
-    std::vector<ChordDiagramPtr> m_chordDiagramArray; ///< Chord diagrams used in the score.
-    std::vector<FloatingTextPtr> m_floatingTextArray; ///< Floating text used in the score.
+    std::vector<ChordDiagramPtr> m_chordDiagramArray; ///< Chord diagrams used
+                                                      ///< in the score.
+    std::vector<FloatingTextPtr> m_floatingTextArray; ///< Floating text used in
+                                                      ///< the score.
     std::vector<GuitarInPtr> m_guitarInArray; ///< Guitar Ins used in the score.
-    std::vector<TempoMarkerPtr> m_tempoMarkerArray; ///< Tempo Markers used in the score.
-    std::vector<DynamicPtr> m_dynamicArray; ///< Dynamic markers used in the score.
-    std::vector<AlternateEndingPtr> m_alternateEndingArray; ///< Alternate endings used in the score.
+    std::vector<TempoMarkerPtr> m_tempoMarkerArray; ///< Tempo Markers used in
+                                                    ///< the score.
+    std::vector<DynamicPtr> m_dynamicArray; ///< Dynamic markers used in the
+                                            ///< score.
+    std::vector<AlternateEndingPtr> m_alternateEndingArray; ///< Alternate
+                                                            ///< endings used in
+                                                            ///< the score.
     std::vector<SystemPtr> m_systemArray; ///< Systems used in the score.
     std::string m_scoreName; ///< Name of the score (e.g. Bass, Guitar, etc)
 };
 
-}
+} // namespace PowerTabDocument
 
 #endif // SCORE_H

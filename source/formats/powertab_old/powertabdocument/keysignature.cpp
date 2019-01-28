@@ -14,17 +14,17 @@
 #include "powertabinputstream.h"
 #include "powertaboutputstream.h"
 
-namespace PowerTabDocument {
+namespace PowerTabDocument
+{
 
 using std::string;
 
 // Default constants
-const uint8_t       KeySignature::DEFAULT_DATA              = 0;
-const uint8_t       KeySignature::ACCIDENTAL_WIDTH          = 6;
+const uint8_t KeySignature::DEFAULT_DATA = 0;
+const uint8_t KeySignature::ACCIDENTAL_WIDTH = 6;
 
 /// Default Constructor
-KeySignature::KeySignature() :
-    m_data(DEFAULT_DATA)
+KeySignature::KeySignature() : m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -34,8 +34,8 @@ KeySignature::KeySignature() :
 /// @param keyType major or minor (see keyTypes enum in .h for values)
 /// @param keyAccidentals type and number of accidentals (4 sharps, 2 flats,
 /// etc.; see keyAccidentals enum in .h for values)
-KeySignature::KeySignature(uint8_t keyType, uint8_t keyAccidentals) :
-    m_data(DEFAULT_DATA)
+KeySignature::KeySignature(uint8_t keyType, uint8_t keyAccidentals)
+    : m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -43,8 +43,8 @@ KeySignature::KeySignature(uint8_t keyType, uint8_t keyAccidentals) :
 }
 
 /// Copy Constructor
-KeySignature::KeySignature(const KeySignature& keySignature) :
-    PowerTabObject(), m_data(DEFAULT_DATA)
+KeySignature::KeySignature(const KeySignature &keySignature)
+    : PowerTabObject(), m_data(DEFAULT_DATA)
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -59,7 +59,7 @@ KeySignature::~KeySignature()
 }
 
 /// Assignment Operator
-const KeySignature& KeySignature::operator=(const KeySignature& keySignature)
+const KeySignature &KeySignature::operator=(const KeySignature &keySignature)
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -71,7 +71,7 @@ const KeySignature& KeySignature::operator=(const KeySignature& keySignature)
 }
 
 /// Equality operator
-bool KeySignature::operator==(const KeySignature& keySignature) const
+bool KeySignature::operator==(const KeySignature &keySignature) const
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -79,7 +79,7 @@ bool KeySignature::operator==(const KeySignature& keySignature) const
 }
 
 /// Inequality operator
-bool KeySignature::operator!=(const KeySignature& keySignature) const
+bool KeySignature::operator!=(const KeySignature &keySignature) const
 {
     //------Last Checked------//
     // - Dec 10, 2004
@@ -90,7 +90,7 @@ bool KeySignature::operator!=(const KeySignature& keySignature) const
 /// Performs serialization for the class
 /// @param stream Power Tab output stream to serialize to
 /// @return True if the object was serialized, false if not
-bool KeySignature::Serialize(PowerTabOutputStream& stream) const
+bool KeySignature::Serialize(PowerTabOutputStream &stream) const
 {
     stream << m_data;
 
@@ -101,7 +101,7 @@ bool KeySignature::Serialize(PowerTabOutputStream& stream) const
 /// @param stream Power Tab input stream to load from
 /// @param version File version
 /// @return True if the object was deserialized, false if not
-bool KeySignature::Deserialize(PowerTabInputStream& stream, uint16_t)
+bool KeySignature::Deserialize(PowerTabInputStream &stream, uint16_t)
 {
     stream >> m_data;
     return true;
@@ -127,7 +127,7 @@ bool KeySignature::SetKey(uint8_t keyType, uint8_t keyAccidentals)
 /// @param keyType major or minor (see keyTypes enum in .h for values)
 /// @param keyAccidentals type and number of accidentals (4 sharps, 2 flats,
 /// etc.; see keyAccidentals enum in .h for values)
-void KeySignature::GetKey(uint8_t& keyType, uint8_t& keyAccidentals) const
+void KeySignature::GetKey(uint8_t &keyType, uint8_t &keyAccidentals) const
 {
     //------Last Checked------//
     // - Dec 11, 2004
@@ -146,7 +146,7 @@ void KeySignature::GetKey(uint8_t& keyType, uint8_t& keyAccidentals) const
 /// @param keyAccidentals Type and number of accidentals (4 sharps, 2 flats,
 /// etc.; see keyAccidentals enum in .h for values)
 /// @return True if the key is a cancellation, false if not
-bool KeySignature::GetDrawKey(uint8_t& keyType, uint8_t& keyAccidentals) const
+bool KeySignature::GetDrawKey(uint8_t &keyType, uint8_t &keyAccidentals) const
 {
     //------Last Checked------//
     // - Dec 11, 2004
@@ -202,8 +202,8 @@ uint8_t KeySignature::GetKeyAccidentals() const
     return (returnValue);
 }
 
-/// Gets the number of accidentals (including cancelled) in the key signature (4 sharps,
-/// 2 flats, etc.)
+/// Gets the number of accidentals (including cancelled) in the key signature (4
+/// sharps, 2 flats, etc.)
 /// @return Number of accidentals to be displayed in the key signature
 uint8_t KeySignature::GetKeyAccidentalsIncludingCancel() const
 {
@@ -213,11 +213,11 @@ uint8_t KeySignature::GetKeyAccidentalsIncludingCancel() const
     GetDrawKey(keyType, keyAccidentals);
 
     // Determine the number of accidentals, be it sharps or flats
-    uint8_t numAccidentals = ((keyAccidentals <= KeySignature::sevenSharps) ? keyAccidentals :
-        (keyAccidentals - 7));
+    uint8_t numAccidentals =
+        ((keyAccidentals <= KeySignature::sevenSharps) ? keyAccidentals
+                                                       : (keyAccidentals - 7));
     return numAccidentals;
 }
-
 
 /// Gets the width of the key signature, in drawing units (100ths of an inch)
 /// @return The width of the key signature
@@ -240,4 +240,4 @@ int KeySignature::GetWidth() const
     return (returnValue);
 }
 
-}
+} // namespace PowerTabDocument

@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "position.h"
 
@@ -21,16 +21,12 @@
 #include <stdexcept>
 
 Position::Position()
-    : myPosition(0),
-      myDurationType(EighthNote),
-      myMultiBarRestCount(0)
+    : myPosition(0), myDurationType(EighthNote), myMultiBarRestCount(0)
 {
 }
 
 Position::Position(int position, DurationType duration)
-    : myPosition(position),
-      myDurationType(duration),
-      myMultiBarRestCount(0)
+    : myPosition(position), myDurationType(duration), myMultiBarRestCount(0)
 {
 }
 
@@ -161,9 +157,10 @@ void Position::insertNote(const Note &note)
     myNotes.push_back(note);
 
     // Sort notes by string.
-    std::sort(myNotes.begin(), myNotes.end(), [](const Note &note1, const Note &note2) {
-        return note1.getString() < note2.getString();
-    });
+    std::sort(myNotes.begin(), myNotes.end(),
+              [](const Note &note1, const Note &note2) {
+                  return note1.getString() < note2.getString();
+              });
 }
 
 void Position::removeNote(const Note &note)

@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "layoutinfo.h"
 
 #include <boost/algorithm/clamp.hpp>
@@ -42,8 +42,8 @@ const double LayoutInfo::DEFAULT_POSITION_SPACING = 20;
 const double LayoutInfo::IRREGULAR_GROUP_HEIGHT = 9;
 const double LayoutInfo::IRREGULAR_GROUP_BEAM_SPACING = 3;
 
-LayoutInfo::LayoutInfo(const Score &score, const System &system, int systemIndex,
-                       const Staff &staff, int staffIndex)
+LayoutInfo::LayoutInfo(const Score &score, const System &system,
+                       int systemIndex, const Staff &staff, int staffIndex)
     : mySystem(system),
       myStaff(staff),
       myLineSpacing(score.getLineSpacing()),
@@ -110,9 +110,9 @@ double LayoutInfo::getSystemSymbolSpacing() const
     double directionHeight = 0;
     for (const Direction &direction : mySystem.getDirections())
     {
-        directionHeight = std::max(directionHeight,
-                                   direction.getSymbols().size() *
-                                   SYSTEM_SYMBOL_SPACING);
+        directionHeight =
+            std::max(directionHeight,
+                     direction.getSymbols().size() * SYSTEM_SYMBOL_SPACING);
     }
 
     height += directionHeight;
@@ -123,16 +123,16 @@ double LayoutInfo::getSystemSymbolSpacing() const
 double LayoutInfo::getStaffHeight() const
 {
     return myStdNotationStaffAboveSpacing + myStdNotationStaffBelowSpacing +
-            myTabStaffAboveSpacing + myTabStaffBelowSpacing +
-            STD_NOTATION_LINE_SPACING * (NUM_STD_NOTATION_LINES - 1) +
-            (getStringCount() - 1) * getTabLineSpacing() +
-            4 * STAFF_BORDER_SPACING;
+           myTabStaffAboveSpacing + myTabStaffBelowSpacing +
+           STD_NOTATION_LINE_SPACING * (NUM_STD_NOTATION_LINES - 1) +
+           (getStringCount() - 1) * getTabLineSpacing() +
+           4 * STAFF_BORDER_SPACING;
 }
 
 double LayoutInfo::getStdNotationLine(int line) const
 {
     return myStdNotationStaffAboveSpacing + STAFF_BORDER_SPACING +
-            (line - 1) * STD_NOTATION_LINE_SPACING;
+           (line - 1) * STD_NOTATION_LINE_SPACING;
 }
 
 double LayoutInfo::getStdNotationSpace(int space) const
@@ -158,7 +158,7 @@ double LayoutInfo::getStdNotationStaffHeight() const
 double LayoutInfo::getTabLine(int line) const
 {
     return getStaffHeight() - myTabStaffBelowSpacing - STAFF_BORDER_SPACING -
-            (getStringCount() - line) * getTabLineSpacing();
+           (getStringCount() - line) * getTabLineSpacing();
 }
 
 double LayoutInfo::getTopTabLine() const
@@ -208,7 +208,8 @@ double LayoutInfo::getFirstPositionX() const
     // Add the width required by the starting barline; for a standard barline,
     // this is 1 unit of space, otherwise it is the distance between positions
     const double barlineWidth = (startBar.getBarType() == Barline::SingleBar)
-            ? 1 : getPositionSpacing();
+                                    ? 1
+                                    : getPositionSpacing();
     width += barlineWidth;
 
     return width;
@@ -331,8 +332,8 @@ void LayoutInfo::computePositionSpacing()
         {
             for (const Position &position : voice.getPositions())
             {
-                myNumPositions = std::max(myNumPositions,
-                                          position.getPosition());
+                myNumPositions =
+                    std::max(myNumPositions, position.getPosition());
             }
         }
     }
@@ -399,7 +400,8 @@ void LayoutInfo::calculateTabStaffBelowLayout()
                                                     leftPosition, rightPosition,
                                                     voice, width, height++);
             }
-            else if ((Utils::hasNoteWithProperty(pos, Note::HammerOnOrPullOff) &&
+            else if ((Utils::hasNoteWithProperty(pos,
+                                                 Note::HammerOnOrPullOff) &&
                       !VoiceUtils::hasNoteWithHammerOn(voice, pos)) ||
                      Utils::hasNoteWithProperty(pos, Note::PullOffToNowhere))
             {
@@ -424,7 +426,7 @@ void LayoutInfo::calculateTabStaffBelowLayout()
 
     // Compute the overall spacing needed below the tab staff.
     myTabStaffBelowSpacing =
-            getMaxHeight(myTabStaffBelowSymbols) * TAB_SYMBOL_SPACING;
+        getMaxHeight(myTabStaffBelowSymbols) * TAB_SYMBOL_SPACING;
 }
 
 void LayoutInfo::calculateStdNotationStaffAboveLayout()
@@ -432,7 +434,7 @@ void LayoutInfo::calculateStdNotationStaffAboveLayout()
     calculateOctaveSymbolLayout(myStdNotationStaffAboveSymbols, true);
 
     myStdNotationStaffAboveSpacing =
-            getMaxHeight(myStdNotationStaffAboveSymbols) * TAB_SYMBOL_SPACING;
+        getMaxHeight(myStdNotationStaffAboveSymbols) * TAB_SYMBOL_SPACING;
 
     // Reserve space for notes and their stems.
     double minLocation = std::numeric_limits<double>::max();
@@ -450,7 +452,7 @@ void LayoutInfo::calculateStdNotationStaffBelowLayout()
     calculateOctaveSymbolLayout(myStdNotationStaffBelowSymbols, false);
 
     myStdNotationStaffBelowSpacing =
-            getMaxHeight(myStdNotationStaffBelowSymbols) * TAB_SYMBOL_SPACING;
+        getMaxHeight(myStdNotationStaffBelowSymbols) * TAB_SYMBOL_SPACING;
 
     // Reserve space for notes and their stems.
     double maxLocation = -std::numeric_limits<double>::max();
@@ -462,7 +464,7 @@ void LayoutInfo::calculateStdNotationStaffBelowLayout()
 
     const double bottomBoundary = 5 * STD_NOTATION_LINE_SPACING;
     myStdNotationStaffBelowSpacing +=
-            std::max(bottomBoundary, maxLocation) - bottomBoundary;
+        std::max(bottomBoundary, maxLocation) - bottomBoundary;
 }
 
 void LayoutInfo::calculateOctaveSymbolLayout(std::vector<SymbolGroup> &symbols,
@@ -522,7 +524,7 @@ void LayoutInfo::calculateTabStaffAboveLayout()
 {
     // First, allocate spacing for player changes in the system.
     const int staffIndex = std::find(mySystem.getStaves().begin(),
-                                      mySystem.getStaves().end(), myStaff) -
+                                     mySystem.getStaves().end(), myStaff) -
                            mySystem.getStaves().begin();
 
     for (const PlayerChange &change : mySystem.getPlayerChanges())
@@ -595,8 +597,8 @@ void LayoutInfo::calculateTabStaffAboveLayout()
     for (int symbolIndex = SymbolGroup::LetRing;
          symbolIndex <= SymbolGroup::ArtificialHarmonic; ++symbolIndex)
     {
-        SymbolGroup::SymbolType symbol = static_cast<SymbolGroup::SymbolType>(
-                    symbolIndex);
+        SymbolGroup::SymbolType symbol =
+            static_cast<SymbolGroup::SymbolType>(symbolIndex);
         bool inGroup = false;
         int leftPos = 0;
         int rightPos = 0;
@@ -613,10 +615,10 @@ void LayoutInfo::calculateTabStaffAboveLayout()
 
             // Finish creating a group if we've reached the end of one, or
             // we're handling a symbol that doesn't get grouped.
-            if ((!hasSymbol && inGroup) || (hasSymbol && (
-                symbol == SymbolGroup::Trill ||
-                symbol == SymbolGroup::TremoloPicking ||
-                symbol == SymbolGroup::Dynamic)))
+            if ((!hasSymbol && inGroup) ||
+                (hasSymbol && (symbol == SymbolGroup::Trill ||
+                               symbol == SymbolGroup::TremoloPicking ||
+                               symbol == SymbolGroup::Dynamic)))
             {
                 int rightPos = i;
 
@@ -665,7 +667,7 @@ void LayoutInfo::calculateTabStaffAboveLayout()
 
     // Compute the overall spacing needed below the tab staff.
     myTabStaffAboveSpacing +=
-            getMaxHeight(myTabStaffAboveSymbols) * TAB_SYMBOL_SPACING;
+        getMaxHeight(myTabStaffAboveSymbols) * TAB_SYMBOL_SPACING;
 }
 
 static int getBendHeight(const Bend &bend)
@@ -715,7 +717,7 @@ void LayoutInfo::calculateBendLayout(VerticalLayout &layout)
 
             groupHeight = std::max(groupHeight, getBendHeight(*bend));
             rightPos = std::max(rightPos, getBendEndPosition(voice, *bend, i));
-            
+
             const Bend::BendType type = bend->getType();
             if (type == Bend::NormalBend || type == Bend::BendAndRelease ||
                 type == Bend::PreBend || type == Bend::PreBendAndRelease ||
@@ -782,7 +784,8 @@ const std::vector<SymbolGroup> &LayoutInfo::getTabStaffAboveSymbols() const
     return myTabStaffAboveSymbols;
 }
 
-const std::vector<SymbolGroup> &LayoutInfo::getStdNotationStaffAboveSymbols() const
+const std::vector<SymbolGroup> &LayoutInfo::getStdNotationStaffAboveSymbols()
+    const
 {
     return myStdNotationStaffAboveSymbols;
 }
@@ -792,7 +795,8 @@ double LayoutInfo::getStdNotationStaffBelowSpacing() const
     return myStdNotationStaffBelowSpacing;
 }
 
-const std::vector<SymbolGroup> &LayoutInfo::getStdNotationStaffBelowSymbols() const
+const std::vector<SymbolGroup> &LayoutInfo::getStdNotationStaffBelowSymbols()
+    const
 {
     return myStdNotationStaffBelowSymbols;
 }

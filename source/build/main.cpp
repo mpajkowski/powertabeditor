@@ -1,20 +1,24 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
- 
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <QApplication>
+#include <QFileOpenEvent>
+#include <QLocalServer>
+#include <QLocalSocket>
 #include <app/appinfo.h>
 #include <app/paths.h>
 #include <app/powertabeditor.h>
@@ -25,10 +29,6 @@
 #include <dialogs/crashdialog.h>
 #include <exception>
 #include <iostream>
-#include <QApplication>
-#include <QFileOpenEvent>
-#include <QLocalServer>
-#include <QLocalSocket>
 #include <string>
 #include <withershins.hpp>
 
@@ -127,9 +127,8 @@ protected:
                 auto app = dynamic_cast<PowerTabEditor *>(activeWindow());
                 Q_ASSERT(app);
 
-                app->openFiles({
-                    static_cast<QFileOpenEvent *>(event)->file()
-                });
+                app->openFiles(
+                    { static_cast<QFileOpenEvent *>(event)->file() });
                 return true;
             }
             default:
@@ -164,11 +163,10 @@ int main(int argc, char *argv[])
                                  "\nA guitar tablature editor.\n\nOptions");
     try
     {
-        desc.add_options()
-            ("help,h", "Displays this help.")
-            ("version,v", "Displays version information.")
-            ("files", po::value<std::vector<std::string>>(),
-             "The files to be opened, optionally.");
+        desc.add_options()("help,h", "Displays this help.")(
+            "version,v", "Displays version information.")(
+            "files", po::value<std::vector<std::string>>(),
+            "The files to be opened, optionally.");
         po::positional_options_description p;
         p.add("files", -1);
         po::variables_map vm;
@@ -201,7 +199,7 @@ int main(int argc, char *argv[])
                 filesToOpen.push_back(QString::fromStdString(file));
         }
     }
-    catch(po::error &e)
+    catch (po::error &e)
     {
         std::cerr << "Error: " << e.what() << std::endl << std::endl;
         std::cerr << desc << std::endl;
@@ -213,7 +211,8 @@ int main(int argc, char *argv[])
         settings_manager.load(Paths::getConfigDir());
 
         auto settings = settings_manager.getReadHandle();
-        bool single_window_mode = !settings->get(Settings::OpenFilesInNewWindow);
+        bool single_window_mode =
+            !settings->get(Settings::OpenFilesInNewWindow);
 
         // If an instance of the program is already running and we're in
         // single-window mode, tell the running instance to open the files in

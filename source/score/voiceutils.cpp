@@ -1,26 +1,26 @@
 /*
-  * Copyright (C) 2013 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2013 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "voiceutils.h"
 
-#include <boost/range/adaptor/reversed.hpp>
 #include "score.h"
 #include "scorelocation.h"
 #include "utils.h"
+#include <boost/range/adaptor/reversed.hpp>
 
 namespace VoiceUtils
 {
@@ -31,9 +31,11 @@ const Voice *getAdjacentVoice(const ScoreLocation &location, int offset)
     const int staffIndex = location.getStaffIndex();
     const int voiceIndex = location.getVoiceIndex();
 
-    if (systemIndex >= 0 && systemIndex < location.getScore().getSystems().size())
+    if (systemIndex >= 0 &&
+        systemIndex < location.getScore().getSystems().size())
     {
-        const System &nextSystem = location.getScore().getSystems()[systemIndex];
+        const System &nextSystem =
+            location.getScore().getSystems()[systemIndex];
         if (staffIndex < nextSystem.getStaves().size())
         {
             const Staff &nextStaff = nextSystem.getStaves()[staffIndex];
@@ -80,7 +82,8 @@ const Note *getPreviousNote(const Voice &voice, int position, int string,
 {
     const Position *prevPos = getPreviousPosition(voice, position);
     if (!prevPos && prevVoice)
-        prevPos = getPreviousPosition(*prevVoice, std::numeric_limits<int>::max());
+        prevPos =
+            getPreviousPosition(*prevVoice, std::numeric_limits<int>::max());
     return prevPos ? Utils::findByString(*prevPos, string) : nullptr;
 }
 
@@ -120,9 +123,11 @@ std::vector<const IrregularGrouping *> getIrregularGroupsInRange(
     {
         const int groupLeft = group.getPosition();
         const int groupRight =
-            voice.getPositions()[ScoreUtils::findIndexByPosition(
-                                     voice.getPositions(), groupLeft) +
-                                 group.getLength() - 1].getPosition();
+            voice
+                .getPositions()[ScoreUtils::findIndexByPosition(
+                                    voice.getPositions(), groupLeft) +
+                                group.getLength() - 1]
+                .getPosition();
 
         if (groupLeft <= right && groupRight >= left)
             groups.push_back(&group);
@@ -156,4 +161,4 @@ boost::rational<int> getDurationTime(const Voice &voice, const Position &pos)
 
     return duration;
 }
-}
+} // namespace VoiceUtils

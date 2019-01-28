@@ -1,19 +1,19 @@
 /*
-  * Copyright (C) 2015 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2015 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef APP_SETTINGSTREE_H
 #define APP_SETTINGSTREE_H
@@ -24,8 +24,8 @@
 #include <boost/variant/variant.hpp>
 
 #include <iosfwd>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 template <typename T>
@@ -45,10 +45,7 @@ class SettingsTree
 {
 public:
     using SettingValue = boost::make_recursive_variant<
-        int,
-        std::string,
-        bool,
-        std::vector<boost::recursive_variant_>,
+        int, std::string, bool, std::vector<boost::recursive_variant_>,
         std::unordered_map<std::string, boost::recursive_variant_>>::type;
 
     using SettingList = std::vector<SettingValue>;

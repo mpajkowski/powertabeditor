@@ -1,28 +1,28 @@
 /*
-  * Copyright (C) 2014 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2014 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "document.h"
 
-#include <cmath>
 #include <boost/algorithm/clamp.hpp>
+#include <cmath>
 #include <iostream>
 
-#include <formats/guitar_pro/inputstream.h>
 #include <formats/fileformat.h>
+#include <formats/guitar_pro/inputstream.h>
 #include <score/generalmidi.h>
 
 static const int NUM_LYRIC_LINES = 5;
@@ -296,16 +296,16 @@ void GraceNote::load(InputStream &stream)
     int duration = stream.read<int8_t>();
     switch (duration)
     {
-    case 3:
-        myDuration = 64;
-        break;
-    case 2:
-        myDuration = 32;
-        break;
-    case 1:
-    default:
-        myDuration = 16;
-        break;
+        case 3:
+            myDuration = 64;
+            break;
+        case 2:
+            myDuration = 32;
+            break;
+        case 1:
+        default:
+            myDuration = 16;
+            break;
     }
 
     // TODO - figure out the meaning of this byte.
@@ -1103,4 +1103,4 @@ void Document::load(InputStream &stream)
         myMeasures[i].loadStaves(stream, numTracks);
 }
 
-}
+} // namespace Gp

@@ -1,20 +1,20 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 
@@ -43,7 +43,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent,
     MidiOutputDevice device;
     for (size_t i = 0; i < device.getApiCount(); ++i)
     {
-        for(unsigned int j = 0; j < device.getPortCount(i); ++j)
+        for (unsigned int j = 0; j < device.getPortCount(i); ++j)
         {
             std::string portName = device.getPortName(i, j);
             ui->midiPortComboBox->addItem(
@@ -130,8 +130,9 @@ void PreferencesDialog::loadCurrentSettings()
     ui->defaultTuningClickButton->setToolTip(tr("Click to adjust tuning."));
     myDefaultTuning = settings->get(Settings::DefaultTuning);
     ui->defaultTuningClickButton->setText(QString::fromStdString(
-            boost::lexical_cast<std::string>(myDefaultTuning)));
-    connect(ui->defaultTuningClickButton, SIGNAL(clicked()), this, SLOT(editTuning()));
+        boost::lexical_cast<std::string>(myDefaultTuning)));
+    connect(ui->defaultTuningClickButton, SIGNAL(clicked()), this,
+            SLOT(editTuning()));
 }
 
 /// Save the new settings
@@ -139,8 +140,9 @@ void PreferencesDialog::accept()
 {
     auto settings = mySettingsManager.getWriteHandle();
 
-    MidiApiAndPort apiAndPort = ui->midiPortComboBox->itemData(
-                ui->midiPortComboBox->currentIndex()).value<MidiApiAndPort>();
+    MidiApiAndPort apiAndPort =
+        ui->midiPortComboBox->itemData(ui->midiPortComboBox->currentIndex())
+            .value<MidiApiAndPort>();
     settings->set(Settings::MidiApi, apiAndPort.first);
     settings->set(Settings::MidiPort, apiAndPort.second);
 
@@ -192,6 +194,6 @@ void PreferencesDialog::editTuning()
     {
         myDefaultTuning = dialog.getTuning();
         ui->defaultTuningClickButton->setText(QString::fromStdString(
-                boost::lexical_cast<std::string>(myDefaultTuning)));
+            boost::lexical_cast<std::string>(myDefaultTuning)));
     }
 }

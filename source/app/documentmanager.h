@@ -1,25 +1,25 @@
 /*
-  * Copyright (C) 2011 Cameron White
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-  
+ * Copyright (C) 2011 Cameron White
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef APP_DOCUMENTMANAGER_H
 #define APP_DOCUMENTMANAGER_H
 
-#include <app/viewoptions.h>
 #include <app/caret.h>
+#include <app/viewoptions.h>
 #include <boost/filesystem/path.hpp>
 #include <boost/optional/optional.hpp>
 #include <memory>
@@ -45,8 +45,14 @@ public:
     const Score &getScore() const;
     Score &getScore();
 
-    const ViewOptions &getViewOptions() const { return myViewOptions; }
-    ViewOptions &getViewOptions() { return myViewOptions; }
+    const ViewOptions &getViewOptions() const
+    {
+        return myViewOptions;
+    }
+    ViewOptions &getViewOptions()
+    {
+        return myViewOptions;
+    }
 
     /// Ensure that e.g. the active view filter is valid.
     void validateViewOptions();
@@ -82,8 +88,9 @@ public:
 
     int getCurrentDocumentIndex() const;
     size_t getDocumentListSize() const;
-    
-    /// Returns -1 if the file at filepath is not open, else it returns the index at which the already open file is at
+
+    /// Returns -1 if the file at filepath is not open, else it returns the
+    /// index at which the already open file is at
     int findDocument(const Document::PathType &filepath);
 
 private:
