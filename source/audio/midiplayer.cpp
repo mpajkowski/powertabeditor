@@ -49,7 +49,6 @@ MidiPlayer::~MidiPlayer()
     wait();
 }
 
-#include <iostream>
 void MidiPlayer::run()
 {
     // Workaround to fix errors with the Microsoft GS Wavetable Synth on
