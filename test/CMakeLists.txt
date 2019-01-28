@@ -71,7 +71,6 @@ set( srcs
     formats/test_fileformat.cpp
     formats/gpx/test_gpx.cpp
     formats/guitar_pro/test_gp.cpp
-    formats/powertab_old/test_powertabold.cpp
 
     score/test_alternateending.cpp
     score/test_barline.cpp
@@ -110,22 +109,6 @@ set( headers
 set( data_files
     actions/data/test_editstaff.pt2
 
-    formats/powertab_old/data/alternate_endings.ptb
-    formats/powertab_old/data/barlines.ptb
-    formats/powertab_old/data/bends.ptb
-    formats/powertab_old/data/chordtext.ptb
-    formats/powertab_old/data/directions.ptb
-    formats/powertab_old/data/floating_text.ptb
-    formats/powertab_old/data/guitar_ins.ptb
-    formats/powertab_old/data/guitars.ptb
-    formats/powertab_old/data/merge_multibar_rests_correct.pt2
-    formats/powertab_old/data/merge_multibar_rests.ptb
-    formats/powertab_old/data/notes.ptb
-    formats/powertab_old/data/positions.ptb
-    formats/powertab_old/data/song_header.ptb
-    formats/powertab_old/data/staves.ptb
-    formats/powertab_old/data/tempo_markers.ptb
-
     formats/guitar_pro/data/alt_endings.gp5
     formats/guitar_pro/data/barlines.gp5
     formats/guitar_pro/data/gracenote.gp5
@@ -141,7 +124,7 @@ set( data_files
     formats/gpx/data/text.gpx
 
     score/data/test_viewfilter.pt2
-    
+
     util/test_settingstree_expected.json
 )
 
