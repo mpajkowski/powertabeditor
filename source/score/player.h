@@ -53,6 +53,9 @@ public:
     /// Sets the player's tuning.
     void setTuning(const Tuning &tuning);
 
+    uint8_t getMidiPreset() const;
+    void setMidiPreset(uint8_t preset);
+
     static const uint8_t MIN_VOLUME;
     static const uint8_t MAX_VOLUME;
     static const uint8_t MIN_PAN;
@@ -63,6 +66,7 @@ private:
     uint8_t myMaxVolume;
     uint8_t myPan;
     Tuning myTuning;
+    uint8_t myMidiPreset;
 };
 
 template <class Archive>
@@ -72,6 +76,7 @@ void Player::serialize(Archive &ar, const FileVersion /*version*/)
     ar("max_volume", myMaxVolume);
     ar("pan", myPan);
     ar("tuning", myTuning);
+    ar("my_midi_preset", myMidiPreset);
 }
 
 #endif

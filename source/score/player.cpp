@@ -33,7 +33,8 @@ bool Player::operator==(const Player &other) const
 {
     return myDescription == other.myDescription &&
            myMaxVolume == other.myMaxVolume && myPan == other.myPan &&
-           myTuning == other.myTuning;
+           myTuning == other.myTuning &&
+           myMidiPreset == other.myMidiPreset;
 }
 
 const std::string &Player::getDescription() const
@@ -80,4 +81,17 @@ const Tuning &Player::getTuning() const
 void Player::setTuning(const Tuning &tuning)
 {
     myTuning = tuning;
+}
+
+uint8_t Player::getMidiPreset() const
+{
+    return myMidiPreset;
+}
+
+void Player::setMidiPreset(uint8_t preset)
+{
+    if (preset > Midi::LAST_MIDI_PRESET)
+        throw std::out_of_range("Invalid MIDI preset");
+
+    myMidiPreset = preset;
 }
