@@ -126,11 +126,13 @@ QComboBox *PlayerChangeDialog::getInstrumentComboBox(const Score &score)
     myInstrumentComboBoxes.push_back(list);
 
     int i = 0;
+#if 0
     for (const Instrument &instrument : score.getInstruments())
     {
         list->addItem(QString::fromStdString(instrument.getDescription()), i);
         ++i;
     }
+#endif
 
     return list;
 }

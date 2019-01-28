@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -43,4 +44,5 @@ private:
     const InstrumentRemovePubSub &myRemovePubSub;
 };
 
+#endif
 #endif

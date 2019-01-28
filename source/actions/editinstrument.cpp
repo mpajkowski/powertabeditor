@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -38,3 +39,4 @@ void EditInstrument::undo()
 {
     myScore.getInstruments()[myInstrumentIndex] = myOriginalInstrument;
 }
+#endif

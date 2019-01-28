@@ -103,11 +103,9 @@ void Gpx::DocumentReader::readTracks(Score &score)
     for (xml_node track : myFile.child("Tracks"))
     {
         Player player;
-        Instrument instrument;
         player.setDescription(track.child_value("Name"));
-        instrument.setMidiPreset(
+        player.setMidiPreset(
             track.child("GeneralMidi").child("Program").text().as_int());
-        instrument.setDescription(presetNames.at(instrument.getMidiPreset()));
 
         xml_node volume = track.child("ChannelStrip").child("Volume");
         player.setMaxVolume(volume.text().as_int(Player::MAX_VOLUME));
@@ -139,7 +137,6 @@ void Gpx::DocumentReader::readTracks(Score &score)
         }
 
         score.insertPlayer(player);
-        score.insertInstrument(instrument);
     }
 }
 

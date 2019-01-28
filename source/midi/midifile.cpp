@@ -585,6 +585,7 @@ int MidiFile::addEventsForBar(
         // Handle player/instrument changes.
         const PlayerChange *current_players =
             ScoreUtils::findByPosition(system.getPlayerChanges(), position);
+#if 0
         if (current_players)
         {
             for (const ActivePlayer &player :
@@ -598,6 +599,7 @@ int MidiFile::addEventsForBar(
                                              instrument.getMidiPreset()));
             }
         }
+#endif
 
         if (!current_players)
         {

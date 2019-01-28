@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -54,3 +55,4 @@ void InstrumentPanel::clear()
         delete item;
     }
 }
+#endif

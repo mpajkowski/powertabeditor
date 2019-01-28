@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -54,4 +55,6 @@ void Instrument::serialize(Archive &ar, const FileVersion /*version*/)
     ar("midi_preset", myMidiPreset);
 }
 
+
+#endif
 #endif

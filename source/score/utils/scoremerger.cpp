@@ -221,11 +221,6 @@ static void mergePlayers(Score &dest_score, const Score &guitar_score,
         dest_score.insertPlayer(player);
     for (const Player &player : bass_score.getPlayers())
         dest_score.insertPlayer(player);
-
-    for (const Instrument &instrument : guitar_score.getInstruments())
-        dest_score.insertInstrument(instrument);
-    for (const Instrument &instrument : bass_score.getInstruments())
-        dest_score.insertInstrument(instrument);
 }
 
 static void getPositionRange(const ScoreLocation &dest,
@@ -536,7 +531,7 @@ static void mergePlayerChanges(ScoreLocation &dest_loc,
                                 guitar_loc.getScore().getPlayers().size()) +
                                 player.getPlayerNumber(),
                             static_cast<int>(
-                                guitar_loc.getScore().getInstruments().size()) +
+                                guitar_loc.getScore().getPlayers().size()) +
                                 player.getInstrumentNumber()));
                 }
             }

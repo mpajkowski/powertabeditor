@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2014 Cameron White
  *
@@ -37,4 +38,5 @@ private:
     const int myIndex;
 };
 
+#endif
 #endif

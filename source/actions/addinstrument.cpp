@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2014 Cameron White
  *
@@ -36,3 +37,4 @@ void AddInstrument::undo()
 {
     myScore.removeInstrument(myIndex);
 }
+#endif

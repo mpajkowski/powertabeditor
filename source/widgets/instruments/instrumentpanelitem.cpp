@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -100,3 +101,4 @@ void InstrumentPanelItem::onEdited()
 
     myEditPubSub.publish(myInstrumentIndex, instrument);
 }
+#endif

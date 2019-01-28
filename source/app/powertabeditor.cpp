@@ -300,14 +300,14 @@ void PowerTabEditor::switchTab(int index)
     {
         const Document &doc = myDocumentManager->getCurrentDocument();
         myMixer->reset(doc.getScore());
-        myInstrumentPanel->reset(doc.getScore());
+    //    myInstrumentPanel->reset(doc.getScore());
         myPlaybackWidget->reset(doc);
         updateLocationLabel();
     }
     else
     {
         myMixer->clear();
-        myInstrumentPanel->clear();
+   //     myInstrumentPanel->clear();
     }
 
     myUndoManager->setActiveStackIndex(index);
@@ -645,7 +645,7 @@ void PowerTabEditor::redrawScore()
     updateCommands();
 
     myMixer->reset(doc.getScore());
-    myInstrumentPanel->reset(doc.getScore());
+    //myInstrumentPanel->reset(doc.getScore());
     myPlaybackWidget->reset(doc);
 }
 
@@ -1557,9 +1557,10 @@ void PowerTabEditor::addPlayer()
 
 void PowerTabEditor::addInstrument()
 {
+#if 0
     ScoreLocation &location = getLocation();
     Score &score = location.getScore();
-    Instrument instrument;
+    //Instrument instrument;
 
     auto settings = mySettingsManager->getReadHandle();
 
@@ -1594,6 +1595,7 @@ void PowerTabEditor::addInstrument()
 
     myUndoManager->push(new AddInstrument(location.getScore(), instrument),
                         UndoManager::AFFECTS_ALL_SYSTEMS);
+#endif
 }
 
 void PowerTabEditor::editPlayerChange()
@@ -1654,17 +1656,21 @@ void PowerTabEditor::removePlayer(int index)
 
 void PowerTabEditor::editInstrument(int index, const Instrument &instrument)
 {
+#if 0
     ScoreLocation &location = getLocation();
 
     myUndoManager->push(
         new EditInstrument(location.getScore(), index, instrument),
         UndoManager::AFFECTS_ALL_SYSTEMS);
+#endif
 }
 
 void PowerTabEditor::removeInstrument(int index)
 {
+#if 0
     myUndoManager->push(new RemoveInstrument(getLocation().getScore(), index),
                         UndoManager::AFFECTS_ALL_SYSTEMS);
+#endif
 }
 
 void PowerTabEditor::showTuningDictionary()
@@ -2462,10 +2468,10 @@ void PowerTabEditor::createCommands()
     connect(myAddPlayerCommand, &QAction::triggered, this,
             &PowerTabEditor::addPlayer);
 
-    myAddInstrumentCommand = new Command(
-        tr("Add Instrument"), "Player.AddInstrument", QKeySequence(), this);
-    connect(myAddInstrumentCommand, &QAction::triggered, this,
-            &PowerTabEditor::addInstrument);
+    //myAddInstrumentCommand = new Command(
+    //    tr("Add Instrument"), "Player.AddInstrument", QKeySequence(), this);
+    //connect(myAddInstrumentCommand, &QAction::triggered, this,
+    //        &PowerTabEditor::addInstrument);
 
     myPlayerChangeCommand = new Command(
         tr("Player Change..."), "Player.PlayerChange", QKeySequence(), this);
@@ -2515,9 +2521,11 @@ void PowerTabEditor::createCommands()
     myMixerDockWidgetCommand =
         createCommandWrapper(myMixerDockWidget->toggleViewAction(),
                              "Window.Mixer", QKeySequence(), this);
+#if 0
     myInstrumentDockWidgetCommand =
         createCommandWrapper(myInstrumentDockWidget->toggleViewAction(),
                              "Window.Instruments", QKeySequence(), this);
+#endif
 }
 
 void PowerTabEditor::loadKeyboardShortcuts()
@@ -2579,6 +2587,7 @@ void PowerTabEditor::createInstrumentPanel()
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setMinimumSize(0, 150);
 
+#if 0
     myInstrumentPanel = new InstrumentPanel(scroll, myInstrumentEditPubSub,
                                             myInstrumentRemovePubSub);
 
@@ -2592,6 +2601,7 @@ void PowerTabEditor::createInstrumentPanel()
         });
     myInstrumentRemovePubSub.subscribe(
         [=](int index) { removeInstrument(index); });
+#endif
 }
 
 Command *PowerTabEditor::createCommandWrapper(
@@ -2880,7 +2890,7 @@ void PowerTabEditor::createMenus()
     myWindowMenu->addAction(myPrevTabCommand);
     myWindowMenu->addSeparator();
     myWindowMenu->addAction(myMixerDockWidgetCommand);
-    myWindowMenu->addAction(myInstrumentDockWidgetCommand);
+    //myWindowMenu->addAction(myInstrumentDockWidgetCommand);
 
     // Help menu.
     myHelpMenu = menuBar()->addMenu(tr("&Help"));
@@ -3017,7 +3027,7 @@ void PowerTabEditor::setupNewTab()
     myTabWidget->setTabToolTip(tabIndex, fileInfo.fileName());
 
     myMixer->reset(doc.getScore());
-    myInstrumentPanel->reset(doc.getScore());
+    //myInstrumentPanel->reset(doc.getScore());
     myPlaybackWidget->reset(doc);
 
     // Switch to the new document.
@@ -3283,7 +3293,7 @@ void PowerTabEditor::enableEditing(bool enable)
     myPrintPreviewCommand->setEnabled(enable);
     myPlayFromStartOfMeasureCommand->setEnabled(enable);
     myAddPlayerCommand->setEnabled(enable);
-    myAddInstrumentCommand->setEnabled(enable);
+    //myAddInstrumentCommand->setEnabled(enable);
     myPlayerChangeCommand->setEnabled(enable);
     myEditViewFiltersCommand->setEnabled(enable);
     myNextTabCommand->setEnabled(enable);

@@ -19,7 +19,6 @@
 #define SCORE_SCORE_H
 
 #include "fileversion.h"
-#include "instrument.h"
 #include "player.h"
 #include "scoreinfo.h"
 #include "system.h"
@@ -36,8 +35,6 @@ public:
     typedef std::vector<System>::const_iterator SystemConstIterator;
     typedef std::vector<Player>::iterator PlayerIterator;
     typedef std::vector<Player>::const_iterator PlayerConstIterator;
-    typedef std::vector<Instrument>::iterator InstrumentIterator;
-    typedef std::vector<Instrument>::const_iterator InstrumentConstIterator;
     typedef std::vector<ViewFilter>::iterator ViewFilterIterator;
     typedef std::vector<ViewFilter>::const_iterator ViewFilterConstIterator;
 
@@ -75,17 +72,6 @@ public:
     /// Removes the specified player from the score.
     void removePlayer(int index);
 
-    /// Returns the set of instruments in the score.
-    boost::iterator_range<InstrumentIterator> getInstruments();
-    /// Returns the set of instruments in the score.
-    boost::iterator_range<InstrumentConstIterator> getInstruments() const;
-
-    /// Adds a new instrument to the score.
-    void insertInstrument(const Instrument &instrument);
-    void insertInstrument(const Instrument &instrument, int index);
-    /// Removes the specified instrument from the score.
-    void removeInstrument(int index);
-
     /// Returns the set of view filters in the score.
     boost::iterator_range<ViewFilterIterator> getViewFilters();
     /// Returns the set of view filters in the score.
@@ -109,7 +95,6 @@ private:
     ScoreInfo myScoreInfo;
     std::vector<System> mySystems;
     std::vector<Player> myPlayers;
-    std::vector<Instrument> myInstruments;
     int myLineSpacing; ///< Spacing between tab lines (in pixels).
     std::vector<ViewFilter> myViewFilters;
 };
@@ -120,7 +105,6 @@ void Score::serialize(Archive &ar, const FileVersion version)
     ar("score_info", myScoreInfo);
     ar("systems", mySystems);
     ar("players", myPlayers);
-    ar("instruments", myInstruments);
     ar("line_spacing", myLineSpacing);
 
     if (version >= FileVersion::VIEW_FILTERS)

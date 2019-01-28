@@ -1,3 +1,4 @@
+#if 0
 /*
  * Copyright (C) 2013 Cameron White
  *
@@ -53,3 +54,4 @@ void Instrument::setMidiPreset(uint8_t preset)
 
     myMidiPreset = preset;
 }
+#endif
