@@ -10,7 +10,6 @@ set( srcs
     actions/test_addchordtext.cpp
     actions/test_adddirection.cpp
     actions/test_adddynamic.cpp
-    actions/test_addinstrument.cpp
     actions/test_addirregulargrouping.cpp
     actions/test_addlefthandfingering.cpp
     actions/test_addmultibarrest.cpp
@@ -31,7 +30,6 @@ set( srcs
     actions/test_editbarline.cpp
     actions/test_editclef.cpp
     actions/test_editfileinformation.cpp
-    actions/test_editinstrument.cpp
     actions/test_editkeysignature.cpp
     actions/test_editnoteduration.cpp
     actions/test_editplayer.cpp
@@ -46,7 +44,6 @@ set( srcs
     actions/test_removechordtext.cpp
     actions/test_removedirection.cpp
     actions/test_removedynamic.cpp
-    actions/test_removeinstrument.cpp
     actions/test_removeirregulargrouping.cpp
     actions/test_removelefthandfingering.cpp
     actions/test_removenote.cpp
@@ -78,7 +75,6 @@ set( srcs
     score/test_chordtext.cpp
     score/test_direction.cpp
     score/test_dynamic.cpp
-    score/test_instrument.cpp
     score/test_irregulargrouping.cpp
     score/test_keysignature.cpp
     score/test_note.cpp

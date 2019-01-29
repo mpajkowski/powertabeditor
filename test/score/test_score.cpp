@@ -45,19 +45,6 @@ TEST_CASE("Score/Score/Players", "")
     REQUIRE(score.getPlayers().size() == 0);
 }
 
-TEST_CASE("Score/Score/Instruments", "")
-{
-    Score score;
-
-    REQUIRE(score.getInstruments().size() == 0);
-
-    Instrument instrument;
-    score.insertInstrument(instrument);
-    REQUIRE(score.getInstruments().size() == 1);
-    score.removeInstrument(0);
-    REQUIRE(score.getInstruments().size() == 0);
-}
-
 TEST_CASE("Score/Score/ViewFilters", "")
 {
     Score score;
