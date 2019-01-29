@@ -22,7 +22,6 @@
 #include <actions/addchordtext.h>
 #include <actions/adddirection.h>
 #include <actions/adddynamic.h>
-#include <actions/addinstrument.h>
 #include <actions/addirregulargrouping.h>
 #include <actions/addmultibarrest.h>
 #include <actions/addnote.h>
@@ -40,7 +39,6 @@
 #include <actions/adjustlinespacing.h>
 #include <actions/editbarline.h>
 #include <actions/editfileinformation.h>
-#include <actions/editinstrument.h>
 #include <actions/editkeysignature.h>
 #include <actions/editnoteduration.h>
 #include <actions/editplayer.h>
@@ -55,7 +53,6 @@
 #include <actions/removechordtext.h>
 #include <actions/removedirection.h>
 #include <actions/removedynamic.h>
-#include <actions/removeinstrument.h>
 #include <actions/removeirregulargrouping.h>
 #include <actions/removenote.h>
 #include <actions/removenoteproperty.h>
