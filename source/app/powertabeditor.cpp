@@ -2878,7 +2878,7 @@ void PowerTabEditor::createMenus()
     // Player Menu.
     myPlayerMenu = menuBar()->addMenu(tr("&Player"));
     myPlayerMenu->addAction(myAddPlayerCommand);
-    myPlayerMenu->addAction(myAddInstrumentCommand);
+    //myPlayerMenu->addAction(myAddInstrumentCommand);
     myPlayerMenu->addAction(myPlayerChangeCommand);
     myPlayerMenu->addSeparator();
     myPlayerMenu->addAction(myShowTuningDictionaryCommand);
