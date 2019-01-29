@@ -2521,11 +2521,6 @@ void PowerTabEditor::createCommands()
     myMixerDockWidgetCommand =
         createCommandWrapper(myMixerDockWidget->toggleViewAction(),
                              "Window.Mixer", QKeySequence(), this);
-#if 0
-    myInstrumentDockWidgetCommand =
-        createCommandWrapper(myInstrumentDockWidget->toggleViewAction(),
-                             "Window.Instruments", QKeySequence(), this);
-#endif
 }
 
 void PowerTabEditor::loadKeyboardShortcuts()
@@ -2579,6 +2574,7 @@ void PowerTabEditor::createMixer()
 
 void PowerTabEditor::createInstrumentPanel()
 {
+#if 0
     myInstrumentDockWidget = new QDockWidget(tr("Instruments"), this);
     myInstrumentDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     myInstrumentDockWidget->setFeatures(QDockWidget::DockWidgetClosable);
@@ -2587,7 +2583,6 @@ void PowerTabEditor::createInstrumentPanel()
     QScrollArea *scroll = new QScrollArea(this);
     scroll->setMinimumSize(0, 150);
 
-#if 0
     myInstrumentPanel = new InstrumentPanel(scroll, myInstrumentEditPubSub,
                                             myInstrumentRemovePubSub);
 
@@ -2878,7 +2873,6 @@ void PowerTabEditor::createMenus()
     // Player Menu.
     myPlayerMenu = menuBar()->addMenu(tr("&Player"));
     myPlayerMenu->addAction(myAddPlayerCommand);
-    //myPlayerMenu->addAction(myAddInstrumentCommand);
     myPlayerMenu->addAction(myPlayerChangeCommand);
     myPlayerMenu->addSeparator();
     myPlayerMenu->addAction(myShowTuningDictionaryCommand);
@@ -2890,7 +2884,6 @@ void PowerTabEditor::createMenus()
     myWindowMenu->addAction(myPrevTabCommand);
     myWindowMenu->addSeparator();
     myWindowMenu->addAction(myMixerDockWidgetCommand);
-    //myWindowMenu->addAction(myInstrumentDockWidgetCommand);
 
     // Help menu.
     myHelpMenu = menuBar()->addMenu(tr("&Help"));
