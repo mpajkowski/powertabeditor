@@ -22,12 +22,10 @@
 #include <formats/midi/midiexporter.h>
 #include <formats/powertab/powertabexporter.h>
 #include <formats/powertab/powertabimporter.h>
-#include <formats/powertab_old/powertaboldimporter.h>
 
 FileFormatManager::FileFormatManager(const SettingsManager &settings_manager)
 {
     myImporters.emplace_back(new PowerTabImporter());
-    myImporters.emplace_back(new PowerTabOldImporter());
     myImporters.emplace_back(new GuitarProImporter());
     myImporters.emplace_back(new GpxImporter());
 

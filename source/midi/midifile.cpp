@@ -585,17 +585,18 @@ int MidiFile::addEventsForBar(
         // Handle player/instrument changes.
         const PlayerChange *current_players =
             ScoreUtils::findByPosition(system.getPlayerChanges(), position);
+
         if (current_players)
         {
             for (const ActivePlayer &player :
                  current_players->getActivePlayers(staff_index))
             {
-                const Instrument &instrument =
-                    score.getInstruments()[player.getInstrumentNumber()];
+                const Player &p =
+                    score.getPlayers()[player.getPlayerNumber()];
 
                 tracks[player.getPlayerNumber()].append(
                     MidiEvent::programChange(current_tick, getChannel(player),
-                                             instrument.getMidiPreset()));
+                                             p.getMidiPreset()));
             }
         }
 

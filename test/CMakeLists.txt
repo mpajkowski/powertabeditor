@@ -10,7 +10,6 @@ set( srcs
     actions/test_addchordtext.cpp
     actions/test_adddirection.cpp
     actions/test_adddynamic.cpp
-    actions/test_addinstrument.cpp
     actions/test_addirregulargrouping.cpp
     actions/test_addlefthandfingering.cpp
     actions/test_addmultibarrest.cpp
@@ -31,7 +30,6 @@ set( srcs
     actions/test_editbarline.cpp
     actions/test_editclef.cpp
     actions/test_editfileinformation.cpp
-    actions/test_editinstrument.cpp
     actions/test_editkeysignature.cpp
     actions/test_editnoteduration.cpp
     actions/test_editplayer.cpp
@@ -46,7 +44,6 @@ set( srcs
     actions/test_removechordtext.cpp
     actions/test_removedirection.cpp
     actions/test_removedynamic.cpp
-    actions/test_removeinstrument.cpp
     actions/test_removeirregulargrouping.cpp
     actions/test_removelefthandfingering.cpp
     actions/test_removenote.cpp
@@ -71,7 +68,6 @@ set( srcs
     formats/test_fileformat.cpp
     formats/gpx/test_gpx.cpp
     formats/guitar_pro/test_gp.cpp
-    formats/powertab_old/test_powertabold.cpp
 
     score/test_alternateending.cpp
     score/test_barline.cpp
@@ -79,7 +75,6 @@ set( srcs
     score/test_chordtext.cpp
     score/test_direction.cpp
     score/test_dynamic.cpp
-    score/test_instrument.cpp
     score/test_irregulargrouping.cpp
     score/test_keysignature.cpp
     score/test_note.cpp
@@ -110,22 +105,6 @@ set( headers
 set( data_files
     actions/data/test_editstaff.pt2
 
-    formats/powertab_old/data/alternate_endings.ptb
-    formats/powertab_old/data/barlines.ptb
-    formats/powertab_old/data/bends.ptb
-    formats/powertab_old/data/chordtext.ptb
-    formats/powertab_old/data/directions.ptb
-    formats/powertab_old/data/floating_text.ptb
-    formats/powertab_old/data/guitar_ins.ptb
-    formats/powertab_old/data/guitars.ptb
-    formats/powertab_old/data/merge_multibar_rests_correct.pt2
-    formats/powertab_old/data/merge_multibar_rests.ptb
-    formats/powertab_old/data/notes.ptb
-    formats/powertab_old/data/positions.ptb
-    formats/powertab_old/data/song_header.ptb
-    formats/powertab_old/data/staves.ptb
-    formats/powertab_old/data/tempo_markers.ptb
-
     formats/guitar_pro/data/alt_endings.gp5
     formats/guitar_pro/data/barlines.gp5
     formats/guitar_pro/data/gracenote.gp5
@@ -141,7 +120,7 @@ set( data_files
     formats/gpx/data/text.gpx
 
     score/data/test_viewfilter.pt2
-    
+
     util/test_settingstree_expected.json
 )
 

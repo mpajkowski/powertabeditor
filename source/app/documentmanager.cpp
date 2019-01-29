@@ -45,11 +45,7 @@ Document &DocumentManager::addDefaultDocument(
     player.setTuning(settings->get(Settings::DefaultTuning));
     score.insertPlayer(player);
 
-    Instrument instrument;
-    instrument.setDescription(settings->get(Settings::DefaultInstrumentName) +
-                              " 1");
-    instrument.setMidiPreset(settings->get(Settings::DefaultInstrumentPreset));
-    score.insertInstrument(instrument);
+    player.setMidiPreset(settings->get(Settings::DefaultInstrumentPreset));
 
     ScoreUtils::addStandardFilters(score);
 

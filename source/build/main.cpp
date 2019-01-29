@@ -140,8 +140,8 @@ protected:
 int main(int argc, char *argv[])
 {
     // Register handlers for unhandled exceptions and segmentation faults.
-    std::set_terminate(terminateHandler);
-    std::signal(SIGSEGV, signalHandler);
+    //std::set_terminate(terminateHandler);
+    //std::signal(SIGSEGV, signalHandler);
 
     Application a(argc, argv);
 

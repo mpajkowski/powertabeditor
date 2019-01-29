@@ -8,7 +8,6 @@ set( srcs
     direction.cpp
     dynamic.cpp
     generalmidi.cpp
-    instrument.cpp
     irregulargrouping.cpp
     keysignature.cpp
     note.cpp
@@ -46,7 +45,6 @@ set( headers
     dynamic.h
     fileversion.h
     generalmidi.h
-    instrument.h
     irregulargrouping.h
     keysignature.h
     note.h

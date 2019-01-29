@@ -22,7 +22,6 @@
 #include <actions/addchordtext.h>
 #include <actions/adddirection.h>
 #include <actions/adddynamic.h>
-#include <actions/addinstrument.h>
 #include <actions/addirregulargrouping.h>
 #include <actions/addmultibarrest.h>
 #include <actions/addnote.h>
@@ -40,7 +39,6 @@
 #include <actions/adjustlinespacing.h>
 #include <actions/editbarline.h>
 #include <actions/editfileinformation.h>
-#include <actions/editinstrument.h>
 #include <actions/editkeysignature.h>
 #include <actions/editnoteduration.h>
 #include <actions/editplayer.h>
@@ -55,7 +53,6 @@
 #include <actions/removechordtext.h>
 #include <actions/removedirection.h>
 #include <actions/removedynamic.h>
-#include <actions/removeinstrument.h>
 #include <actions/removeirregulargrouping.h>
 #include <actions/removenote.h>
 #include <actions/removenoteproperty.h>
@@ -160,8 +157,6 @@ PowerTabEditor::PowerTabEditor()
       myTabWidget(nullptr),
       myMixer(nullptr),
       myMixerDockWidget(nullptr),
-      myInstrumentPanel(nullptr),
-      myInstrumentDockWidget(nullptr),
       myPlaybackWidget(nullptr),
       myPlaybackArea(nullptr)
 {
@@ -186,7 +181,6 @@ PowerTabEditor::PowerTabEditor()
     mySettingsManager->load(Paths::getConfigDir());
 
     createMixer();
-    createInstrumentPanel();
     createCommands();
     loadKeyboardShortcuts();
     createMenus();
@@ -300,14 +294,12 @@ void PowerTabEditor::switchTab(int index)
     {
         const Document &doc = myDocumentManager->getCurrentDocument();
         myMixer->reset(doc.getScore());
-        myInstrumentPanel->reset(doc.getScore());
         myPlaybackWidget->reset(doc);
         updateLocationLabel();
     }
     else
     {
         myMixer->clear();
-        myInstrumentPanel->clear();
     }
 
     myUndoManager->setActiveStackIndex(index);
@@ -645,7 +637,6 @@ void PowerTabEditor::redrawScore()
     updateCommands();
 
     myMixer->reset(doc.getScore());
-    myInstrumentPanel->reset(doc.getScore());
     myPlaybackWidget->reset(doc);
 }
 
@@ -1555,47 +1546,6 @@ void PowerTabEditor::addPlayer()
                         UndoManager::AFFECTS_ALL_SYSTEMS);
 }
 
-void PowerTabEditor::addInstrument()
-{
-    ScoreLocation &location = getLocation();
-    Score &score = location.getScore();
-    Instrument instrument;
-
-    auto settings = mySettingsManager->getReadHandle();
-
-    // Create a unique name for the instrument.
-    {
-        std::vector<std::string> names;
-        boost::range::transform(score.getInstruments(),
-                                std::back_inserter(names),
-                                [](const Instrument &instrument) {
-                                    return instrument.getDescription();
-                                });
-
-        const std::string default_name =
-            settings->get(Settings::DefaultInstrumentName);
-
-        size_t i = score.getInstruments().size() + 1;
-        while (true)
-        {
-            const std::string name = default_name + " " + std::to_string(i);
-
-            if (std::find(names.begin(), names.end(), name) == names.end())
-            {
-                instrument.setDescription(name);
-                break;
-            }
-            else
-                ++i;
-        }
-    }
-
-    instrument.setMidiPreset(settings->get(Settings::DefaultInstrumentPreset));
-
-    myUndoManager->push(new AddInstrument(location.getScore(), instrument),
-                        UndoManager::AFFECTS_ALL_SYSTEMS);
-}
-
 void PowerTabEditor::editPlayerChange()
 {
     const ScoreLocation &location = getLocation();
@@ -1649,21 +1599,6 @@ void PowerTabEditor::removePlayer(int index)
     ScoreLocation &location = getLocation();
 
     myUndoManager->push(new RemovePlayer(location.getScore(), index),
-                        UndoManager::AFFECTS_ALL_SYSTEMS);
-}
-
-void PowerTabEditor::editInstrument(int index, const Instrument &instrument)
-{
-    ScoreLocation &location = getLocation();
-
-    myUndoManager->push(
-        new EditInstrument(location.getScore(), index, instrument),
-        UndoManager::AFFECTS_ALL_SYSTEMS);
-}
-
-void PowerTabEditor::removeInstrument(int index)
-{
-    myUndoManager->push(new RemoveInstrument(getLocation().getScore(), index),
                         UndoManager::AFFECTS_ALL_SYSTEMS);
 }
 
@@ -2462,11 +2397,6 @@ void PowerTabEditor::createCommands()
     connect(myAddPlayerCommand, &QAction::triggered, this,
             &PowerTabEditor::addPlayer);
 
-    myAddInstrumentCommand = new Command(
-        tr("Add Instrument"), "Player.AddInstrument", QKeySequence(), this);
-    connect(myAddInstrumentCommand, &QAction::triggered, this,
-            &PowerTabEditor::addInstrument);
-
     myPlayerChangeCommand = new Command(
         tr("Player Change..."), "Player.PlayerChange", QKeySequence(), this);
     myPlayerChangeCommand->setCheckable(true);
@@ -2515,9 +2445,6 @@ void PowerTabEditor::createCommands()
     myMixerDockWidgetCommand =
         createCommandWrapper(myMixerDockWidget->toggleViewAction(),
                              "Window.Mixer", QKeySequence(), this);
-    myInstrumentDockWidgetCommand =
-        createCommandWrapper(myInstrumentDockWidget->toggleViewAction(),
-                             "Window.Instruments", QKeySequence(), this);
 }
 
 void PowerTabEditor::loadKeyboardShortcuts()
@@ -2567,31 +2494,6 @@ void PowerTabEditor::createMixer()
             editPlayer(index, player, undoable);
         });
     myPlayerRemovePubSub.subscribe([=](int index) { removePlayer(index); });
-}
-
-void PowerTabEditor::createInstrumentPanel()
-{
-    myInstrumentDockWidget = new QDockWidget(tr("Instruments"), this);
-    myInstrumentDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    myInstrumentDockWidget->setFeatures(QDockWidget::DockWidgetClosable);
-    myInstrumentDockWidget->setObjectName("Instruments");
-
-    QScrollArea *scroll = new QScrollArea(this);
-    scroll->setMinimumSize(0, 150);
-
-    myInstrumentPanel = new InstrumentPanel(scroll, myInstrumentEditPubSub,
-                                            myInstrumentRemovePubSub);
-
-    scroll->setWidget(myInstrumentPanel);
-    myInstrumentDockWidget->setWidget(scroll);
-    addDockWidget(Qt::BottomDockWidgetArea, myInstrumentDockWidget);
-
-    myInstrumentEditPubSub.subscribe(
-        [=](int index, const Instrument &instrument) {
-            editInstrument(index, instrument);
-        });
-    myInstrumentRemovePubSub.subscribe(
-        [=](int index) { removeInstrument(index); });
 }
 
 Command *PowerTabEditor::createCommandWrapper(
@@ -2868,7 +2770,6 @@ void PowerTabEditor::createMenus()
     // Player Menu.
     myPlayerMenu = menuBar()->addMenu(tr("&Player"));
     myPlayerMenu->addAction(myAddPlayerCommand);
-    myPlayerMenu->addAction(myAddInstrumentCommand);
     myPlayerMenu->addAction(myPlayerChangeCommand);
     myPlayerMenu->addSeparator();
     myPlayerMenu->addAction(myShowTuningDictionaryCommand);
@@ -2880,7 +2781,6 @@ void PowerTabEditor::createMenus()
     myWindowMenu->addAction(myPrevTabCommand);
     myWindowMenu->addSeparator();
     myWindowMenu->addAction(myMixerDockWidgetCommand);
-    myWindowMenu->addAction(myInstrumentDockWidgetCommand);
 
     // Help menu.
     myHelpMenu = menuBar()->addMenu(tr("&Help"));
@@ -3017,7 +2917,6 @@ void PowerTabEditor::setupNewTab()
     myTabWidget->setTabToolTip(tabIndex, fileInfo.fileName());
 
     myMixer->reset(doc.getScore());
-    myInstrumentPanel->reset(doc.getScore());
     myPlaybackWidget->reset(doc);
 
     // Switch to the new document.
@@ -3283,7 +3182,6 @@ void PowerTabEditor::enableEditing(bool enable)
     myPrintPreviewCommand->setEnabled(enable);
     myPlayFromStartOfMeasureCommand->setEnabled(enable);
     myAddPlayerCommand->setEnabled(enable);
-    myAddInstrumentCommand->setEnabled(enable);
     myPlayerChangeCommand->setEnabled(enable);
     myEditViewFiltersCommand->setEnabled(enable);
     myNextTabCommand->setEnabled(enable);

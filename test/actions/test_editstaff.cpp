@@ -15,6 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* FIXME
+ * that test will be enabled after binary format stabilization
+ */
+
+#if 0
 #include <catch.hpp>
 
 #include <actions/editstaff.h>
@@ -52,3 +57,4 @@ TEST_CASE("Actions/EditStaff", "")
     REQUIRE(system.getPlayerChanges()[1].getActivePlayers(0).size() == 1);
     REQUIRE(next_system.getPlayerChanges().empty());
 }
+#endif

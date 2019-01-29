@@ -244,18 +244,12 @@ private slots:
 
     /// Adds a new player to the score.
     void addPlayer();
-    /// Adds a new instrument to the score.
-    void addInstrument();
     /// Adds or removes a player change at the current location.
     void editPlayerChange();
     /// Edits the properties of a player.
     void editPlayer(int playerIndex, const Player &player, bool undoable);
     /// Removes the specified player.
     void removePlayer(int index);
-    /// Edits the properties of an instrument.
-    void editInstrument(int index, const Instrument &instrument);
-    /// Removes the specified instrument.
-    void removeInstrument(int index);
     /// Shows a dialog to view or edit the tuning dictionary.
     void showTuningDictionary();
     /// Shows a dialog to edit the score's view filters.
@@ -284,8 +278,6 @@ private:
     void createCommands();
     /// Build the mixer widget.
     void createMixer();
-    /// Build the instrument panel.
-    void createInstrumentPanel();
 
     /// Load any custom keyboard shortcuts.
     void loadKeyboardShortcuts();
@@ -397,8 +389,6 @@ private:
     std::unique_ptr<TuningDictionary> myTuningDictionary;
     PlayerEditPubSub myPlayerEditPubSub;
     PlayerRemovePubSub myPlayerRemovePubSub;
-    InstrumentEditPubSub myInstrumentEditPubSub;
-    InstrumentRemovePubSub myInstrumentRemovePubSub;
     /// Tracks whether we are currently in playback mode.
     bool myIsPlaying;
     /// Tracks the last directory that a file was opened from.
@@ -409,8 +399,6 @@ private:
     QTabWidget *myTabWidget;
     Mixer *myMixer;
     QDockWidget *myMixerDockWidget;
-    InstrumentPanel *myInstrumentPanel;
-    QDockWidget *myInstrumentDockWidget;
     PlaybackWidget *myPlaybackWidget;
     QWidget *myPlaybackArea;
 
@@ -587,7 +575,6 @@ private:
     Command *myNextTabCommand;
     Command *myPrevTabCommand;
     Command *myMixerDockWidgetCommand;
-    Command *myInstrumentDockWidgetCommand;
 
     QMenu *myHelpMenu;
     Command *myReportBugCommand;

@@ -22,6 +22,7 @@
 #include <boost/lexical_cast.hpp>
 #include <dialogs/tuningdialog.h>
 #include <score/player.h>
+#include <score/generalmidi.h>
 
 #include <QStyle>
 
@@ -43,6 +44,11 @@ MixerItem::MixerItem(QWidget *parent, int playerIndex, const Player &player,
     ui->playerNameLabel->setText(
         QString::fromStdString(player.getDescription()));
     ui->playerNameEdit->setText(ui->playerNameLabel->text());
+
+    for (const std::string &name : Midi::getPresetNames())
+        ui->midiInstrument->addItem(QString::fromStdString(name));
+
+    ui->midiInstrument->setCurrentIndex(player.getMidiPreset());
     ui->playerVolume->setValue(player.getMaxVolume());
     ui->playerPan->setValue(player.getPan());
     ui->playerTuning->setText(QString::fromStdString(
@@ -69,6 +75,10 @@ MixerItem::MixerItem(QWidget *parent, int playerIndex, const Player &player,
 
     connect(ui->playerTuning, &ClickableLabel::clicked, this,
             &MixerItem::editTuning);
+
+    connect(ui->midiInstrument,
+            static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this,
+            &MixerItem::onEdited);
 
     connect(ui->removeButton, &QPushButton::clicked,
             [&]() { myRemovePubSub.publish(myPlayerIndex); });
@@ -114,6 +124,7 @@ void MixerItem::onEdited(bool undoable)
     player.setMaxVolume(ui->playerVolume->value());
     player.setPan(ui->playerPan->value());
     player.setTuning(myTuning);
+    player.setMidiPreset(ui->midiInstrument->currentIndex());
 
     myEditPubSub.publish(myPlayerIndex, player, undoable);
 }

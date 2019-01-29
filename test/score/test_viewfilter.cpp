@@ -15,6 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* FIXME
+ * that test will be enabled after binary format stabilization
+ */
+
+#if 0
 #include <catch.hpp>
 
 #include "test_serialization.h"
@@ -67,3 +72,4 @@ TEST_CASE("Score/ViewFilter/Serialization", "")
 
     Serialization::test("filter", filter);
 }
+#endif

@@ -6,7 +6,6 @@ set( srcs
     addchordtext.cpp
     adddirection.cpp
     adddynamic.cpp
-    addinstrument.cpp
     addirregulargrouping.cpp
     addmultibarrest.cpp
     addnote.cpp
@@ -23,7 +22,6 @@ set( srcs
     adjustlinespacing.cpp
     editbarline.cpp
     editfileinformation.cpp
-    editinstrument.cpp
     editkeysignature.cpp
     editnoteduration.cpp
     editplayer.cpp
@@ -39,7 +37,6 @@ set( srcs
     removechordtext.cpp
     removedirection.cpp
     removedynamic.cpp
-    removeinstrument.cpp
     removeirregulargrouping.cpp
     removenote.cpp
     removenoteproperty.cpp
@@ -62,7 +59,6 @@ set( headers
     addchordtext.h
     adddirection.h
     adddynamic.h
-    addinstrument.h
     addirregulargrouping.h
     addmultibarrest.h
     addnote.h
@@ -80,7 +76,6 @@ set( headers
     adjustlinespacing.h
     editbarline.h
     editfileinformation.h
-    editinstrument.h
     editkeysignature.h
     editnoteduration.h
     editplayer.h
@@ -96,7 +91,6 @@ set( headers
     removechordtext.h
     removedirection.h
     removedynamic.h
-    removeinstrument.h
     removeirregulargrouping.h
     removenote.h
     removenoteproperty.h

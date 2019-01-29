@@ -94,23 +94,20 @@ void GuitarProImporter::convertPlayers(const Gp::Document &doc, Score &score)
     for (const Gp::Track &track : doc.myTracks)
     {
         Player player;
-        Instrument instrument;
         Tuning tuning;
 
         player.setDescription(track.myName);
-        instrument.setDescription(track.myName);
 
         tuning.setNotes(track.myTuning);
         tuning.setCapo(track.myCapo);
 
         const Gp::Channel &channel = doc.myChannels[track.myChannelIndex];
-        instrument.setMidiPreset(channel.myInstrument);
+        player.setMidiPreset(channel.myInstrument);
         player.setMaxVolume(channel.myVolume);
         player.setPan(channel.myBalance);
 
         player.setTuning(tuning);
         score.insertPlayer(player);
-        score.insertInstrument(instrument);
     }
 }
 
